@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Share, PlusSquare, ArrowUp } from 'lucide-react';
+import { X, Sparkles, Share, PlusSquare, ArrowDownToLine, Smartphone, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -11,7 +11,7 @@ export const InstallAppPrompt: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
 
   useEffect(() => {
     // 1. Check if already installed in standalone mode
@@ -29,59 +29,77 @@ export const InstallAppPrompt: React.FC = () => {
     const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
     setIsIOS(isIOSDevice);
 
-    // 4. Listen for Chromium/Android install prompt
+    // 4. Check if prompt was already captured early in index.html
+    const globalPrompt = (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt;
+    if (globalPrompt) {
+      setDeferredPrompt(globalPrompt);
+      setShowPrompt(true);
+    }
+
+    // 5. Listen for Chromium/Android install prompt
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      const promptEvent = e as BeforeInstallPromptEvent;
+      (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt = promptEvent;
+      setDeferredPrompt(promptEvent);
       setShowPrompt(true);
     };
 
+    const customCaptureHandler = () => {
+      const captured = (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt;
+      if (captured) {
+        setDeferredPrompt(captured);
+        setShowPrompt(true);
+      }
+    };
+
     window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('pwa-prompt-captured', customCaptureHandler);
 
     window.addEventListener('appinstalled', () => {
       setShowPrompt(false);
       setDeferredPrompt(null);
+      (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt = undefined;
       toast.success('City Helpline app installed successfully! 🎉');
     });
 
-    // On iOS or mobile web where beforeinstallprompt isn't fired immediately, show top prompt after a brief 2-second delay
+    // On mobile or web, ensure banner shows after a brief delay if not dismissed
     const timer = setTimeout(() => {
       if (!isStandalone && !isDismissed) {
         setShowPrompt(true);
       }
-    }, 2000);
+    }, 1500);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('pwa-prompt-captured', customCaptureHandler);
       clearTimeout(timer);
     };
   }, []);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
+    // Check local or global deferred prompt
+    const promptToUse =
+      deferredPrompt ||
+      (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt;
+
+    if (promptToUse) {
       try {
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+        await promptToUse.prompt();
+        const { outcome } = await promptToUse.userChoice;
         if (outcome === 'accepted') {
           setShowPrompt(false);
         }
         setDeferredPrompt(null);
+        (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt = undefined;
+        return;
       } catch (err) {
-        console.warn('Install prompt error:', err);
+        console.warn('Native install prompt error:', err);
       }
-      return;
     }
 
-    if (isIOS) {
-      setShowIOSGuide(true);
-      return;
-    }
-
-    // Generic fallback for desktop / other browsers without direct prompt
-    toast.info(
-      "To install: Tap your browser menu (⋮ / Share) and select 'Install App' or 'Add to Home screen'.",
-      { duration: 5000 }
-    );
+    // Fallback: Show guided visual modal with direct instructions
+    setShowGuideModal(true);
   };
 
   const handleDismiss = () => {
@@ -141,7 +159,7 @@ export const InstallAppPrompt: React.FC = () => {
 
             <button
               onClick={handleDismiss}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 active:scale-90 transition-colors"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 active:scale-90 transition-colors cursor-pointer"
               title="Dismiss"
               aria-label="Dismiss banner"
             >
@@ -151,61 +169,97 @@ export const InstallAppPrompt: React.FC = () => {
         </div>
       </aside>
 
-      {/* iOS Safari Guided Install Bottom Sheet */}
-      {showIOSGuide && (
-        <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      {/* Guided In-App Install Modal (for iOS or browsers requiring manual tap) */}
+      {showGuideModal && (
+        <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
           <div className="w-full max-w-sm bg-[#161926] border border-white/15 rounded-3xl p-5 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#00E5FF] to-[#8A2BE2] p-0.5">
-                  <div className="w-full h-full bg-[#0E1320] rounded-[6px] flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-[#00E5FF]" />
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#00E5FF] to-[#8A2BE2] p-0.5 shadow-md">
+                  <div className="w-full h-full bg-[#0E1320] rounded-[10px] flex items-center justify-center overflow-hidden">
+                    <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.svg'; }} />
                   </div>
                 </div>
-                <h3 className="text-sm font-bold text-white">Install on iPhone / iPad</h3>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Install City Helpline</h3>
+                  <p className="text-[11px] text-gray-400">{isIOS ? 'iPhone / iPad Safari' : 'Android / Chrome Browser'}</p>
+                </div>
               </div>
               <button
-                onClick={() => setShowIOSGuide(false)}
-                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5"
+                onClick={() => setShowGuideModal(false)}
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs text-gray-300">
-              <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
-                  1
-                </span>
-                <p>
-                  Tap the <strong className="text-white">Share</strong> button <Share className="w-3.5 h-3.5 inline text-[#00E5FF] mx-0.5" /> in your Safari bottom bar.
-                </p>
-              </div>
+            {isIOS ? (
+              // iOS Steps
+              <div className="space-y-2.5 text-xs text-gray-300">
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    1
+                  </span>
+                  <p>
+                    Tap the <strong className="text-white">Share</strong> button <Share className="w-3.5 h-3.5 inline text-[#00E5FF] mx-0.5" /> in your Safari bottom navigation bar.
+                  </p>
+                </div>
 
-              <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
-                  2
-                </span>
-                <p>
-                  Scroll down and tap <strong className="text-white">"Add to Home Screen"</strong> <PlusSquare className="w-3.5 h-3.5 inline text-[#00E5FF] mx-0.5" />.
-                </p>
-              </div>
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    2
+                  </span>
+                  <p>
+                    Scroll down and tap <strong className="text-white">"Add to Home Screen"</strong> <PlusSquare className="w-3.5 h-3.5 inline text-[#00E5FF] mx-0.5" />.
+                  </p>
+                </div>
 
-              <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
-                  3
-                </span>
-                <p>
-                  Tap <strong className="text-white">"Add"</strong> in the top right corner. The City Helpline app will appear on your home screen!
-                </p>
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    3
+                  </span>
+                  <p>
+                    Tap <strong className="text-white">"Add"</strong> in the top right. City Helpline will install instantly on your home screen!
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              // Android / Chrome / Mobile Web Steps
+              <div className="space-y-2.5 text-xs text-gray-300">
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    1
+                  </span>
+                  <p>
+                    ब्राउज़र के ऊपर दायीं तरफ <strong className="text-white">3-डॉट्स (⋮)</strong> मेनू पर क्लिक करें।
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    2
+                  </span>
+                  <p>
+                    <strong className="text-white">"Install App"</strong> या <strong className="text-white">"Add to Home screen"</strong> (ऐप इंस्टॉल करें) विकल्प चुनें।
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.04] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] font-bold flex items-center justify-center shrink-0 text-[11px]">
+                    3
+                  </span>
+                  <p>
+                    <strong className="text-white">Install</strong> पर टैप करें। City Helpline ऐप आपके फ़ोन में ऐप की तरह इंस्टॉल हो जाएगा!
+                  </p>
+                </div>
+              </div>
+            )}
 
             <button
-              onClick={() => setShowIOSGuide(false)}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] text-white font-bold text-xs hover:brightness-110 active:scale-98 transition-all"
+              onClick={() => setShowGuideModal(false)}
+              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] text-white font-bold text-xs hover:brightness-110 active:scale-98 transition-all cursor-pointer"
             >
-              Got It
+              समझ गया (Got It)
             </button>
           </div>
         </div>

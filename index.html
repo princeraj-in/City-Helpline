@@ -36,6 +36,23 @@
     <meta property="twitter:title" content="City Helpline - Student PGs, Mess, Libraries, Marketplace & Budget Estimator" />
     <meta property="twitter:description" content="Hyper-local student ecosystem platform for verified PGs, libraries, mess facilities, marketplace, and monthly student budget estimator." />
     <meta property="twitter:image" content="https://app.imprince.me/logo.png" />
+
+    <!-- Early PWA Install Event Trap & Service Worker Registration -->
+    <script>
+      window.deferredPWAInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        window.deferredPWAInstallPrompt = e;
+        window.dispatchEvent(new CustomEvent('pwa-prompt-captured'));
+      });
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function(err) {
+            console.warn('SW registration:', err);
+          });
+        });
+      }
+    </script>
   </head>
   <body class="bg-gray-900 text-white">
     <div id="root"></div>
