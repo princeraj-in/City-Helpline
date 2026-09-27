@@ -1,8 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Building2, LogOut, PlusCircle, ShieldCheck, Search, Home, ShoppingBag, Calculator, Bot, BedDouble, HelpCircle } from 'lucide-react';
-import { LiquidButton } from '../ui/LiquidButton';
-import { isSuperAdminEmail } from '../../types';
+import { LogOut, ShieldCheck, Search, Home, ShoppingBag, Calculator, Bot, BedDouble, HelpCircle } from 'lucide-react';
 import { UserAvatar } from '../common/UserAvatar';
 import { NavbarChatButton } from './NavbarChatButton';
 import { LanguageSelector } from '../common/LanguageSelector';
@@ -108,19 +106,6 @@ export function Navbar() {
               <span>Help</span>
             </Link>
 
-            {/* Always visible List Service button on Desktop */}
-            <Link
-              to="/add-listing"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold ${
-                isActive('/add-listing')
-                  ? 'bg-[#00E5FF]/20 border-[#00E5FF] text-[#00E5FF] shadow-[0_0_12px_rgba(0,229,255,0.3)]'
-                  : 'bg-white/[0.05] border-white/15 text-white hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10'
-              }`}
-            >
-              <PlusCircle className="h-4 w-4 text-[#00E5FF]" />
-              <span>+ List Service</span>
-            </Link>
-
             {/* Desktop Premium Chat Icon */}
             <NavbarChatButton />
 
@@ -187,7 +172,7 @@ export function Navbar() {
           </div>
 
           {/* Mobile Right Action */}
-          <div className="flex md:hidden items-center gap-1.5">
+          <div className="flex md:hidden items-center gap-2">
             {/* Mobile Premium Chat Icon (Strictly NO text, pure logo with glowing badge) */}
             <NavbarChatButton isMobile />
 
@@ -201,14 +186,6 @@ export function Navbar() {
               title="Help & Support"
             >
               <HelpCircle className="h-4 w-4" />
-            </Link>
-
-            <Link
-              to="/add-listing"
-              className="flex items-center gap-1 px-2.5 py-1 text-xs font-black rounded-xl bg-gradient-to-r from-[#00E5FF]/20 to-[#8A2BE2]/20 border border-[#00E5FF]/40 text-[#00E5FF] hover:brightness-110 active:scale-95 transition-all shadow-[0_0_10px_rgba(0,229,255,0.2)]"
-            >
-              <PlusCircle className="h-3.5 w-3.5" />
-              <span>+ List</span>
             </Link>
 
             {currentUser ? (
