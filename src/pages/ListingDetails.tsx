@@ -11,6 +11,7 @@ import { getOrCreateConversation } from '../lib/chatService';
 import { toast } from 'sonner';
 import { VerifiedPGBadge } from '../components/common/TrustBadge';
 import { PGVerificationModal } from '../components/profile/PGVerificationModal';
+import { formatWhatsAppUrl } from '../lib/utils';
 
 export default function ListingDetails() {
   const { id } = useParams<{ id: string }>();
@@ -368,7 +369,10 @@ export default function ListingDetails() {
                 </a>
 
                 <a
-                  href={`https://wa.me/${listing.contact.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${listing.authorName}, I saw your listing "${listing.title}" on City Helpline (${APP_CONFIG.getListingUrl(listing.id)}). Is it still available?`)}`}
+                  href={formatWhatsAppUrl(
+                    listing.contact,
+                    `Hi ${listing.authorName}, I saw your listing "${listing.title}" on City Helpline (${APP_CONFIG.getListingUrl(listing.id)}). Is it still available?`
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 min-w-[130px] flex items-center justify-center gap-2.5 bg-[rgba(16,185,129,0.08)] hover:bg-[rgba(16,185,129,0.18)] text-emerald-400 border border-emerald-400/30 font-bold py-3.5 px-5 rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95"

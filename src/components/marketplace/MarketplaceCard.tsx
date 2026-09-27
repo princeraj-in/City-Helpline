@@ -5,6 +5,7 @@ import { MapPin, Phone, MessageCircle, Clock, ShieldCheck, Tag } from 'lucide-re
 import { motion } from 'motion/react';
 import { APP_CONFIG } from '../../lib/appConfig';
 import { VerifiedStudentBadge } from '../common/TrustBadge';
+import { formatWhatsAppUrl } from '../../lib/utils';
 
 interface MarketplaceCardProps {
   item: MarketplaceItem;
@@ -19,15 +20,11 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const phone = item.whatsappNumber || item.sellerPhone;
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const fullPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
-    const text = encodeURIComponent(
-      item.price === 0
-        ? `Hi ${item.sellerName}, maine City Helpline par aapka Free Study Material Giveaway "${item.title}" dekha. Kya ye abhi available hai collect karne ke liye?`
-        : `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`
-    );
-    window.open(`https://wa.me/${fullPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    const text = item.price === 0
+      ? `Hi ${item.sellerName}, maine City Helpline par aapka Free Study Material Giveaway "${item.title}" dekha. Kya ye abhi available hai collect karne ke liye?`
+      : `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
+    window.open(formatWhatsAppUrl(phone, text), '_blank', 'noopener,noreferrer');
   };
 
   const handleCallClick = (e: React.MouseEvent) => {

@@ -9,6 +9,7 @@ import {
   Check, X, LifeBuoy, AlertCircle, PhoneCall
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { formatWhatsAppUrl } from '../../lib/utils';
 
 export function ProfileEmergencySection() {
   const { userLocation, openLocationModal } = useLocationContext();
@@ -55,14 +56,11 @@ export function ProfileEmergencySection() {
 
   const handleTriggerParentSos = () => {
     if (!sosContact) return;
-    const cleanPhone = sosContact.phone.replace(/[^0-9]/g, '');
     const locationStr = userLocation 
       ? `${userLocation.area ? userLocation.area + ', ' : ''}${userLocation.city}${userLocation.state ? ', ' + userLocation.state : ''}` 
       : currentCity;
-    const message = encodeURIComponent(
-      `🚨 EMERGENCY SOS ALERT! I need immediate help. My current location is: ${locationStr}. Please call me back right now!`
-    );
-    window.open(`https://wa.me/91${cleanPhone}?text=${message}`, '_blank');
+    const message = `🚨 EMERGENCY SOS ALERT! I need immediate help. My current location is: ${locationStr}. Please call me back right now!`;
+    window.open(formatWhatsAppUrl(sosContact.phone, message), '_blank');
   };
 
   const handleCall = (number: string) => {

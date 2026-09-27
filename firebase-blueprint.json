@@ -88,7 +88,8 @@
         "whatsappNumber": { "type": "string" },
         "status": { "type": "string", "enum": ["available", "sold"] },
         "createdAt": { "type": "number" },
-        "featured": { "type": "boolean" }
+        "featured": { "type": "boolean" },
+        "isStudentVerified": { "type": "boolean" }
       },
       "required": ["title", "description", "price", "category", "condition", "city", "images", "sellerId", "sellerName", "sellerPhone", "status", "createdAt"]
     },
@@ -181,6 +182,24 @@
         "note": { "type": "string" }
       },
       "required": ["collegeOrCoaching", "rollOrIdNumber", "courseOrExam"]
+    },
+    "ListingPrivateVerification": {
+      "title": "ListingPrivateVerification",
+      "description": "Private owner electricity bill, consumer number, and property verification credentials stored securely away from public listing document",
+      "type": "object",
+      "properties": {
+        "electricityConsumerNumber": { "type": "string" },
+        "subMeterRateDeclared": { "type": "number" },
+        "caretakerName": { "type": "string" },
+        "caretakerPhone": { "type": "string" },
+        "ownerGovtIdType": { "type": "string" },
+        "physicalInspectionDone": { "type": "boolean" },
+        "submittedAt": { "type": "number" },
+        "verifiedAt": { "type": "number" },
+        "reviewedBy": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["electricityConsumerNumber", "subMeterRateDeclared"]
     }
   },
   "firestore": {
@@ -195,6 +214,10 @@
     "/listings/{listingId}": {
       "schema": { "$ref": "#/entities/Listing" },
       "description": "Listings"
+    },
+    "/listings/{listingId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/ListingPrivateVerification" },
+      "description": "Protected private subcollection for sensitive property verification, consumer numbers, and electricity documents"
     },
     "/reviews/{reviewId}": {
       "schema": { "$ref": "#/entities/Review" },

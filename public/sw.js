@@ -48,11 +48,18 @@ self.addEventListener('fetch', (event) => {
     fetch(event.request)
       .then((response) => {
         // Clone response to cache if successful
-        if (response && response.status === 200 && response.type === 'basic') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache).catch(() => {});
-          });
+        // Supports both same-origin ('basic') and cross-origin ('cors') assets like Cloudinary/Unsplash/Google images
+        if (response && response.status === 200 && (response.type === 'basic' || response.type === 'cors')) {
+          const url = event.request.url;
+          const isApi = url.includes('/api/');
+          const isFirestoreLive = url.includes('firestore.googleapis.com') || url.includes('identitytoolkit.googleapis.com');
+          
+          if (!isApi && !isFirestoreLive) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache).catch(() => {});
+            });
+          }
         }
         return response;
       })

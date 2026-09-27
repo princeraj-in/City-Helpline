@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
+import { formatWhatsAppUrl } from '../../lib/utils';
 
 interface RoommateConnectModalProps {
   profile: RoommateProfile | null;
@@ -24,11 +25,8 @@ export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalP
 
   const handleWhatsApp = () => {
     const phone = profile.whatsappNumber || profile.userPhone;
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const text = encodeURIComponent(
-      `Hi ${profile.userName}, I saw your Roommate listing for ${profile.locality}, ${profile.city} on City Helpline. I am preparing for ${profile.targetExam} and would like to connect!\n\nMessage: ${message}`
-    );
-    window.open(`https://wa.me/91${cleanPhone}?text=${text}`, '_blank');
+    const text = `Hi ${profile.userName}, I saw your Roommate listing for ${profile.locality}, ${profile.city} on City Helpline. I am preparing for ${profile.targetExam} and would like to connect!\n\nMessage: ${message}`;
+    window.open(formatWhatsAppUrl(phone, text), '_blank');
   };
 
   const handleCall = () => {

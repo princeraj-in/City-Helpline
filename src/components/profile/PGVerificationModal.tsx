@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { X, Building2, ShieldCheck, CheckCircle2, AlertTriangle, Sparkles, Clock, FileText } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Building2, ShieldCheck, CheckCircle2, AlertTriangle, Sparkles, Clock, FileText, Lock, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { toast } from 'sonner';
 import { Listing, PGVerificationData } from '../../types';
@@ -34,10 +34,40 @@ export const PGVerificationModal: React.FC<PGVerificationModalProps> = ({ listin
   );
   const [inspectionAgreement, setInspectionAgreement] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingPrivate, setIsLoadingPrivate] = useState(false);
 
   const existingStatus = listing.pgVerificationStatus;
   const isAlreadyVerified = listing.isVerifiedPG || existingStatus === 'verified';
   const isPending = existingStatus === 'pending';
+
+  // Fetch private verification details from protected subcollection
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPrivateData = async () => {
+      if (!listing?.id) return;
+      setIsLoadingPrivate(true);
+      try {
+        const privateRef = doc(db, 'listings', listing.id, 'private', 'verification');
+        const snap = await getDoc(privateRef);
+        if (snap.exists() && isMounted) {
+          const data = snap.data() as PGVerificationData;
+          if (data.electricityConsumerNumber) setConsumerNumber(data.electricityConsumerNumber);
+          if (data.subMeterRateDeclared) setSubMeterRate(data.subMeterRateDeclared);
+          if (data.caretakerName) setCaretakerName(data.caretakerName);
+          if (data.caretakerPhone) setCaretakerPhone(data.caretakerPhone);
+          if (data.ownerGovtIdType) setIdType(data.ownerGovtIdType);
+        }
+      } catch (err) {
+        console.warn('Could not load private listing verification doc:', err);
+      } finally {
+        if (isMounted) setIsLoadingPrivate(false);
+      }
+    };
+    fetchPrivateData();
+    return () => {
+      isMounted = false;
+    };
+  }, [listing?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +87,7 @@ export const PGVerificationModal: React.FC<PGVerificationModalProps> = ({ listin
 
     setIsSubmitting(true);
     try {
-      const verificationPayload: PGVerificationData = {
+      const fullVerificationPayload: PGVerificationData = {
         electricityConsumerNumber: consumerNumber.trim(),
         subMeterRateDeclared: Number(subMeterRate),
         caretakerName: caretakerName.trim(),
@@ -67,10 +97,20 @@ export const PGVerificationModal: React.FC<PGVerificationModalProps> = ({ listin
         submittedAt: Date.now(),
       };
 
+      // 1. SECURE STORAGE: Store sensitive electricity bill & caretaker IDs in protected private subcollection
+      const privateListingVerificationRef = doc(db, 'listings', listing.id, 'private', 'verification');
+      await setDoc(privateListingVerificationRef, fullVerificationPayload);
+
+      // 2. PUBLIC LISTING: Only save public tariff rate & status (Zero sensitive consumer number / ID leakage)
+      const safePublicSummary = {
+        subMeterRateDeclared: Number(subMeterRate),
+        submittedAt: Date.now(),
+      };
+
       const listingRef = doc(db, 'listings', listing.id);
       await updateDoc(listingRef, {
         pgVerificationStatus: 'pending',
-        pgVerificationData: verificationPayload,
+        pgVerificationData: safePublicSummary,
       });
 
       toast.success(

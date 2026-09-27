@@ -382,13 +382,23 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   const handleApprovePGVerification = async (id: string) => {
     const target = listings.find(l => l.id === id);
     try {
+      const now = Date.now();
+      const reviewer = currentUser?.email || 'Admin';
+
       await updateDoc(doc(db, 'listings', id), {
         isVerifiedPG: true,
         pgVerificationStatus: 'verified',
-        'pgVerificationData.verifiedAt': Date.now(),
+        'pgVerificationData.verifiedAt': now,
         'pgVerificationData.physicalInspectionDone': true,
-        'pgVerificationData.reviewedBy': currentUser?.email || 'Admin',
+        'pgVerificationData.reviewedBy': reviewer,
       });
+
+      // Also sync to private listing verification subcollection
+      await setDoc(doc(db, 'listings', id, 'private', 'verification'), {
+        verifiedAt: now,
+        physicalInspectionDone: true,
+        reviewedBy: reviewer,
+      }, { merge: true }).catch((pErr) => console.warn('Private listing subcollection sync warning:', pErr));
 
       setListings(prev => prev.map(l => l.id === id ? {
         ...l,
@@ -396,9 +406,9 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         pgVerificationStatus: 'verified',
         pgVerificationData: {
           ...(l.pgVerificationData || {}),
-          verifiedAt: Date.now(),
+          verifiedAt: now,
           physicalInspectionDone: true,
-          reviewedBy: currentUser?.email || 'Admin',
+          reviewedBy: reviewer,
         }
       } : l));
 
@@ -409,9 +419,9 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
           pgVerificationStatus: 'verified',
           pgVerificationData: {
             ...(prev.pgVerificationData || {}),
-            verifiedAt: Date.now(),
+            verifiedAt: now,
             physicalInspectionDone: true,
-            reviewedBy: currentUser?.email || 'Admin',
+            reviewedBy: reviewer,
           }
         } : null);
       }
@@ -427,12 +437,22 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   const handleRejectPGVerification = async (id: string, reason?: string) => {
     const target = listings.find(l => l.id === id);
     try {
+      const now = Date.now();
+      const reviewer = currentUser?.email || 'Admin';
+      const note = reason || 'Verification documents could not be validated';
+
       await updateDoc(doc(db, 'listings', id), {
         isVerifiedPG: false,
         pgVerificationStatus: 'rejected',
-        'pgVerificationData.reviewedBy': currentUser?.email || 'Admin',
-        'pgVerificationData.note': reason || 'Verification documents could not be validated',
+        'pgVerificationData.reviewedBy': reviewer,
+        'pgVerificationData.note': note,
       });
+
+      // Also sync to private listing verification subcollection
+      await setDoc(doc(db, 'listings', id, 'private', 'verification'), {
+        reviewedBy: reviewer,
+        note: note,
+      }, { merge: true }).catch((pErr) => console.warn('Private listing subcollection sync warning:', pErr));
 
       setListings(prev => prev.map(l => l.id === id ? {
         ...l,
@@ -440,8 +460,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         pgVerificationStatus: 'rejected',
         pgVerificationData: {
           ...(l.pgVerificationData || {}),
-          reviewedBy: currentUser?.email || 'Admin',
-          note: reason || 'Verification documents could not be validated',
+          reviewedBy: reviewer,
+          note: note,
         }
       } : l));
 
@@ -450,6 +470,11 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
           ...prev,
           isVerifiedPG: false,
           pgVerificationStatus: 'rejected',
+          pgVerificationData: {
+            ...(prev.pgVerificationData || {}),
+            reviewedBy: reviewer,
+            note: note,
+          }
         } : null);
       }
 

@@ -7,6 +7,7 @@ import {
   CheckCircle2, BedDouble, Calendar, UserCheck
 } from 'lucide-react';
 import { VerifiedStudentBadge } from '../common/TrustBadge';
+import { formatWhatsAppUrl } from '../../lib/utils';
 
 export interface RoommateCardProps {
   profile: RoommateProfile;
@@ -22,11 +23,8 @@ export const RoommateCard: React.FC<RoommateCardProps> = ({ profile, onConnect, 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.stopPropagation();
     const phone = profile.whatsappNumber || profile.userPhone;
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const text = encodeURIComponent(
-      `Hi ${profile.userName}, I saw your Roommate / Flatmate profile on City Helpline for ${profile.locality}, ${profile.city}. I am preparing for ${profile.targetExam} and looking for a flatmate in budget ₹${profile.budgetMin}-${profile.budgetMax}. Let's connect!`
-    );
-    window.open(`https://wa.me/91${cleanPhone}?text=${text}`, '_blank');
+    const text = `Hi ${profile.userName}, I saw your Roommate / Flatmate profile on City Helpline for ${profile.locality}, ${profile.city}. I am preparing for ${profile.targetExam} and looking for a flatmate in budget ₹${profile.budgetMin}-${profile.budgetMax}. Let's connect!`;
+    window.open(formatWhatsAppUrl(phone, text), '_blank');
   };
 
   const handleCall = (e: React.MouseEvent) => {

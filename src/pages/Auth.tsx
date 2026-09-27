@@ -646,7 +646,7 @@ export default function Auth() {
           {/* Form: Sign Up */}
           <form className="form sign-up" onSubmit={handleSignupSubmit}>
             <h2>Create Account,</h2>
-            <p className="form-subtitle">Join thousands of students and verified owners</p>
+            <p className="form-subtitle">Join thousands of students and verified service contributors</p>
 
             {/* Role Switcher */}
             <div className="role-pill-switch">
@@ -655,14 +655,14 @@ export default function Auth() {
                 className={role === 'user' ? 'active' : ''}
                 onClick={() => setRole('user')}
               >
-                Student / Aspirant
+                User (Student / Aspirant)
               </button>
               <button
                 type="button"
                 className={role === 'contributor' ? 'active' : ''}
                 onClick={() => setRole('contributor')}
               >
-                Hostel / PG Owner
+                Contributor (Business / Service Owner)
               </button>
             </div>
 
@@ -723,7 +723,7 @@ export default function Auth() {
             {role === 'contributor' && (
               <>
                 <label>
-                  <span>Phone Number</span>
+                  <span>Contact / Phone Number</span>
                   <input
                     type="tel"
                     required
@@ -734,11 +734,11 @@ export default function Auth() {
                 </label>
 
                 <label>
-                  <span>Hostel / Business Name</span>
+                  <span>Business / Service Name</span>
                   <input
                     type="text"
                     required
-                    placeholder="Shree Ram Student PG"
+                    placeholder="e.g. Sharda Boys PG / Saraswati Library / Anand Mess"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
                   />
@@ -751,7 +751,7 @@ export default function Auth() {
                     value={businessType}
                     onChange={(e) => setBusinessType(e.target.value)}
                   >
-                    <option value="" disabled>Select Property Type</option>
+                    <option value="" disabled>Select Business / Service Category</option>
                     {CATEGORIES.map((cat) => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
@@ -775,11 +775,11 @@ export default function Auth() {
                 </label>
 
                 <label>
-                  <span>Full Address</span>
+                  <span>Business Address / Locality</span>
                   <textarea
                     rows={2}
                     required
-                    placeholder="Street, Landmark, Area"
+                    placeholder="Street, Landmark, Coaching Hub Area"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
@@ -866,8 +866,8 @@ export default function Auth() {
                   className="p-5 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#00E5FF] hover:bg-[#00E5FF]/10 transition-all text-center group cursor-pointer flex flex-col items-center justify-center"
                 >
                   <User className="w-8 h-8 text-[#00E5FF] mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="font-bold text-white text-sm">Student / User</div>
-                  <div className="text-[11px] text-gray-400 mt-1">Search rooms, PGs & marketplace</div>
+                  <div className="font-bold text-white text-sm">User (Student / Aspirant)</div>
+                  <div className="text-[11px] text-gray-400 mt-1">Search PGs, mess, libraries & marketplace</div>
                 </button>
 
                 <button
@@ -876,8 +876,8 @@ export default function Auth() {
                   className="p-5 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#8A2BE2] hover:bg-[#8A2BE2]/10 transition-all text-center group cursor-pointer flex flex-col items-center justify-center"
                 >
                   <Building2 className="w-8 h-8 text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="font-bold text-white text-sm">Hostel / Room Owner</div>
-                  <div className="text-[11px] text-gray-400 mt-1">Post listings & manage properties</div>
+                  <div className="font-bold text-white text-sm">Contributor (Business / Service Owner)</div>
+                  <div className="text-[11px] text-gray-400 mt-1">List PGs, mess, libraries, coaching & services</div>
                 </button>
               </div>
 

@@ -14,6 +14,7 @@ import { db } from '../../lib/firebase';
 import { APP_CONFIG } from '../../lib/appConfig';
 import { getOrCreateConversation } from '../../lib/chatService';
 import { toast } from 'sonner';
+import { formatWhatsAppUrl } from '../../lib/utils';
 
 interface MarketplaceDetailModalProps {
   item: MarketplaceItem | null;
@@ -46,13 +47,9 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
 
   const handleWhatsApp = () => {
     const phone = item.whatsappNumber || item.sellerPhone;
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const fullPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
-    const text = encodeURIComponent(
-      `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`
-    );
-    window.open(`https://wa.me/${fullPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    const text = `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
+    window.open(formatWhatsAppUrl(phone, text), '_blank', 'noopener,noreferrer');
   };
 
   const handleShare = () => {

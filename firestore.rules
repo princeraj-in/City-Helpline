@@ -212,6 +212,14 @@ service cloud.firestore {
                     );
                     
       allow delete: if isAuthenticated() && (isOwner(resource.data.authorId) || isAdmin());
+
+      // Protected private subcollection for sensitive owner/business verification documents & electricity credentials
+      match /private/{docId} {
+        allow read, write: if isAuthenticated() && (
+          get(/databases/$(database)/documents/listings/$(listingId)).data.authorId == request.auth.uid || 
+          isAdmin()
+        );
+      }
     }
 
     match /reviews/{reviewId} {
@@ -238,13 +246,29 @@ service cloud.firestore {
                     isValidMarketplaceItem(request.resource.data) && 
                     request.resource.data.sellerId == request.auth.uid &&
                     request.resource.data.status == 'available' &&
-                    (request.resource.data.featured == false || !('featured' in request.resource.data) || isAdmin());
+                    (request.resource.data.featured == false || !('featured' in request.resource.data) || isAdmin()) &&
+                    (
+                      !('isStudentVerified' in request.resource.data) ||
+                      request.resource.data.isStudentVerified == false ||
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isStudentVerified == true
+                    );
                     
       allow update: if isAuthenticated() && 
                     isValidMarketplaceItem(request.resource.data) && 
                     request.resource.data.sellerId == resource.data.sellerId &&
                     request.resource.data.createdAt == resource.data.createdAt &&
-                    (isOwner(resource.data.sellerId) || isAdmin());
+                    (
+                      (
+                        isOwner(resource.data.sellerId) &&
+                        (
+                          !('isStudentVerified' in request.resource.data) ||
+                          request.resource.data.isStudentVerified == resource.data.isStudentVerified ||
+                          (request.resource.data.isStudentVerified == true && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isStudentVerified == true) ||
+                          request.resource.data.isStudentVerified == false
+                        )
+                      ) || 
+                      isAdmin()
+                    );
                     
       allow delete: if isAuthenticated() && (isOwner(resource.data.sellerId) || isAdmin());
     }

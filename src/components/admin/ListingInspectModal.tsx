@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, CheckCircle, XCircle, Star, Phone, MapPin, 
   IndianRupee, Building, User, Calendar, ExternalLink, Edit,
-  ShieldCheck, Zap, Building2, CheckCircle2, AlertTriangle
+  ShieldCheck, Zap, Building2, CheckCircle2, AlertTriangle, Lock, RefreshCw
 } from 'lucide-react';
-import { Listing } from '../../types';
+import { Listing, PGVerificationData } from '../../types';
 import { VerifiedPGBadge } from '../common/TrustBadge';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 
 interface ListingInspectModalProps {
   listing: Listing | null;
@@ -29,7 +31,40 @@ export const ListingInspectModal: React.FC<ListingInspectModalProps> = ({
   onApprovePGVerification,
   onRejectPGVerification,
 }) => {
+  const [privateVerificationData, setPrivateVerificationData] = useState<PGVerificationData | null>(null);
+  const [loadingPrivate, setLoadingPrivate] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPrivateListingDoc = async () => {
+      if (!listing?.id) return;
+      setLoadingPrivate(true);
+      try {
+        const privateRef = doc(db, 'listings', listing.id, 'private', 'verification');
+        const snap = await getDoc(privateRef);
+        if (snap.exists() && isMounted) {
+          setPrivateVerificationData(snap.data() as PGVerificationData);
+        } else if (isMounted) {
+          setPrivateVerificationData(listing.pgVerificationData || null);
+        }
+      } catch (err) {
+        console.warn('Could not load private listing verification for admin:', err);
+        if (isMounted) {
+          setPrivateVerificationData(listing.pgVerificationData || null);
+        }
+      } finally {
+        if (isMounted) setLoadingPrivate(false);
+      }
+    };
+    fetchPrivateListingDoc();
+    return () => {
+      isMounted = false;
+    };
+  }, [listing?.id, listing?.pgVerificationData]);
+
   if (!listing) return null;
+
+  const activeVerificationData = privateVerificationData || listing.pgVerificationData;
 
   return (
     <AnimatePresence>
@@ -179,31 +214,48 @@ export const ListingInspectModal: React.FC<ListingInspectModalProps> = ({
                 </span>
               </div>
 
-              {listing.pgVerificationData ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-black/30 p-3.5 rounded-xl border border-white/5">
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Electricity Consumer / CA No.:</span>
-                    <span className="font-mono text-white font-bold bg-white/5 px-2 py-0.5 rounded">
-                      {listing.pgVerificationData.electricityConsumerNumber || 'Not provided'}
+              {loadingPrivate ? (
+                <div className="flex items-center justify-center p-6 bg-black/40 rounded-xl border border-white/5 text-gray-400 gap-2">
+                  <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+                  <span className="text-xs">Loading private verification document...</span>
+                </div>
+              ) : activeVerificationData ? (
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between pb-1 border-b border-white/5 text-[10px]">
+                    <span className="text-emerald-400 font-bold flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      <span>Protected Private Storage ({privateVerificationData ? 'listings/{id}/private/verification' : 'Legacy document'})</span>
+                    </span>
+                    <span className="text-gray-400">
+                      ID Type: {activeVerificationData.ownerGovtIdType || 'Electricity Bill'}
                     </span>
                   </div>
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Declared Electricity Rate:</span>
-                    <span className="text-emerald-300 font-bold">
-                      ₹{listing.pgVerificationData.subMeterRateDeclared || 8} per unit
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Caretaker / Contact:</span>
-                    <span className="text-white font-semibold">
-                      {listing.pgVerificationData.caretakerName || listing.authorName} ({listing.pgVerificationData.caretakerPhone || listing.contact})
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Submitted Date:</span>
-                    <span className="text-gray-300">
-                      {listing.pgVerificationData.submittedAt ? new Date(listing.pgVerificationData.submittedAt).toLocaleDateString('en-IN') : 'Recent'}
-                    </span>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-black/30 p-3.5 rounded-xl border border-white/5">
+                    <div>
+                      <span className="text-gray-400 block mb-0.5 font-medium">Electricity Consumer / CA No.:</span>
+                      <span className="font-mono text-white font-bold bg-white/5 px-2 py-0.5 rounded">
+                        {activeVerificationData.electricityConsumerNumber || 'Not provided'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400 block mb-0.5 font-medium">Declared Electricity Rate:</span>
+                      <span className="text-emerald-300 font-bold">
+                        ₹{activeVerificationData.subMeterRateDeclared || 8} per unit
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400 block mb-0.5 font-medium">Caretaker / Contact:</span>
+                      <span className="text-white font-semibold">
+                        {activeVerificationData.caretakerName || listing.authorName} ({activeVerificationData.caretakerPhone || listing.contact})
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400 block mb-0.5 font-medium">Submitted Date:</span>
+                      <span className="text-gray-300">
+                        {activeVerificationData.submittedAt ? new Date(activeVerificationData.submittedAt).toLocaleDateString('en-IN') : 'Recent'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ) : (
