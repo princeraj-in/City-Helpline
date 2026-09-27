@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, Search, Shield, Ban, Trash2, CheckCircle2, 
   Briefcase, Phone, MapPin, Calendar, ExternalLink, Info,
   UserPlus, RefreshCw, Copy, Check, X, ShieldAlert, Sparkles,
-  GraduationCap, Clock, ShieldCheck, Camera
+  GraduationCap, Clock, ShieldCheck, Camera, Lock
 } from 'lucide-react';
-import { UserProfile, Role, isSuperAdminEmail } from '../../types';
+import { UserProfile, Role, StudentVerificationData, isSuperAdminEmail } from '../../types';
 import { VerifiedStudentBadge } from '../common/TrustBadge';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 import { toast } from 'sonner';
 
 interface AdminUsersTabProps {
@@ -40,7 +42,46 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
   const [search, setSearch] = useState('');
   const [inspectUser, setInspectUser] = useState<UserProfile | null>(null);
   const [inspectStudentVerification, setInspectStudentVerification] = useState<UserProfile | null>(null);
+  const [privateVerificationData, setPrivateVerificationData] = useState<StudentVerificationData | null>(null);
+  const [isLoadingPrivateData, setIsLoadingPrivateData] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Fetch private verification subcollection /users/{uid}/private/verification when inspecting a student
+  useEffect(() => {
+    if (!inspectStudentVerification) {
+      setPrivateVerificationData(null);
+      setIsLoadingPrivateData(false);
+      return;
+    }
+    const uid = inspectStudentVerification.id || inspectStudentVerification.uid;
+    if (!uid) return;
+
+    let isMounted = true;
+    setIsLoadingPrivateData(true);
+    getDoc(doc(db, 'users', uid, 'private', 'verification'))
+      .then((snap) => {
+        if (!isMounted) return;
+        if (snap.exists()) {
+          setPrivateVerificationData(snap.data() as StudentVerificationData);
+        } else {
+          // Fallback to legacy record on user profile if exists
+          setPrivateVerificationData(inspectStudentVerification.studentVerificationData || null);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not read private verification doc:', err);
+        if (isMounted) {
+          setPrivateVerificationData(inspectStudentVerification.studentVerificationData || null);
+        }
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingPrivateData(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [inspectStudentVerification]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [copiedUid, setCopiedUid] = useState<string | null>(null);
 
@@ -673,73 +714,93 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
             </div>
 
             {/* Application Data */}
-            {inspectStudentVerification.studentVerificationData ? (
-              <div className="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/5 text-xs">
-                <div>
-                  <span className="text-gray-400 block mb-0.5 font-medium">Coaching Institute / College / University:</span>
-                  <p className="text-base font-bold text-[#00E5FF]">
-                    {inspectStudentVerification.studentVerificationData.collegeOrCoaching || 'Not provided'}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/5">
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Roll No. / Student ID:</span>
-                    <span className="font-mono text-white font-bold bg-white/5 px-2.5 py-1 rounded inline-block">
-                      {inspectStudentVerification.studentVerificationData.rollOrIdNumber || 'Not provided'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block mb-0.5 font-medium">Exam / Course:</span>
-                    <span className="text-purple-300 font-bold bg-purple-500/10 px-2.5 py-1 rounded inline-block border border-purple-500/20">
-                      {inspectStudentVerification.studentVerificationData.courseOrExam || 'Not specified'}
-                    </span>
-                  </div>
-                </div>
-
-                {inspectStudentVerification.studentVerificationData.idProofUrl && (
-                  <div className="pt-2 border-t border-white/5 space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400 font-medium">Student ID Proof:</span>
-                        {inspectStudentVerification.studentVerificationData.isLiveCameraCaptured ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1">
-                            <Camera className="w-3 h-3" /> Live Camera Clicked
-                          </span>
-                        ) : (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold flex items-center gap-1">
-                            <ExternalLink className="w-3 h-3" /> Provided via URL Link
-                          </span>
-                        )}
-                      </div>
-                      <a
-                        href={inspectStudentVerification.studentVerificationData.idProofUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-[#00E5FF] hover:underline flex items-center gap-1 font-semibold"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>View Full Size / Link</span>
-                      </a>
-                    </div>
-                    <div className="rounded-xl overflow-hidden border border-white/10 max-h-56 bg-black flex items-center justify-center p-1">
-                      <img 
-                        src={inspectStudentVerification.studentVerificationData.idProofUrl} 
-                        alt="Student ID Card" 
-                        className="max-h-56 object-contain rounded-lg"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div className="p-2 rounded-lg bg-white/[0.03] border border-white/5 text-[11px] text-gray-400">
-                      🔍 <strong>AI vs Real Verification Check:</strong> Verify student photo lighting consistency, official coaching watermark/hologram, aligned fonts, and match roll number format with coaching standard.
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-2 border-t border-white/5 text-[11px] text-gray-500">
-                  <span>Application Submitted: {inspectStudentVerification.studentVerificationData.submittedAt ? new Date(inspectStudentVerification.studentVerificationData.submittedAt).toLocaleString() : 'Recent'}</span>
-                </div>
+            {isLoadingPrivateData ? (
+              <div className="flex flex-col items-center justify-center p-8 bg-black/40 rounded-2xl border border-white/5 text-gray-400 gap-2.5">
+                <RefreshCw className="w-5 h-5 animate-spin text-[#00E5FF]" />
+                <span className="text-xs font-medium">Loading private verification document...</span>
               </div>
+            ) : (privateVerificationData || inspectStudentVerification.studentVerificationData) ? (
+              (() => {
+                const verificationData = privateVerificationData || inspectStudentVerification.studentVerificationData!;
+                return (
+                  <div className="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/5 text-xs">
+                    <div className="flex items-center justify-between pb-1.5 border-b border-white/5">
+                      <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1.5">
+                        <Lock className="w-3 h-3 text-emerald-400" />
+                        <span>Protected Private Storage ({privateVerificationData ? 'users/{id}/private/verification' : 'Legacy record'})</span>
+                      </span>
+                      <span className="text-[10px] text-gray-400">
+                        {verificationData.isLiveCameraCaptured ? 'Live Camera Capture' : 'URL Link'}
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className="text-gray-400 block mb-0.5 font-medium">Coaching Institute / College / University:</span>
+                      <p className="text-base font-bold text-[#00E5FF]">
+                        {verificationData.collegeOrCoaching || 'Not provided'}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/5">
+                      <div>
+                        <span className="text-gray-400 block mb-0.5 font-medium">Roll No. / Student ID:</span>
+                        <span className="font-mono text-white font-bold bg-white/5 px-2.5 py-1 rounded inline-block">
+                          {verificationData.rollOrIdNumber || 'Not provided'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block mb-0.5 font-medium">Exam / Course:</span>
+                        <span className="text-purple-300 font-bold bg-purple-500/10 px-2.5 py-1 rounded inline-block border border-purple-500/20">
+                          {verificationData.courseOrExam || 'Not specified'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {verificationData.idProofUrl && (
+                      <div className="pt-2 border-t border-white/5 space-y-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400 font-medium">Student ID Proof:</span>
+                            {verificationData.isLiveCameraCaptured ? (
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1">
+                                <Camera className="w-3 h-3" /> Live Camera Clicked
+                              </span>
+                            ) : (
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold flex items-center gap-1">
+                                <ExternalLink className="w-3 h-3" /> Provided via URL Link
+                              </span>
+                            )}
+                          </div>
+                          <a
+                            href={verificationData.idProofUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs text-[#00E5FF] hover:underline flex items-center gap-1 font-semibold"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            <span>View Full Size / Link</span>
+                          </a>
+                        </div>
+                        <div className="rounded-xl overflow-hidden border border-white/10 max-h-56 bg-black flex items-center justify-center p-1">
+                          <img 
+                            src={verificationData.idProofUrl} 
+                            alt="Student ID Card" 
+                            className="max-h-56 object-contain rounded-lg"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                        <div className="p-2 rounded-lg bg-white/[0.03] border border-white/5 text-[11px] text-gray-400">
+                          🔍 <strong>AI vs Real Verification Check:</strong> Verify student photo lighting consistency, official coaching watermark/hologram, aligned fonts, and match roll number format with coaching standard.
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="pt-2 border-t border-white/5 text-[11px] text-gray-500">
+                      <span>Application Submitted: {verificationData.submittedAt ? new Date(verificationData.submittedAt).toLocaleString() : 'Recent'}</span>
+                    </div>
+                  </div>
+                );
+              })()
             ) : (
               <p className="text-xs text-gray-400 italic bg-white/[0.02] p-4 rounded-xl">
                 No formal student verification submission on record for this user.

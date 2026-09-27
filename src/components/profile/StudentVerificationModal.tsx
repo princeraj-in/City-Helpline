@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { toast } from 'sonner';
 import { StudentVerificationData } from '../../types';
@@ -78,12 +78,39 @@ export const StudentVerificationModal: React.FC<StudentVerificationModalProps> =
     setIsCameraInitializing(false);
   };
 
-  // Cleanup on unmount or close
+  // Fetch from protected private subcollection /users/{uid}/private/verification
   useEffect(() => {
+    if (!currentUser) return;
+    let isMounted = true;
+    const fetchPrivateVerification = async () => {
+      try {
+        const privateRef = doc(db, 'users', currentUser.uid, 'private', 'verification');
+        const snap = await getDoc(privateRef);
+        if (snap.exists() && isMounted) {
+          const data = snap.data() as StudentVerificationData;
+          if (data.collegeOrCoaching) setCoachingOrCollege(data.collegeOrCoaching);
+          if (data.rollOrIdNumber) setRollNumber(data.rollOrIdNumber);
+          if (data.courseOrExam) setTargetExam(data.courseOrExam);
+          if (data.idProofUrl) {
+            if (data.isLiveCameraCaptured || data.idProofUrl.startsWith('data:image')) {
+              setCapturedPhoto(data.idProofUrl);
+              setExternalUrl('');
+            } else {
+              setExternalUrl(data.idProofUrl);
+              setCapturedPhoto('');
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Could not read private verification doc:', err);
+      }
+    };
+    fetchPrivateVerification();
     return () => {
+      isMounted = false;
       stopCameraStream();
     };
-  }, []);
+  }, [currentUser]);
 
   // Launch live camera view
   const handleStartCamera = async () => {
@@ -246,7 +273,7 @@ export const StudentVerificationModal: React.FC<StudentVerificationModalProps> =
 
     setIsSubmitting(true);
     try {
-      const verificationPayload: StudentVerificationData = {
+      const fullVerificationPayload: StudentVerificationData = {
         collegeOrCoaching: coachingOrCollege.trim(),
         rollOrIdNumber: rollNumber.trim(),
         courseOrExam: targetExam.trim(),
@@ -255,16 +282,27 @@ export const StudentVerificationModal: React.FC<StudentVerificationModalProps> =
         submittedAt: Date.now(),
       };
 
+      // 1. SECURE STORAGE: Save sensitive ID card proof & credentials in protected private subcollection
+      const privateVerificationRef = doc(db, 'users', currentUser.uid, 'private', 'verification');
+      await setDoc(privateVerificationRef, fullVerificationPayload);
+
+      // 2. PUBLIC PROFILE: Only save badge status and general non-sensitive metadata (Zero ID card photo / roll number leakage)
+      const safePublicSummary = {
+        collegeOrCoaching: coachingOrCollege.trim(),
+        courseOrExam: targetExam.trim(),
+        submittedAt: Date.now(),
+      };
+
       const userRef = doc(db, 'users', currentUser.uid);
       await updateDoc(userRef, {
         studentVerificationStatus: 'pending',
-        studentVerificationData: verificationPayload,
+        studentVerificationData: safePublicSummary,
         updatedAt: Date.now(),
       });
 
       updateLocalProfile({
         studentVerificationStatus: 'pending',
-        studentVerificationData: verificationPayload,
+        studentVerificationData: safePublicSummary,
       });
 
       toast.success(

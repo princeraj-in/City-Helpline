@@ -164,12 +164,33 @@
         "assignedAt": { "type": "number" }
       },
       "required": ["uid", "email", "role"]
+    },
+    "StudentPrivateVerification": {
+      "title": "StudentPrivateVerification",
+      "description": "Private student ID card proof, roll number, and verification credentials stored securely away from public user document",
+      "type": "object",
+      "properties": {
+        "collegeOrCoaching": { "type": "string" },
+        "rollOrIdNumber": { "type": "string" },
+        "courseOrExam": { "type": "string" },
+        "idProofUrl": { "type": "string" },
+        "isLiveCameraCaptured": { "type": "boolean" },
+        "submittedAt": { "type": "number" },
+        "verifiedAt": { "type": "number" },
+        "reviewedBy": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["collegeOrCoaching", "rollOrIdNumber", "courseOrExam"]
     }
   },
   "firestore": {
     "/users/{userId}": {
       "schema": { "$ref": "#/entities/UserProfile" },
       "description": "User profiles"
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/StudentPrivateVerification" },
+      "description": "Protected private subcollection for sensitive student ID verification proofs & credentials"
     },
     "/listings/{listingId}": {
       "schema": { "$ref": "#/entities/Listing" },

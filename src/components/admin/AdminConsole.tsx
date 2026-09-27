@@ -303,13 +303,22 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   const handleApproveStudentVerification = async (uid: string) => {
     const target = users.find(u => u.uid === uid);
     try {
+      const now = Date.now();
+      const reviewer = currentUser?.email || 'Admin';
+
       await updateDoc(doc(db, 'users', uid), {
         isStudentVerified: true,
         studentVerificationStatus: 'verified',
-        'studentVerificationData.verifiedAt': Date.now(),
-        'studentVerificationData.reviewedBy': currentUser?.email || 'Admin',
-        updatedAt: Date.now(),
+        'studentVerificationData.verifiedAt': now,
+        'studentVerificationData.reviewedBy': reviewer,
+        updatedAt: now,
       });
+
+      // Also sync to private subcollection if present
+      await setDoc(doc(db, 'users', uid, 'private', 'verification'), {
+        verifiedAt: now,
+        reviewedBy: reviewer,
+      }, { merge: true }).catch((pErr) => console.warn('Private subcollection sync warning:', pErr));
 
       setUsers(prev => prev.map(u => u.uid === uid ? {
         ...u,
@@ -317,8 +326,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         studentVerificationStatus: 'verified',
         studentVerificationData: {
           ...(u.studentVerificationData || { collegeOrCoaching: '', rollOrIdNumber: '', courseOrExam: '' }),
-          verifiedAt: Date.now(),
-          reviewedBy: currentUser?.email || 'Admin',
+          verifiedAt: now,
+          reviewedBy: reviewer,
         }
       } : u));
 
@@ -333,13 +342,23 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   const handleRejectStudentVerification = async (uid: string, reason?: string) => {
     const target = users.find(u => u.uid === uid);
     try {
+      const now = Date.now();
+      const reviewer = currentUser?.email || 'Admin';
+      const note = reason || 'Verification documents could not be validated';
+
       await updateDoc(doc(db, 'users', uid), {
         isStudentVerified: false,
         studentVerificationStatus: 'rejected',
-        'studentVerificationData.reviewedBy': currentUser?.email || 'Admin',
-        'studentVerificationData.note': reason || 'Verification documents could not be validated',
-        updatedAt: Date.now(),
+        'studentVerificationData.reviewedBy': reviewer,
+        'studentVerificationData.note': note,
+        updatedAt: now,
       });
+
+      // Also sync to private subcollection if present
+      await setDoc(doc(db, 'users', uid, 'private', 'verification'), {
+        reviewedBy: reviewer,
+        note: note,
+      }, { merge: true }).catch((pErr) => console.warn('Private subcollection sync warning:', pErr));
 
       setUsers(prev => prev.map(u => u.uid === uid ? {
         ...u,
@@ -347,8 +366,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         studentVerificationStatus: 'rejected',
         studentVerificationData: {
           ...(u.studentVerificationData || { collegeOrCoaching: '', rollOrIdNumber: '', courseOrExam: '' }),
-          reviewedBy: currentUser?.email || 'Admin',
-          note: reason || 'Verification documents could not be validated',
+          reviewedBy: reviewer,
+          note: note,
         }
       } : u));
 
