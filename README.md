@@ -16,6 +16,7 @@
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/TailwindCSS-v4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"></a>
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/Firebase-v12.19.0-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase"></a>
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/Google%20GenAI-Gemini%203.8%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google GenAI"></a>
+  <a href="#-key-features"><img src="https://img.shields.io/badge/PWA-Installable-blueviolet?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA Ready"></a>
 </p>
 
 ---
@@ -32,6 +33,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 - **Student Budget Estimator**: Intelligent expense calculator tailored to living costs in Indian coaching hubs.
 - **Peer-to-Peer Marketplace**: Buy and sell pre-owned academic essentials (books, notes, tables, coolers, bicycles).
 - **Roommate Matching**: Connect with compatible study partners based on competitive exam goals and lifestyle.
+- **Progressive Web App (PWA)**: Installable on Android, iOS Safari, and Desktop with offline asset caching.
 - **Bilingual Interface**: Full Hindi and English localization for seamless student accessibility.
 
 ---
@@ -67,6 +69,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
   - Live camera photo capture or student ID upload.
   - Institution/coaching verification (roll number, target exam).
   - Prominent verified badge displayed across marketplace cards and user profiles.
+  - **Protected Private Storage**: Document proofs and sensitive roll numbers are secured in private Firestore subcollections (`/users/{uid}/private/verification`).
 - **Verified PG Badge (`PGVerificationModal`)**:
   - Property electricity consumer / K-number verification.
   - Declared sub-meter electricity tariff guarantee (₹7–₹10/unit).
@@ -96,7 +99,13 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 - **Visual Analytics**: Interactive SVG donut chart showing expense category percentages and affordability ratings.
 - **Multi-Channel Sharing**: Formatted WhatsApp budget statements for parents/roommates, clipboard copy, and printable/downloadable statements.
 
-### 🌐 8. Bilingual Localization (Hindi / English)
+### 📱 8. Progressive Web App (PWA) & Offline Capabilities
+- **Installable Experience**: Supports direct installation as a standalone app on Android, iOS Safari (via "Add to Home Screen"), and Chromium Desktop.
+- **Early Install Trap**: Captures `beforeinstallprompt` early in `index.html` to guarantee instant responsiveness in custom UI banners.
+- **Guided Install Sheet (`InstallAppPrompt`)**: Bilingual interactive modal with step-by-step visual instructions tailored for iOS Safari and Android Chrome.
+- **Service Worker (`public/sw.js`)**: Implements network-first caching with offline fallback for core assets, icons, and shell HTML.
+
+### 🌐 9. Bilingual Localization (Hindi / English)
 - **LanguageProvider (`LanguageContext`)**: Global context supporting English and Hindi.
 - **Compact Language Selector**: Header and mobile controls for instant language switching across help, verification, and navigation.
 
@@ -108,6 +117,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                          City Helpline Client                           │
 │              React 19 • TypeScript • Vite • Tailwind CSS v4             │
+│                     PWA Service Worker & Offline Cache                  │
 └──────────────┬──────────────────┬─────────────────┬─────────────────────┘
                │                  │                 │
                ▼                  ▼                 ▼
@@ -120,11 +130,13 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
                │                  │        ┌──────────────────────────────┐
                │                  │        │  Vercel Serverless / Express │
                │                  │        │  /api/chat • 4-tier fallback │
+               │                  │        │  IP Rate Limiter & Sanitize  │
                │                  │        └──────────────┬───────────────┘
                ▼                  ▼                       │
 ┌─────────────────────────────────────────────────────────▼───────────────┐
 │                        Cloud Firestore Database                         │
 │  • /users/{userId}                       → User profiles, RBAC, auth    │
+│  • /users/{userId}/private/verification  → Protected ID card proofs     │
 │  • /listings/{listingId}                 → PGs, Hostels, Mess, Library  │
 │  • /reviews/{reviewId}                   → Atomic ratings & reviews     │
 │  • /marketplace_items/{itemId}           → Student buy & sell posts     │
@@ -145,6 +157,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 | **Build Tooling** | Vite | `^6.2.0` | Fast build pipeline and Hot Module Replacement (HMR) |
 | **Styling & UI** | Tailwind CSS | `@tailwindcss/vite` | Modern utility-first styling & glassmorphism |
 | **Animations** | Motion (Framer) | `^12.23.24` | 60fps spring transitions & layout animations |
+| **Mobile / PWA** | Web App Manifest & SW | Service Worker v1 | Offline caching & installable home screen app |
 | **Database** | Cloud Firestore | `12.19.0` | Real-time NoSQL data store with security rules |
 | **Authentication** | Firebase Auth | `12.19.0` | Google OAuth, GitHub OAuth, Email/Password |
 | **AI Integration** | Google Gen AI SDK | `@google/genai` | Multi-tier cascading Gemini model orchestration |
@@ -161,8 +174,12 @@ City-Helpline/
 ├── api/
 │   ├── chat.ts                  # Vercel serverless AI chat handler (Gemini fallback)
 │   └── health.ts                # Serverless health check endpoint
-├── index.html                   # HTML entry point with OpenGraph meta tags
+├── index.html                   # HTML entry point with OpenGraph meta tags & PWA prompt trap
 ├── package.json                 # Dependencies and build scripts
+├── public/
+│   ├── manifest.json            # PWA manifest metadata
+│   ├── sw.js                    # Service worker for asset caching & offline support
+│   └── ...                      # Static app logos & icons
 ├── server.ts                    # Express development server with rate-limiting & chat API
 ├── tsconfig.json                # TypeScript compiler configuration
 ├── vercel.json                  # Vercel deployment routing configuration
@@ -170,8 +187,10 @@ City-Helpline/
 ├── firestore.rules              # Cloud Firestore security rules
 ├── firebase-blueprint.json      # Firestore collection schema blueprints
 ├── metadata.json                # Application metadata
+├── CONTRIBUTING.md              # Open-source contribution guidelines & setup
+├── CODE_OF_CONDUCT.md           # Community standards & behavior rules
 ├── src/
-│   ├── main.tsx                 # Application root entry point
+│   ├── main.tsx                 # Application root entry point & SW registration
 │   ├── App.tsx                  # Main router, route guards, and global layout
 │   ├── index.css                # Global styling, liquid glassmorphism, animations
 │   ├── types/
@@ -208,7 +227,7 @@ City-Helpline/
 │   │   ├── ai/
 │   │   │   └── AiFloatingAssistant.tsx# Kinetic floating AI Mitra button & modal
 │   │   ├── common/
-│   │   │   ├── InstallAppPrompt.tsx   # PWA installation banner
+│   │   │   ├── InstallAppPrompt.tsx   # Guided PWA installation banner & sheet
 │   │   │   ├── LanguageSelector.tsx   # Hindi/English language toggle
 │   │   │   ├── TrustBadge.tsx         # Verified Student & Verified PG trust badges
 │   │   │   └── UserAvatar.tsx         # Standardized avatar with fallback
@@ -258,12 +277,14 @@ City-Helpline/
 
 ## 🔒 Security Architecture
 
-Cloud Firestore is protected by comprehensive rules defined in `firestore.rules`:
+Cloud Firestore and API routes are protected by defense-in-depth security:
 - **Authentication Required**: Write operations require a validated Firebase Auth session (`request.auth != null`).
 - **Owner Access Control**: Users can only update or delete listings, marketplace posts, and profile documents that they own.
 - **Admin Governance**: Sensitive moderation operations (approving listings, verifying badges, assigning roles) require verified admin credentials (`hasAdminClaim()`, `isDatabaseAdmin()`, or super admin configuration).
+- **Private Subcollections**: Sensitive student ID proofs and roll numbers are stored exclusively in `/users/{userId}/private/verification`, strictly shielded from public profile reads.
 - **Strict Schema Boundaries**: String lengths, required fields, and valid enum values are strictly enforced by schema validators (`isValidListing`, `isValidUser`, `isValidMarketplaceItem`).
 - **Conversation Confidentiality**: Access to `/conversations/{convId}` and nested messages is restricted strictly to conversation participants and administrators.
+- **API Rate Limiting & Sanitization**: Serverless and Express chat endpoints enforce in-memory IP sliding-window rate limiting (25 req/min) and prompt sanitization against injection attacks.
 
 ---
 
@@ -305,11 +326,13 @@ GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### 3. Run Locally
-Start the development server:
+Start the development server (runs Express backend + Vite with HMR):
 ```bash
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+> **Note**: `server.ts` handles `/api/chat` and `/api/health` locally. Make sure `GEMINI_API_KEY` is provided in `.env` to test City Helpline AI Mitra.
 
 ### 4. Build for Production
 To compile and bundle for production deployment:
@@ -317,21 +340,19 @@ To compile and bundle for production deployment:
 npm run build
 ```
 
-To run type checking and linting:
+To run type checking and lint validation:
 ```bash
 npm run lint
 ```
 
 ---
 
-## 🌟 Contributing
+## 🌟 Contributing & Community
 
-Contributions are welcome! Follow these steps to contribute:
-1. **Fork** the repository.
-2. Create your feature branch (`git checkout -b feature/amazing-feature`).
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`).
-4. Push to the branch (`git push origin feature/amazing-feature`).
-5. Open a **Pull Request**.
+We welcome contributions from the community!
+
+- Please review our **[CONTRIBUTING.md](CONTRIBUTING.md)** for detailed local setup instructions, branching conventions, and the pull request workflow.
+- All contributors and participants are expected to adhere to our **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**.
 
 ---
 
