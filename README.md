@@ -311,7 +311,7 @@ Configure your environment variables:
 ```env
 # Cloudinary Media Configuration
 VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
-VITE_CLOUDINARY_UPLOAD_PRESET=cityhelpline_upload
+VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
 
 # Firebase Web Configuration
 VITE_FIREBASE_API_KEY=your_firebase_api_key
