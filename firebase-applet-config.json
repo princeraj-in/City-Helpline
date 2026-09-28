@@ -1,10 +1,10 @@
 {
-  "projectId": "city-helpline-47c96",
-  "appId": "1:899952350045:web:975ab1a4d749bfdce00eb4",
-  "apiKey": "AIzaSyDfgfEto73uWXUaHrrVglJKe6_EIf6C3Qk",
-  "authDomain": "city-helpline-47c96.firebaseapp.com",
+  "projectId": "studolink-in",
+  "appId": "1:974058852405:web:f6408f42df8def386b217c",
+  "apiKey": "AIzaSyCyHeKo2fl8DPvbFkIAlbpZLPtOx2QF96E",
+  "authDomain": "studolink-in.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
-  "storageBucket": "city-helpline-47c96.firebasestorage.app",
-  "messagingSenderId": "899952350045",
-  "measurementId": "G-1V9T3KLP46"
+  "storageBucket": "studolink-in.firebasestorage.app",
+  "messagingSenderId": "974058852405",
+  "measurementId": "G-Z96F5PM8LW"
 }
