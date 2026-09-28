@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
+import { checkRateLimit } from './src/lib/serverRateLimiter';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -79,25 +80,6 @@ You are "Studolink AI Mitra" (स्टुडोलिंक एआई मित
 Keep answers well-structured with clear bullet points, accurate local advice, and encouraging tone!
 `;
 
-// Rate Limiting Store (In-Memory IP Sliding Window)
-interface RateLimitRecord {
-  timestamps: number[];
-}
-const rateLimitMap = new Map<string, RateLimitRecord>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 25; // max 25 queries per minute per IP
-
-// Periodic cleanup of stale rate-limit IP records every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, record] of rateLimitMap.entries()) {
-    record.timestamps = record.timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (record.timestamps.length === 0) {
-      rateLimitMap.delete(ip);
-    }
-  }
-}, 5 * 60 * 1000);
-
 function sanitizeInput(text: string): string {
   return text
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
@@ -173,33 +155,26 @@ async function startServer() {
   // AI Chat Endpoint with Protection
   app.post('/api/chat', async (req: Request, res: Response) => {
     try {
-      // 1. IP Rate Limiting
+      // 1. Persistent Shared Rate Limiting (Upstash Redis + fallback)
       const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || 
                        req.socket.remoteAddress || 
                        'anonymous';
-      const now = Date.now();
-      let record = rateLimitMap.get(clientIp);
-      if (!record) {
-        record = { timestamps: [] };
-        rateLimitMap.set(clientIp, record);
-      }
-      record.timestamps = record.timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
 
-      res.setHeader('X-RateLimit-Limit', MAX_REQUESTS_PER_WINDOW.toString());
-      res.setHeader('X-RateLimit-Remaining', Math.max(0, MAX_REQUESTS_PER_WINDOW - record.timestamps.length - 1).toString());
+      const rateResult = await checkRateLimit(clientIp);
 
-      if (record.timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
-        const oldestTime = record.timestamps[0];
-        const retryAfterSeconds = Math.ceil((oldestTime + RATE_LIMIT_WINDOW_MS - now) / 1000);
-        res.setHeader('Retry-After', retryAfterSeconds.toString());
+      res.setHeader('X-RateLimit-Limit', rateResult.limit.toString());
+      res.setHeader('X-RateLimit-Remaining', rateResult.remaining.toString());
+      res.setHeader('X-RateLimit-Reset', rateResult.reset.toString());
+
+      if (!rateResult.success) {
+        res.setHeader('Retry-After', rateResult.retryAfterSec.toString());
         res.status(429).json({
-          error: 'Too many queries. Please wait a moment before sending another message to AI Mitra.',
-          retryAfter: retryAfterSeconds,
+          error: `Too many queries. Please wait ${rateResult.retryAfterSec} seconds before sending another message to AI Mitra. (अधिकतम 25 प्रश्न प्रति मिनट अनुमति है)`,
+          retryAfter: rateResult.retryAfterSec,
           fallback: true,
         });
         return;
       }
-      record.timestamps.push(now);
 
       // 2. Strict Input Validation & Length Checks
       const { message, history } = req.body;

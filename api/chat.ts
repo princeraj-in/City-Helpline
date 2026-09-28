@@ -1,4 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
+import { checkRateLimit } from '../src/lib/serverRateLimiter';
 
 const SYSTEM_INSTRUCTION = `
 You are "Studolink AI Mitra" (स्टुडोलिंक एआई मित्र) — the official intelligent student guide, local advisor, and mentor for "Studolink" (app.imprince.me), India's dedicated zero-brokerage student housing and ecosystem platform.
@@ -52,14 +53,6 @@ You are "Studolink AI Mitra" (स्टुडोलिंक एआई मित
 
 Keep answers well-structured with clear bullet points, accurate local advice, and encouraging tone!
 `;
-
-// In-Memory IP-based Sliding Window Rate Limiting (Serverless-safe map)
-interface RateLimitRecord {
-  timestamps: number[];
-}
-const rateLimitMap = new Map<string, RateLimitRecord>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
-const MAX_REQUESTS_PER_WINDOW = 25; // max 25 queries per minute per IP
 
 function sanitizeInput(text: string): string {
   return text
@@ -128,33 +121,26 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    // 1. IP-Based Sliding Window Rate Limiting
+    // 1. Persistent Shared Rate Limiting (Upstash Redis + fallback)
     const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || 
                      req.headers['x-real-ip'] || 
                      req.socket?.remoteAddress || 
                      'anonymous';
-    const now = Date.now();
-    let record = rateLimitMap.get(clientIp);
-    if (!record) {
-      record = { timestamps: [] };
-      rateLimitMap.set(clientIp, record);
-    }
-    // Filter out requests older than 1 minute
-    record.timestamps = record.timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
 
-    res.setHeader('X-RateLimit-Limit', MAX_REQUESTS_PER_WINDOW.toString());
-    res.setHeader('X-RateLimit-Remaining', Math.max(0, MAX_REQUESTS_PER_WINDOW - record.timestamps.length - 1).toString());
+    const rateResult = await checkRateLimit(clientIp);
 
-    if (record.timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
-      const retryAfterSec = Math.ceil((record.timestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000);
-      res.setHeader('Retry-After', retryAfterSec.toString());
+    res.setHeader('X-RateLimit-Limit', rateResult.limit.toString());
+    res.setHeader('X-RateLimit-Remaining', rateResult.remaining.toString());
+    res.setHeader('X-RateLimit-Reset', rateResult.reset.toString());
+
+    if (!rateResult.success) {
+      res.setHeader('Retry-After', rateResult.retryAfterSec.toString());
       res.status(429).json({
-        error: `Rate limit reached. Please wait ${retryAfterSec} seconds before asking again. (अधिकतम 25 प्रश्न प्रति मिनट अनुमति है)`,
-        retryAfter: retryAfterSec,
+        error: `Rate limit reached. Please wait ${rateResult.retryAfterSec} seconds before asking again. (अधिकतम 25 प्रश्न प्रति मिनट अनुमति है)`,
+        retryAfter: rateResult.retryAfterSec,
       });
       return;
     }
-    record.timestamps.push(now);
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
     const { message, history } = body;
