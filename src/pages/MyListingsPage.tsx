@@ -16,6 +16,7 @@ export default function MyListingsPage() {
   const { currentUser } = useAuth();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
   const [selectedListingForVerification, setSelectedListingForVerification] = useState<Listing | null>(null);
 
   useEffect(() => {
@@ -42,6 +43,15 @@ export default function MyListingsPage() {
 
     fetchListings();
   }, [currentUser]);
+
+  const pendingCount = listings.filter((l) => l.status === 'pending').length;
+  const approvedCount = listings.filter((l) => l.status === 'approved').length;
+  const rejectedCount = listings.filter((l) => l.status === 'rejected').length;
+
+  const filteredListings = listings.filter((item) => {
+    if (statusFilter === 'all') return true;
+    return item.status === statusFilter;
+  });
 
   const deleteListing = async (listingId: string) => {
     if (!window.confirm('Are you sure you want to delete this accommodation listing?')) return;
@@ -77,6 +87,91 @@ export default function MyListingsPage() {
         }
       />
 
+      {/* Verification Lifecycle Guidance Banner */}
+      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-purple-500/10 border border-amber-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 shrink-0">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-bold text-white text-sm flex items-center gap-1.5">
+              <span>Admin Verification & Approval Process</span>
+              <span className="px-2 py-0.2 rounded-full text-[10px] font-black uppercase bg-[#00E5FF]/20 text-[#00E5FF]">
+                Anti-Fraud Safety
+              </span>
+            </h4>
+            <p className="text-gray-300 mt-0.5">
+              Newly submitted accommodations undergo a security review before appearing in public search. You can view all your listings below with their live status.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            to="/add-listing"
+            className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-[#00E5FF] font-bold text-xs border border-cyan-500/30 transition-all flex items-center gap-1"
+          >
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Post Another PG</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Status Filter Tabs */}
+      <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
+        <button
+          type="button"
+          onClick={() => setStatusFilter('all')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+            statusFilter === 'all'
+              ? 'bg-[#00E5FF] text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.35)]'
+              : 'bg-white/[0.06] text-gray-400 hover:text-white hover:bg-white/[0.1]'
+          }`}
+        >
+          All Accommodations ({listings.length})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setStatusFilter('pending')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+            statusFilter === 'pending'
+              ? 'bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.35)]'
+              : 'bg-white/[0.06] text-amber-300/80 hover:text-amber-200 hover:bg-white/[0.1]'
+          }`}
+        >
+          <Clock className="w-3.5 h-3.5" />
+          <span>Under Review ({pendingCount})</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setStatusFilter('approved')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+            statusFilter === 'approved'
+              ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.35)]'
+              : 'bg-white/[0.06] text-emerald-300/80 hover:text-emerald-200 hover:bg-white/[0.1]'
+          }`}
+        >
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>Live on Studolink ({approvedCount})</span>
+        </button>
+
+        {rejectedCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setStatusFilter('rejected')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              statusFilter === 'rejected'
+                ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.35)]'
+                : 'bg-white/[0.06] text-rose-300/80 hover:text-rose-200 hover:bg-white/[0.1]'
+            }`}
+          >
+            <span>Needs Changes ({rejectedCount})</span>
+          </button>
+        )}
+      </div>
+
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
@@ -86,9 +181,9 @@ export default function MyListingsPage() {
             />
           ))}
         </div>
-      ) : listings.length > 0 ? (
+      ) : filteredListings.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {listings.map((item) => (
+          {filteredListings.map((item) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 12 }}
@@ -116,13 +211,27 @@ export default function MyListingsPage() {
                       {item.category}
                     </span>
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md border ${
                         item.status === 'approved'
-                          ? 'bg-emerald-500/80 text-white'
-                          : 'bg-amber-500/80 text-white'
+                          ? 'bg-emerald-500/90 text-white border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.4)]'
+                          : item.status === 'rejected'
+                          ? 'bg-rose-500/90 text-white border-rose-400/50'
+                          : 'bg-amber-500/90 text-black border-amber-400/50 shadow-[0_0_10px_rgba(245,158,11,0.4)]'
                       }`}
                     >
-                      {item.status === 'approved' ? 'Live' : 'Under Review'}
+                      {item.status === 'approved' ? (
+                        <>
+                          <CheckCircle2 className="w-3 h-3 text-white" />
+                          <span>Approved & Live</span>
+                        </>
+                      ) : item.status === 'rejected' ? (
+                        <span>Needs Changes</span>
+                      ) : (
+                        <>
+                          <Clock className="w-3 h-3 text-black animate-spin" />
+                          <span>Under Review</span>
+                        </>
+                      )}
                     </span>
                     {item.isVerifiedPG && (
                       <VerifiedPGBadge size="sm" />

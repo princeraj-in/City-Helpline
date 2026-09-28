@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLocationContext } from '../contexts/LocationContext';
 import { db } from '../lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
-import { uploadImage } from '../lib/storage';
+import { uploadMultipleImages } from '../lib/storage';
 import { MarketplaceCategory, ItemCondition, MarketplaceItem } from '../types';
 import { MARKETPLACE_CATEGORIES, ITEM_CONDITIONS, STATE_CITIES } from '../lib/constants';
 import { GlassCard } from '../components/ui/GlassCard';
@@ -12,9 +12,10 @@ import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
 import { LiquidButton } from '../components/ui/LiquidButton';
 import { SearchableSelect } from '../components/ui/SearchableSelect';
 import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
+import { ListingSuccessModal } from '../components/common/ListingSuccessModal';
 import { 
   ShoppingBag, ArrowLeft, UploadCloud, X, AlertCircle, 
-  CheckCircle, Sparkles, MapPin, Tag, IndianRupee, Phone, MessageCircle, Info, Gift, Heart
+  CheckCircle, Sparkles, MapPin, Tag, IndianRupee, Phone, MessageCircle, Info, Gift, Heart, Loader2
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -38,11 +39,23 @@ export default function SellItem() {
   const [whatsapp, setWhatsapp] = useState(userProfile?.phone || '');
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [customImageUrl, setCustomImageUrl] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [uploadProgressText, setUploadProgressText] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // Success Celebration Modal State
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdItem, setCreatedItem] = useState<{
+    id: string;
+    title: string;
+    city: string;
+    price: number;
+    category: string;
+    imageThumbnail?: string;
+  } | null>(null);
+  const [customImageUrl, setCustomImageUrl] = useState('');
 
   useEffect(() => {
     if (userLocation?.city && !city) {
@@ -111,16 +124,19 @@ export default function SellItem() {
     }
 
     setLoading(true);
+    setUploadProgressText('Optimizing & compressing photos...');
 
     try {
-      // 1. Upload files if any
-      const uploadedUrls: string[] = [];
-      for (const file of imageFiles) {
-        const url = await uploadImage(file);
-        if (url) {
-          uploadedUrls.push(url);
-        }
+      // 1. Fast Concurrent Pre-compressed Upload
+      let uploadedUrls: string[] = [];
+      if (imageFiles.length > 0) {
+        setUploadProgressText(`Compressing & uploading ${imageFiles.length} photos...`);
+        uploadedUrls = await uploadMultipleImages(imageFiles, (completed, total) => {
+          setUploadProgressText(`Uploaded ${completed} of ${total} photos...`);
+        });
       }
+
+      setUploadProgressText('Publishing to campus marketplace...');
 
       // Combine uploaded file URLs with any direct image URLs added
       const nonBlobUrls = previewUrls.filter(u => !u.startsWith('blob:'));
@@ -160,19 +176,38 @@ export default function SellItem() {
         isStudentVerified: !!userProfile?.isStudentVerified
       };
 
-      await addDoc(collection(db, 'marketplace_items'), itemPayload);
+      const docRef = await addDoc(collection(db, 'marketplace_items'), itemPayload);
 
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/marketplace');
-      }, 1500);
+      setCreatedItem({
+        id: docRef.id,
+        title: title.trim(),
+        city,
+        price: numPrice,
+        category,
+        imageThumbnail: finalImages[0] || undefined
+      });
+      setShowSuccessModal(true);
 
     } catch (err: any) {
       console.error('Error listing item:', err);
       setError(err.message || 'Failed to list item. Please try again.');
     } finally {
       setLoading(false);
+      setUploadProgressText('');
     }
+  };
+
+  const handleResetForm = () => {
+    setTitle('');
+    setDescription('');
+    setPrice(isFreeParam ? '0' : '');
+    setOriginalPrice('');
+    setArea('');
+    setImageFiles([]);
+    setPreviewUrls([]);
+    setError(null);
+    setShowSuccessModal(false);
+    setCreatedItem(null);
   };
 
   return (
@@ -439,13 +474,39 @@ export default function SellItem() {
               type="submit"
               disabled={loading}
               variant="primary"
-              className="px-8 py-3 font-bold text-sm"
+              className="px-8 py-3 font-bold text-sm flex items-center gap-2"
             >
-              {loading ? 'Publishing Item...' : 'Post Listing on Marketplace'}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>{uploadProgressText || 'Publishing Item...'}</span>
+                </>
+              ) : (
+                <span>Post Listing on Marketplace</span>
+              )}
             </LiquidButton>
           </div>
         </form>
       </LiquidGlassCard>
+
+      {/* Premium Celebration & Success Modal for Marketplace Item */}
+      {createdItem && (
+        <ListingSuccessModal
+          isOpen={showSuccessModal}
+          onClose={() => {
+            setShowSuccessModal(false);
+            navigate('/marketplace');
+          }}
+          type="marketplace"
+          itemId={createdItem.id}
+          itemTitle={createdItem.title}
+          city={createdItem.city}
+          price={createdItem.price}
+          category={createdItem.category}
+          imageThumbnail={createdItem.imageThumbnail}
+          onAddAnother={handleResetForm}
+        />
+      )}
     </div>
   );
 }

@@ -8,7 +8,8 @@ import { motion } from 'motion/react';
 import { 
   User, LogOut, Settings, Building2, MapPin, 
   Star, ShoppingBag, Calculator, 
-  ShieldCheck, ArrowRight, Scale, AlertTriangle, FileText
+  ShieldCheck, ArrowRight, Scale, AlertTriangle, FileText,
+  Clock, CheckCircle2, PlusCircle, Sparkles, XCircle, Eye
 } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
 import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
@@ -310,8 +311,15 @@ export default function Profile() {
             <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-[#00E5FF] group-hover:translate-x-1 transition-all" />
           </div>
           <div>
-            <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              {loading ? '...' : myListings.length}
+            <div className="flex items-center gap-2">
+              <span className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                {loading ? '...' : myListings.length}
+              </span>
+              {myListings.filter(l => l.status === 'pending').length > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  {myListings.filter(l => l.status === 'pending').length} review
+                </span>
+              )}
             </div>
             <p className="text-xs font-semibold text-gray-400 mt-0.5">Hosted Listings</p>
           </div>
@@ -336,6 +344,136 @@ export default function Profile() {
             <p className="text-xs font-semibold text-gray-400 mt-0.5">Student Budget Tool</p>
           </div>
         </Link>
+      </div>
+
+      {/* Feature: My Hosted Accommodations & Verification Status */}
+      <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-white/[0.04] via-black/40 to-white/[0.02] border border-white/10 shadow-2xl space-y-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-[#00E5FF] shrink-0">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h4 className="text-base font-bold text-white">My Hosted Accommodations</h4>
+                {myListings.filter(l => l.status === 'pending').length > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    <Clock className="w-3 h-3 animate-spin" />
+                    <span>{myListings.filter(l => l.status === 'pending').length} Under Review</span>
+                  </span>
+                )}
+                {myListings.filter(l => l.status === 'approved').length > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>{myListings.filter(l => l.status === 'approved').length} Live</span>
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Zero-brokerage student PGs, silent study libraries, and mess facilities you manage.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              to="/add-listing"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#00E5FF] hover:bg-cyan-300 text-slate-950 font-bold text-xs shadow-[0_0_15px_rgba(0,229,255,0.35)] transition-all active:scale-95"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Post New Listing</span>
+            </Link>
+            {myListings.length > 0 && (
+              <Link
+                to="/my-listings"
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] text-white font-bold text-xs border border-white/10 transition-all"
+              >
+                <span>Manage ({myListings.length})</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="h-28 rounded-2xl bg-white/5 animate-pulse border border-white/10" />
+            <div className="h-28 rounded-2xl bg-white/5 animate-pulse border border-white/10" />
+          </div>
+        ) : myListings.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {myListings.slice(0, 4).map((listing) => (
+              <div
+                key={listing.id}
+                className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 transition-all flex items-center justify-between gap-3 group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0">
+                    {listing.images && listing.images[0] ? (
+                      <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500">
+                        <Building2 className="w-6 h-6" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-black uppercase px-2 py-0.2 rounded bg-white/10 text-cyan-300">
+                        {listing.category}
+                      </span>
+                      {listing.status === 'approved' ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase text-emerald-400">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Approved</span>
+                        </span>
+                      ) : listing.status === 'rejected' ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase text-rose-400">
+                          <XCircle className="w-3 h-3" />
+                          <span>Needs Changes</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase text-amber-300 animate-pulse">
+                          <Clock className="w-3 h-3" />
+                          <span>Under Review</span>
+                        </span>
+                      )}
+                    </div>
+                    <h5 className="text-sm font-bold text-white truncate group-hover:text-[#00E5FF] transition-colors">
+                      {listing.title}
+                    </h5>
+                    <p className="text-xs text-gray-400 truncate">
+                      {listing.city} • ₹{listing.price?.toLocaleString('en-IN')}/mo
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Link
+                    to={`/listing/${listing.id}`}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-all"
+                    title="Preview listing"
+                  >
+                    <Eye className="w-4 h-4 text-[#00E5FF]" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-5 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <div>
+              <p className="text-sm font-bold text-white">Have a student PG, library, or tiffin facility to list?</p>
+              <p className="text-xs text-gray-400 mt-0.5">Post your student accommodation for zero brokerage. Reach verified students across India.</p>
+            </div>
+            <Link
+              to="/add-listing"
+              className="px-4 py-2 rounded-xl bg-[#00E5FF] hover:bg-cyan-300 text-slate-950 font-bold text-xs shrink-0"
+            >
+              List Free Accommodation
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Feature 1: Flatmate / Roommate Finder (Book or List Yourself) */}

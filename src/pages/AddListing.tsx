@@ -3,21 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
-import { uploadImage } from '../lib/storage';
+import { uploadMultipleImages } from '../lib/storage';
 import { Listing } from '../types';
-import { UploadCloud, X, ArrowLeft, Tag, MapPin } from 'lucide-react';
+import { UploadCloud, X, ArrowLeft, Tag, MapPin, Loader2, Sparkles, Building2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { CATEGORIES, STATE_CITIES } from '../lib/constants';
 import { SearchableSelect } from '../components/ui/SearchableSelect';
 import { useLocationContext } from '../contexts/LocationContext';
 import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
-import { Building2 } from 'lucide-react';
+import { ListingSuccessModal } from '../components/common/ListingSuccessModal';
 
 export default function AddListing() {
   const { currentUser, userProfile } = useAuth();
   const { userLocation } = useLocationContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [uploadProgressText, setUploadProgressText] = useState('');
   const [error, setError] = useState('');
   
   const [title, setTitle] = useState('');
@@ -30,7 +31,23 @@ export default function AddListing() {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
-  // Any authenticated user can submit listings for admin review
+  // Success Celebration Modal State
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdListing, setCreatedListing] = useState<{
+    id: string;
+    title: string;
+    city: string;
+    price: number;
+    category: string;
+    imageThumbnail?: string;
+  } | null>(null);
+
+  // Sync city if user location is detected
+  useEffect(() => {
+    if (userLocation?.city && !city) {
+      setCity(userLocation.city);
+    }
+  }, [userLocation?.city]);
 
   const categoryOptions = CATEGORIES.map(cat => ({ value: cat, label: cat }));
   
@@ -72,44 +89,70 @@ export default function AddListing() {
     
     setLoading(true);
     setError('');
+    setUploadProgressText('Optimizing & preparing photos...');
 
     try {
-      // 1. Upload images (Placeholder)
-      const uploadedImageUrls: string[] = [];
-      for (const image of images) {
-        const downloadUrl = await uploadImage(image);
-        if (downloadUrl) {
-          uploadedImageUrls.push(downloadUrl);
-        }
+      // 1. Fast Concurrent Pre-compressed Upload
+      let uploadedImageUrls: string[] = [];
+      if (images.length > 0) {
+        setUploadProgressText(`Compressing & uploading ${images.length} photos...`);
+        uploadedImageUrls = await uploadMultipleImages(images, (completed, total) => {
+          setUploadProgressText(`Uploaded ${completed} of ${total} photos...`);
+        });
       }
 
-      // 2. Save listing to Firestore
+      setUploadProgressText('Saving listing for verification...');
+
+      // 2. Save listing to Firestore with status: 'pending'
       const newListing: Omit<Listing, 'id'> = {
-        title,
-        description,
+        title: title.trim(),
+        description: description.trim(),
         category,
         city,
-        address,
+        address: address.trim(),
         price: Number(price),
-        contact,
+        contact: contact.trim(),
         images: uploadedImageUrls,
-        status: 'pending', // Default status
+        status: 'pending', // Awaiting Admin Review
         featured: false,
         authorId: currentUser.uid,
-        authorName: userProfile.name || 'Unknown User',
+        authorName: userProfile.name || currentUser.displayName || 'Studolink Host',
         createdAt: Date.now(),
       };
 
-      await addDoc(collection(db, 'listings'), newListing);
+      const docRef = await addDoc(collection(db, 'listings'), newListing);
       
-      // Redirect to profile page
-      navigate('/profile');
+      // 3. Open celebratory success modal
+      setCreatedListing({
+        id: docRef.id,
+        title: title.trim(),
+        city,
+        price: Number(price),
+        category,
+        imageThumbnail: uploadedImageUrls[0] || undefined
+      });
+      setShowSuccessModal(true);
+
     } catch (err: any) {
       console.error("Error adding listing:", err);
-      setError(err.message || 'Failed to add listing');
+      setError(err.message || 'Failed to submit listing. Please try again.');
     } finally {
       setLoading(false);
+      setUploadProgressText('');
     }
+  };
+
+  const handleResetForm = () => {
+    setTitle('');
+    setDescription('');
+    setPrice('');
+    setAddress('');
+    setContact('');
+    setImages([]);
+    setImagePreviewUrls([]);
+    setError('');
+    setShowSuccessModal(false);
+    setCreatedListing(null);
   };
 
   return (
@@ -296,26 +339,59 @@ export default function AddListing() {
                 </div>
               </div>
 
-              <div className="pt-10 border-t border-white/10 flex justify-end gap-5">
-                <button
-                  type="button"
-                  onClick={() => navigate('/')}
-                  className="px-8 py-4 rounded-2xl text-sm font-bold text-gray-400 hover:bg-[rgba(255,255,255,0.05)] hover:text-white transition-all border border-transparent hover:border-white/10 uppercase tracking-wider"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] hover:from-[#8A2BE2] hover:to-[#00E5FF] text-white font-bold py-4 px-10 rounded-2xl transition-all shadow-[0_5px_15px_rgba(0,229,255,0.3)] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:translate-y-0 uppercase tracking-wider"
-                >
-                  {loading ? 'Submitting...' : 'Submit Listing'}
-                </button>
+              <div className="pt-10 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-xs text-gray-400 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#00E5FF]" />
+                  <span>Listings undergo verification within 12–24h before going public.</span>
+                </p>
+
+                <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/profile')}
+                    className="px-6 py-3.5 rounded-2xl text-xs font-bold text-gray-400 hover:bg-white/[0.05] hover:text-white transition-all border border-transparent hover:border-white/10 uppercase tracking-wider"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] hover:from-[#8A2BE2] hover:to-[#00E5FF] text-white font-bold py-3.5 px-8 rounded-2xl transition-all shadow-[0_5px_15px_rgba(0,229,255,0.3)] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none uppercase tracking-wider text-xs"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>{uploadProgressText || 'Submitting...'}</span>
+                      </>
+                    ) : (
+                      <span>Submit for Verification</span>
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </motion.div>
       </div>
+
+      {/* Premium Celebration & Verification Success Modal */}
+      {createdListing && (
+        <ListingSuccessModal
+          isOpen={showSuccessModal}
+          onClose={() => {
+            setShowSuccessModal(false);
+            navigate('/my-listings');
+          }}
+          type="accommodation"
+          itemId={createdListing.id}
+          itemTitle={createdListing.title}
+          city={createdListing.city}
+          price={createdListing.price}
+          category={createdListing.category}
+          imageThumbnail={createdListing.imageThumbnail}
+          onAddAnother={handleResetForm}
+        />
+      )}
     </motion.div>
   );
 }
