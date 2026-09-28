@@ -48,7 +48,8 @@ function calculateDistanceKm(lat1: number, lon1: number, lat2: number, lon2: num
 }
 
 export function findClosestCity(lat: number, lng: number): { city: string; state: string; distanceKm: number } {
-  let closest = CITY_COORDINATES[0];
+  const defaultCity = { city: 'Kota', state: 'Rajasthan', lat: 25.18, lng: 75.83 };
+  let closest = CITY_COORDINATES[0] || defaultCity;
   let minDistance = Infinity;
 
   for (const item of CITY_COORDINATES) {

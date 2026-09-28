@@ -114,7 +114,7 @@ export default function Search() {
               {selectedCity ? (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#00E5FF]/15 border border-[#00E5FF]/40 text-[#00E5FF] font-bold">
                   {selectedCity}
-                  {userLocation?.city === selectedCity && userLocation.isLiveDetected && (
+                  {userLocation?.city === selectedCity && userLocation?.isLiveDetected && (
                     <span className="flex items-center gap-0.5 text-[10px] text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded-full border border-emerald-500/30">
                       <Navigation className="w-2.5 h-2.5" /> GPS
                     </span>

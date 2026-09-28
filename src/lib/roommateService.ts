@@ -207,7 +207,7 @@ export async function getUserRoommateProfile(userId: string): Promise<RoommatePr
     // Check query by userId
     const q = query(collection(db, 'roommate_profiles'), where('userId', '==', userId));
     const querySnap = await getDocs(q);
-    if (!querySnap.empty) {
+    if (!querySnap.empty && querySnap.docs[0]) {
       const first = querySnap.docs[0];
       return { id: first.id, ...first.data() } as RoommateProfile;
     }

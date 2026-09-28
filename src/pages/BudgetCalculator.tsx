@@ -214,7 +214,7 @@ export default function BudgetCalculator() {
             id: c.id,
             name: c.name,
             amount: Number(c.amount) || 0,
-            color: customColors[idx % customColors.length],
+            color: customColors[idx % customColors.length] || '#00E5FF',
             percentage: Math.round(((Number(c.amount) || 0) / safeTotal) * 100)
           });
         }

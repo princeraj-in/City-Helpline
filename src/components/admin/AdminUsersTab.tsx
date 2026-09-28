@@ -53,7 +53,7 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
       setIsLoadingPrivateData(false);
       return;
     }
-    const uid = inspectStudentVerification.id || inspectStudentVerification.uid;
+    const uid = inspectStudentVerification.uid;
     if (!uid) return;
 
     let isMounted = true;
@@ -86,7 +86,7 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
   // Fetch private details subcollection /users/{uid}/private/details when inspecting a user
   useEffect(() => {
     if (!inspectUser) return;
-    const uid = inspectUser.id || inspectUser.uid;
+    const uid = inspectUser.uid;
     if (!uid) return;
 
     let isMounted = true;

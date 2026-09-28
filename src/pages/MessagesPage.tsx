@@ -78,7 +78,7 @@ export default function MessagesPage() {
         setLoadingConversations(false);
 
         // If no conversation is selected and screen is desktop, select first conversation
-        if (!selectedConvId && convList.length > 0 && window.innerWidth >= 1024) {
+        if (!selectedConvId && convList.length > 0 && window.innerWidth >= 1024 && convList[0]) {
           setSelectedConvId(convList[0].id);
         }
       }, (err) => {

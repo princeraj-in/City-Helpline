@@ -3,7 +3,7 @@ import {
   serverTimestamp, increment 
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Conversation, ChatListingContext, UserProfile } from '../types';
+import { Conversation, ChatListingContext, UserProfile, Role } from '../types';
 
 /**
  * Creates or gets an existing conversation between two users (e.g. Student and PG/Marketplace owner).
@@ -26,10 +26,11 @@ export async function getOrCreateConversation(
   const convRef = doc(db, 'conversations', conversationId);
   const convSnap = await getDoc(convRef);
 
-  const myName = currentUserProfile?.name || currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'User');
-  const myEmail = currentUser.email || currentUserProfile?.email || '';
-  const myPhoto = currentUser.photoURL || currentUserProfile?.photoURL || '';
-  const myRole = currentUserProfile?.role || 'user';
+  const fallbackEmailName = currentUser.email ? (currentUser.email.split('@')[0] || 'User') : 'User';
+  const myName: string = currentUserProfile?.name || currentUser.displayName || fallbackEmailName;
+  const myEmail: string = currentUser.email || currentUserProfile?.email || '';
+  const myPhoto: string = currentUser.photoURL || currentUserProfile?.photoURL || '';
+  const myRole: Role = currentUserProfile?.role || 'user';
 
   if (!convSnap.exists()) {
     const newConv: Conversation = {

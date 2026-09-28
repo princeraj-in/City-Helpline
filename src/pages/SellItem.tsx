@@ -83,7 +83,10 @@ export default function SellItem() {
   const removeImage = (index: number) => {
     setImageFiles(prev => prev.filter((_, i) => i !== index));
     setPreviewUrls(prev => {
-      URL.revokeObjectURL(prev[index]);
+      const targetUrl = prev[index];
+      if (targetUrl) {
+        URL.revokeObjectURL(targetUrl);
+      }
       return prev.filter((_, i) => i !== index);
     });
   };
@@ -153,7 +156,8 @@ export default function SellItem() {
           'Mattress & Bedding': 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80',
           'Other Essentials': 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=800&q=80'
         };
-        finalImages.push(categoryFallbacks[category] || categoryFallbacks['Books & Notes']);
+        const fallbackUrl = categoryFallbacks[category] || categoryFallbacks['Books & Notes'] || 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80';
+        finalImages.push(fallbackUrl);
       }
 
       const itemPayload = {

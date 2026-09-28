@@ -415,14 +415,16 @@ export const CITY_EMERGENCY_DATA: Record<string, CityEmergencyInfo> = {
  * Returns dynamic emergency contacts tailored to the student's active location.
  */
 export function getCityEmergencyInfo(cityName?: string): CityEmergencyInfo {
+  const defaultKota = CITY_EMERGENCY_DATA['Kota'] as CityEmergencyInfo;
   if (!cityName) {
-    return CITY_EMERGENCY_DATA['Kota'];
+    return defaultKota;
   }
 
   const clean = cityName.trim();
   // Exact match
-  if (CITY_EMERGENCY_DATA[clean]) {
-    return CITY_EMERGENCY_DATA[clean];
+  const exact = CITY_EMERGENCY_DATA[clean];
+  if (exact) {
+    return exact;
   }
 
   // Case-insensitive / partial match

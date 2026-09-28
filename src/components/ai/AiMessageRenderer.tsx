@@ -220,14 +220,14 @@ export const AiMessageRenderer: React.FC<AiMessageRendererProps> = ({
     if (/^\d+\.\s+/.test(trimmed)) {
       flushList(index);
       const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
-      if (numMatch) {
+      if (numMatch && numMatch[1]) {
         renderedElements.push(
           <div key={`num-${index}`} className="flex items-start gap-2 my-1.5 text-xs sm:text-sm text-gray-200">
             <span className="w-5 h-5 rounded-full bg-[#8A2BE2]/30 border border-[#00E5FF]/40 text-[#00E5FF] font-black text-[10px] flex items-center justify-center shrink-0 mt-0.5">
               {numMatch[1]}
             </span>
             <div className="flex-1 leading-relaxed">
-              {renderInlineFormatted(numMatch[2])}
+              {renderInlineFormatted(numMatch[2] || '')}
             </div>
           </div>
         );

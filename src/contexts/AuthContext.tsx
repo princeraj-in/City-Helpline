@@ -95,7 +95,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           } else {
             // Auto-provision public user profile in Firestore if missing so user is never orphaned in Auth
-            const cleanName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+            const fallbackFromEmail = user.email ? (user.email.split('@')[0] || 'User') : 'User';
+            const cleanName = user.displayName || fallbackFromEmail;
             const cleanEmail = user.email || '';
             const initialProfile: UserProfile = {
               uid: user.uid,

@@ -360,7 +360,7 @@ export default function Auth() {
             if (methods && methods.length > 0) {
               if (methods.includes('google.com')) primaryProvider = 'google.com';
               else if (methods.includes('password')) primaryProvider = 'password';
-              else primaryProvider = methods[0];
+              else primaryProvider = methods[0] || 'google.com';
             }
           } catch (fetchErr) {
             console.warn('Notice fetching sign-in methods:', fetchErr);

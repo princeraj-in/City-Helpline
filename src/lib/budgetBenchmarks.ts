@@ -471,7 +471,10 @@ export function getCityBenchmark(cityName?: string): CityBudgetBenchmark {
   const match = Object.keys(CITY_BENCHMARKS).find(
     k => k.toLowerCase() === cityName.toLowerCase() || cityName.toLowerCase().includes(k.toLowerCase())
   );
-  if (match) return CITY_BENCHMARKS[match];
+  if (match) {
+    const found = CITY_BENCHMARKS[match];
+    if (found) return found;
+  }
   return {
     ...DEFAULT_BENCHMARK,
     city: cityName
