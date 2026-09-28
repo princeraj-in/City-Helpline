@@ -75,18 +75,39 @@ async function compressImageFile(file: File, maxWidth = 1600, quality = 0.82): P
 }
 
 /**
+ * Retrieves and validates Cloudinary configuration from Vite client environment variables.
+ */
+function getCloudinaryConfig(): { cloudName: string; uploadPreset: string } {
+  const cloudName = (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '').trim();
+  const uploadPreset = (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '').trim();
+
+  if (!cloudName || !uploadPreset) {
+    const missing: string[] = [];
+    if (!cloudName) missing.push('VITE_CLOUDINARY_CLOUD_NAME');
+    if (!uploadPreset) missing.push('VITE_CLOUDINARY_UPLOAD_PRESET');
+    throw new Error(
+      `Cloudinary configuration missing: ${missing.join(', ')}. Please configure them in your environment variables (.env file).`
+    );
+  }
+
+  return { cloudName, uploadPreset };
+}
+
+/**
  * Uploads a single image to Cloudinary with automatic client-side pre-compression
  */
 export async function uploadImage(file: File): Promise<string | null> {
   try {
+    const { cloudName, uploadPreset } = getCloudinaryConfig();
+
     // 1. Fast on-device pre-compression (reduces 8MB phone photo to ~300KB in ~30ms)
     const compressedBlob = await compressImageFile(file);
 
     const formData = new FormData();
     formData.append('file', compressedBlob, file.name.replace(/\.[^/.]+$/, "") + ".jpg");
-    formData.append('upload_preset', 'cityhelpline_upload');
+    formData.append('upload_preset', uploadPreset);
 
-    const response = await fetch('https://api.cloudinary.com/v1_1/djpqwrs1l/image/upload', {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`, {
       method: 'POST',
       body: formData,
     });
@@ -94,13 +115,13 @@ export async function uploadImage(file: File): Promise<string | null> {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.error('Cloudinary upload error:', errorData);
-      throw new Error(errorData?.error?.message || 'Failed to upload image');
+      throw new Error(errorData?.error?.message || `Failed to upload image (Status ${response.status})`);
     }
 
     const data = await response.json();
     return data.secure_url;
-  } catch (error) {
-    console.error('Error uploading image to Cloudinary:', error);
+  } catch (error: any) {
+    console.error('Error uploading image to Cloudinary:', error?.message || error);
     return null;
   }
 }
