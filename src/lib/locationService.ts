@@ -1,7 +1,8 @@
 import { UserLocation } from '../types';
 import { ALL_CITIES, STATE_CITIES } from './constants';
 
-const LOCATION_STORAGE_KEY = 'city_helpline_user_location';
+const LOCATION_STORAGE_KEY = 'studolink_user_location';
+const OLD_LOCATION_STORAGE_KEY = 'city_helpline_user_location';
 
 // Centroids for major Indian student hubs and metro cities for fast fallback
 const CITY_COORDINATES: Array<{ city: string; state: string; lat: number; lng: number }> = [
@@ -215,7 +216,7 @@ export function getLiveDeviceCoordinates(): Promise<{ latitude: number; longitud
 
 export function getStoredLocation(): UserLocation | null {
   try {
-    const raw = localStorage.getItem(LOCATION_STORAGE_KEY);
+    const raw = localStorage.getItem(LOCATION_STORAGE_KEY) || localStorage.getItem(OLD_LOCATION_STORAGE_KEY);
     if (!raw) return null;
     return JSON.parse(raw) as UserLocation;
   } catch {

@@ -20,7 +20,7 @@ export interface AuthErrorInfo {
 export function parseAuthError(error: any): AuthErrorInfo {
   const code = error?.code || '';
   const currentHost = typeof window !== 'undefined' ? window.location.hostname : 'app.imprince.me';
-  const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID || appletConfig.projectId || 'city-helpline-47c96';
+  const projectId = appletConfig.projectId || import.meta.env.VITE_FIREBASE_PROJECT_ID || 'studolink-in';
   const consoleSettingsUrl = `https://console.firebase.google.com/project/${projectId}/authentication/settings`;
   const consoleProvidersUrl = `https://console.firebase.google.com/project/${projectId}/authentication/providers`;
   const callbackUrl = `https://${projectId}.firebaseapp.com/__/auth/handler`;

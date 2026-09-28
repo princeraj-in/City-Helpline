@@ -130,7 +130,8 @@ export const DEMO_ROOMMATES: RoommateProfile[] = [
   }
 ];
 
-const LOCAL_STORAGE_KEY = 'city_helpline_local_roommate_profiles';
+const LOCAL_STORAGE_KEY = 'studolink_local_roommate_profiles';
+const OLD_LOCAL_STORAGE_KEY = 'city_helpline_local_roommate_profiles';
 
 export async function getRoommateProfiles(city?: string): Promise<RoommateProfile[]> {
   try {
@@ -173,7 +174,7 @@ export async function getRoommateProfiles(city?: string): Promise<RoommateProfil
   } catch (err) {
     console.warn('Notice: Loading cached/demo roommate profiles:', err);
     try {
-      const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem(OLD_LOCAL_STORAGE_KEY);
       if (cached) {
         const parsed: RoommateProfile[] = JSON.parse(cached);
         if (city && city.trim() !== '') {

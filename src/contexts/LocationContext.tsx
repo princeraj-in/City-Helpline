@@ -34,7 +34,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
   const [hasPrompted, setHasPrompted] = useState<boolean>(() => {
-    return !!localStorage.getItem('city_helpline_location_prompted');
+    return !!(localStorage.getItem('studolink_location_prompted') || localStorage.getItem('city_helpline_location_prompted'));
   });
 
   // Persist to user's Firestore profile if signed in
@@ -64,7 +64,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       
       setUserLocation(loc);
       saveStoredLocation(loc);
-      localStorage.setItem('city_helpline_location_prompted', 'true');
+      localStorage.setItem('studolink_location_prompted', 'true');
       setHasPrompted(true);
       
       // Async sync to Firestore
@@ -96,7 +96,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
 
     setUserLocation(newLoc);
     saveStoredLocation(newLoc);
-    localStorage.setItem('city_helpline_location_prompted', 'true');
+    localStorage.setItem('studolink_location_prompted', 'true');
     setHasPrompted(true);
     setLocationError(null);
     syncLocationToFirestore(newLoc);
