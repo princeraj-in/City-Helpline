@@ -306,18 +306,18 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       const now = Date.now();
       const reviewer = currentUser?.email || 'Admin';
 
+      // 1. PUBLIC PROFILE: Only update verification status and timestamp (no private data in /users/{uid})
       await updateDoc(doc(db, 'users', uid), {
         isStudentVerified: true,
         studentVerificationStatus: 'verified',
-        'studentVerificationData.verifiedAt': now,
-        'studentVerificationData.reviewedBy': reviewer,
         updatedAt: now,
       });
 
-      // Also sync to private subcollection if present
+      // 2. PROTECTED PRIVATE SUBCOLLECTION: Store verification review details
       await setDoc(doc(db, 'users', uid, 'private', 'verification'), {
         verifiedAt: now,
         reviewedBy: reviewer,
+        updatedAt: now,
       }, { merge: true }).catch((pErr) => console.warn('Private subcollection sync warning:', pErr));
 
       setUsers(prev => prev.map(u => u.uid === uid ? {
@@ -346,18 +346,18 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       const reviewer = currentUser?.email || 'Admin';
       const note = reason || 'Verification documents could not be validated';
 
+      // 1. PUBLIC PROFILE: Only update verification status and timestamp
       await updateDoc(doc(db, 'users', uid), {
         isStudentVerified: false,
         studentVerificationStatus: 'rejected',
-        'studentVerificationData.reviewedBy': reviewer,
-        'studentVerificationData.note': note,
         updatedAt: now,
       });
 
-      // Also sync to private subcollection if present
+      // 2. PROTECTED PRIVATE SUBCOLLECTION: Store rejection notes and reviewer
       await setDoc(doc(db, 'users', uid, 'private', 'verification'), {
         reviewedBy: reviewer,
         note: note,
+        updatedAt: now,
       }, { merge: true }).catch((pErr) => console.warn('Private subcollection sync warning:', pErr));
 
       setUsers(prev => prev.map(u => u.uid === uid ? {

@@ -50,6 +50,17 @@ export interface PGVerificationData {
   note?: string;
 }
 
+export interface UserPrivateDetails {
+  phone?: string;
+  address?: string;
+  pincode?: string;
+  latitude?: number;
+  longitude?: number;
+  businessName?: string;
+  businessType?: string;
+  updatedAt?: number;
+}
+
 export interface UserProfile {
   uid: string;
   name: string;

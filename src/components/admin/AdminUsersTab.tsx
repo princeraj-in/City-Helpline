@@ -82,6 +82,31 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
       isMounted = false;
     };
   }, [inspectStudentVerification]);
+
+  // Fetch private details subcollection /users/{uid}/private/details when inspecting a user
+  useEffect(() => {
+    if (!inspectUser) return;
+    const uid = inspectUser.id || inspectUser.uid;
+    if (!uid) return;
+
+    let isMounted = true;
+    getDoc(doc(db, 'users', uid, 'private', 'details'))
+      .then((snap) => {
+        if (!isMounted) return;
+        if (snap.exists()) {
+          const privateData = snap.data();
+          setInspectUser((prev) => prev ? { ...prev, ...privateData } : prev);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not read private details doc in admin inspection:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [inspectUser?.uid]);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [copiedUid, setCopiedUid] = useState<string | null>(null);
 

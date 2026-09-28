@@ -36,7 +36,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isSuperAdmin = hasCustomClaimAdmin;
 
   useEffect(() => {
-    let unsubscribeProfile: () => void;
+    let unsubscribeProfile: (() => void) | undefined;
+    let unsubscribePrivateDetails: (() => void) | undefined;
+    let unsubscribePrivateVerification: (() => void) | undefined;
 
     // Safety fallback: Never keep the app completely unmounted/blocked for more than 2.5 seconds
     const safetyTimeout = setTimeout(() => {
@@ -48,13 +50,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCurrentUser(user);
       if (user) {
         // Inspect Firebase Auth Custom Claims directly on user ID Token (forceRefresh ensures freshest state)
+        let isAdminClaim = false;
         try {
           const tokenResult = await user.getIdTokenResult(true);
-          const isAdminClaim = tokenResult.claims.admin === true;
-          setHasCustomClaimAdmin(Boolean(isAdminClaim));
+          isAdminClaim = tokenResult.claims.admin === true;
+          setHasCustomClaimAdmin(isAdminClaim);
         } catch {
           setHasCustomClaimAdmin(false);
         }
+
+        let publicProfileData: Partial<UserProfile> = {};
+        let privateDetailsData: Partial<UserProfile> = {};
+        let privateVerificationData: any = undefined;
+
+        const mergeAndSetProfile = () => {
+          if (!publicProfileData.uid) return;
+          const merged: UserProfile = {
+            ...publicProfileData,
+            ...privateDetailsData,
+            ...(privateVerificationData ? { studentVerificationData: privateVerificationData } : {}),
+          } as UserProfile;
+
+          setUserProfile(merged);
+          localStorage.setItem('userProfile', JSON.stringify(merged));
+        };
 
         const docRef = doc(db, 'users', user.uid);
         unsubscribeProfile = onSnapshot(docRef, (docSnap) => {
@@ -65,12 +84,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               setUserProfile(null);
               setCurrentUser(null);
               localStorage.removeItem('userProfile');
+              setLoading(false);
+              return;
             } else {
-              setUserProfile(data);
-              localStorage.setItem('userProfile', JSON.stringify(data));
+              // Ensure profile role stays in sync with authoritative Custom Claim
+              publicProfileData = (isAdminClaim && data.role !== 'admin')
+                ? { ...data, role: 'admin' }
+                : data;
+              mergeAndSetProfile();
             }
           } else {
-            // Auto-provision user profile in Firestore if missing so user is never orphaned in Auth
+            // Auto-provision public user profile in Firestore if missing so user is never orphaned in Auth
             const cleanName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
             const cleanEmail = user.email || '';
             const initialProfile: UserProfile = {
@@ -78,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               name: cleanName,
               email: cleanEmail,
               photoURL: user.photoURL || '',
-              role: hasCustomClaimAdmin ? 'admin' : 'user',
+              role: isAdminClaim ? 'admin' : 'user',
               banned: false,
               createdAt: Date.now() as any,
               lastLogin: Date.now() as any,
@@ -93,31 +117,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               console.warn("Notice: auto-provisioning profile notice:", err);
             });
 
-            setUserProfile(initialProfile);
-            localStorage.setItem('userProfile', JSON.stringify(initialProfile));
+            publicProfileData = initialProfile;
+            mergeAndSetProfile();
           }
           setLoading(false);
         }, (error) => {
-          console.warn("Notice: user profile sync in offline/delayed mode:", error);
+          console.warn("Notice: user public profile sync in offline/delayed mode:", error);
           setLoading(false);
         });
+
+        // Listen to protected private details subcollection doc (/users/{uid}/private/details)
+        const privateDetailsRef = doc(db, 'users', user.uid, 'private', 'details');
+        unsubscribePrivateDetails = onSnapshot(privateDetailsRef, (snap) => {
+          if (snap.exists()) {
+            privateDetailsData = snap.data() as Partial<UserProfile>;
+            mergeAndSetProfile();
+          }
+        }, (pErr) => {
+          console.warn("Notice: private details sync offline or not yet initialized:", pErr);
+        });
+
+        // Listen to protected private verification subcollection doc (/users/{uid}/private/verification)
+        const privateVerificationRef = doc(db, 'users', user.uid, 'private', 'verification');
+        unsubscribePrivateVerification = onSnapshot(privateVerificationRef, (snap) => {
+          if (snap.exists()) {
+            privateVerificationData = snap.data();
+            mergeAndSetProfile();
+          }
+        }, (vErr) => {
+          console.warn("Notice: private verification sync offline or not yet initialized:", vErr);
+        });
+
       } else {
         setUserProfile(null);
         setHasCustomClaimAdmin(false);
         localStorage.removeItem('userProfile');
         setLoading(false);
-        if (unsubscribeProfile) {
-          unsubscribeProfile();
-        }
+        if (unsubscribeProfile) unsubscribeProfile();
+        if (unsubscribePrivateDetails) unsubscribePrivateDetails();
+        if (unsubscribePrivateVerification) unsubscribePrivateVerification();
       }
     });
 
     return () => {
       clearTimeout(safetyTimeout);
       unsubscribeAuth();
-      if (unsubscribeProfile) {
-        unsubscribeProfile();
-      }
+      if (unsubscribeProfile) unsubscribeProfile();
+      if (unsubscribePrivateDetails) unsubscribePrivateDetails();
+      if (unsubscribePrivateVerification) unsubscribePrivateVerification();
     };
   }, []);
 

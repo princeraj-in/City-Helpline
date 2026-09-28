@@ -31,7 +31,7 @@ service cloud.firestore {
     // ===============================================================
     
     function isValidUser(data) {
-      return hasOnlyAllowedFields(['uid', 'name', 'email', 'role', 'createdAt', 'photoURL', 'themePreference', 'lastLogin', 'banned', 'phone', 'businessName', 'businessType', 'city', 'address', 'pincode', 'latitude', 'longitude', 'savedListings', 'notifications', 'updatedAt', 'isStudentVerified', 'studentVerificationStatus', 'studentVerificationData', 'isOwnerVerified']) &&
+      return hasOnlyAllowedFields(['uid', 'name', 'email', 'role', 'createdAt', 'photoURL', 'themePreference', 'lastLogin', 'banned', 'city', 'savedListings', 'notifications', 'updatedAt', 'isStudentVerified', 'studentVerificationStatus', 'isOwnerVerified']) &&
              (!('uid' in data) || (data.uid is string && data.uid.size() > 0 && data.uid.size() < 100)) &&
              (!('name' in data) || (data.name is string && data.name.size() > 0 && data.name.size() < 100)) &&
              (!('email' in data) || data.email == '' || (data.email is string && isValidEmail(data.email))) &&
@@ -39,21 +39,40 @@ service cloud.firestore {
              (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() < 1000)) &&
              (!('themePreference' in data) || (data.themePreference in ['light', 'dark', 'system'])) &&
              (!('banned' in data) || data.banned is bool) &&
-             (!('phone' in data) || (data.phone is string && data.phone.size() < 30)) &&
-             (!('businessName' in data) || (data.businessName is string && data.businessName.size() < 150)) &&
-             (!('businessType' in data) || (data.businessType is string && data.businessType.size() < 150)) &&
              (!('city' in data) || (data.city is string && data.city.size() < 150)) &&
-             (!('address' in data) || (data.address is string && data.address.size() < 600)) &&
-             (!('pincode' in data) || (data.pincode is string && data.pincode.size() < 30)) &&
-             (!('latitude' in data) || data.latitude is number) &&
-             (!('longitude' in data) || data.longitude is number) &&
              (!('savedListings' in data) || data.savedListings is list) &&
              (!('isStudentVerified' in data) || data.isStudentVerified is bool) &&
              (!('studentVerificationStatus' in data) || data.studentVerificationStatus in ['none', 'pending', 'verified', 'rejected']) &&
              (!('isOwnerVerified' in data) || data.isOwnerVerified is bool) &&
-             (!('studentVerificationData' in data) || data.studentVerificationData is map) &&
              (!('lastLogin' in data) || data.lastLogin is number || data.lastLogin is timestamp) &&
              (!('createdAt' in data) || data.createdAt is number || data.createdAt is timestamp) &&
+             (!('updatedAt' in data) || data.updatedAt is number || data.updatedAt is timestamp);
+    }
+
+    function isValidPrivateDetails(data) {
+      return hasOnlyAllowedFields(['phone', 'address', 'pincode', 'latitude', 'longitude', 'businessName', 'businessType', 'updatedAt']) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() < 30)) &&
+             (!('address' in data) || (data.address is string && data.address.size() < 600)) &&
+             (!('pincode' in data) || (data.pincode is string && data.pincode.size() < 30)) &&
+             (!('latitude' in data) || data.latitude is number) &&
+             (!('longitude' in data) || data.longitude is number) &&
+             (!('businessName' in data) || (data.businessName is string && data.businessName.size() < 150)) &&
+             (!('businessType' in data) || (data.businessType is string && data.businessType.size() < 150)) &&
+             (!('updatedAt' in data) || data.updatedAt is number || data.updatedAt is timestamp);
+    }
+
+    function isValidPrivateVerification(data) {
+      return hasOnlyAllowedFields(['rollOrIdNumber', 'idProofUrl', 'collegeOrCoaching', 'courseOrExam', 'isLiveCameraCaptured', 'submittedAt', 'reviewedBy', 'verifiedAt', 'note', 'rejectionReason', 'updatedAt']) &&
+             (!('rollOrIdNumber' in data) || (data.rollOrIdNumber is string && data.rollOrIdNumber.size() < 100)) &&
+             (!('idProofUrl' in data) || (data.idProofUrl is string && data.idProofUrl.size() < 1500)) &&
+             (!('collegeOrCoaching' in data) || (data.collegeOrCoaching is string && data.collegeOrCoaching.size() < 200)) &&
+             (!('courseOrExam' in data) || (data.courseOrExam is string && data.courseOrExam.size() < 100)) &&
+             (!('isLiveCameraCaptured' in data) || data.isLiveCameraCaptured is bool) &&
+             (!('submittedAt' in data) || data.submittedAt is number || data.submittedAt is timestamp) &&
+             (!('reviewedBy' in data) || (data.reviewedBy is string && data.reviewedBy.size() < 100)) &&
+             (!('verifiedAt' in data) || data.verifiedAt is number || data.verifiedAt is timestamp) &&
+             (!('note' in data) || (data.note is string && data.note.size() < 500)) &&
+             (!('rejectionReason' in data) || (data.rejectionReason is string && data.rejectionReason.size() < 500)) &&
              (!('updatedAt' in data) || data.updatedAt is number || data.updatedAt is timestamp);
     }
 
@@ -115,7 +134,7 @@ service cloud.firestore {
     // ===============================================================
 
     match /users/{userId} {
-      allow read: if true;
+      allow read: if isAuthenticated();
       allow create: if isAuthenticated() && 
                     isValidUser(request.resource.data) && 
                     (
@@ -141,9 +160,16 @@ service cloud.firestore {
                     );
       allow delete: if isAdmin();
 
-      // Protected private subcollection for sensitive student ID verification proofs & credentials
+      // Protected private subcollection for verification, contact, address & contributor details
+      // STRICT ZERO-LEAKAGE: ONLY the user themselves or an admin can read or write!
       match /private/{docId} {
-        allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+        allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+        allow write: if isAuthenticated() && (request.auth.uid == userId || isAdmin()) &&
+                     (
+                       (docId == 'details' && isValidPrivateDetails(request.resource.data)) ||
+                       (docId == 'verification' && isValidPrivateVerification(request.resource.data)) ||
+                       isAdmin()
+                     );
       }
     }
 

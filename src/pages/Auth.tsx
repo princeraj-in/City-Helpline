@@ -183,20 +183,25 @@ export default function Auth() {
         name: name.trim(),
         email: email.trim(),
         role: role,
+        city: city || '',
         banned: false,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),
       };
 
-      if (role === 'contributor') {
-        userProfile.phone = phone.trim();
-        userProfile.businessName = businessName.trim();
-        userProfile.businessType = businessType;
-        userProfile.city = city;
-        userProfile.address = address.trim();
-      }
-
       await setDoc(doc(db, 'users', user.uid), userProfile);
+
+      // Save contributor sensitive details to protected private subcollection
+      if (role === 'contributor') {
+        const privateDetails = {
+          phone: phone.trim(),
+          businessName: businessName.trim(),
+          businessType: businessType,
+          address: address.trim(),
+          updatedAt: Date.now(),
+        };
+        await setDoc(doc(db, 'users', user.uid, 'private', 'details'), privateDetails);
+      }
       toast.success('Account created successfully');
       navigate(role === 'contributor' ? '/profile' : '/');
     } catch (err: any) {
@@ -266,6 +271,12 @@ export default function Auth() {
       const user = result.user;
       
       const userDoc = await getDoc(doc(db, 'users', user.uid));
+      let isAdminClaim = false;
+      try {
+        const tokenResult = await user.getIdTokenResult(true);
+        isAdminClaim = tokenResult.claims.admin === true;
+      } catch {}
+
       if (!userDoc.exists()) {
         // First Time User: Immediately persist baseline profile to Firestore
         const cleanName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
@@ -275,7 +286,7 @@ export default function Auth() {
           name: cleanName,
           email: cleanEmail,
           photoURL: user.photoURL || '',
-          role: 'user',
+          role: isAdminClaim ? 'admin' : 'user',
           banned: false,
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
@@ -283,8 +294,13 @@ export default function Auth() {
         };
         await setDoc(doc(db, 'users', user.uid), baseProfile, { merge: true });
 
-        setPendingUser(user);
-        setShowRoleModal(true);
+        if (isAdminClaim) {
+          toast.success('Signed in as Administrator');
+          navigate('/');
+        } else {
+          setPendingUser(user);
+          setShowRoleModal(true);
+        }
       } else {
         // Returning User
         const userData = userDoc.data();
@@ -295,10 +311,14 @@ export default function Auth() {
           return null;
         }
         
-        // Update lastLogin
-        await setDoc(doc(db, 'users', user.uid), { lastLogin: serverTimestamp() }, { merge: true });
+        // Update lastLogin and sync admin role if custom claim is active
+        const updatePayload: any = { lastLogin: serverTimestamp() };
+        if (isAdminClaim && userData.role !== 'admin') {
+          updatePayload.role = 'admin';
+        }
+        await setDoc(doc(db, 'users', user.uid), updatePayload, { merge: true });
 
-        toast.success('Logged in successfully');
+        toast.success(isAdminClaim ? 'Logged in as Administrator' : 'Logged in successfully');
         if (userData.role === 'contributor') {
           navigate('/profile');
         } else {

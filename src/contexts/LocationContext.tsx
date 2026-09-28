@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { UserLocation } from '../types';
 import { useAuth } from './AuthContext';
@@ -41,14 +41,22 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
   const syncLocationToFirestore = useCallback(async (loc: UserLocation) => {
     if (!currentUser) return;
     try {
+      // 1. PUBLIC PROFILE: Only general city location
       const userRef = doc(db, 'users', currentUser.uid);
       await updateDoc(userRef, {
         city: loc.city,
+        updatedAt: Date.now()
+      }).catch(() => {});
+
+      // 2. PROTECTED PRIVATE: Exact address, pincode, and precise GPS coordinates
+      const privateDetailsRef = doc(db, 'users', currentUser.uid, 'private', 'details');
+      await setDoc(privateDetailsRef, {
         address: loc.formattedAddress || loc.area || `${loc.city}, ${loc.state || ''}`,
         pincode: loc.pincode || '',
         latitude: loc.latitude ?? 0,
-        longitude: loc.longitude ?? 0
-      });
+        longitude: loc.longitude ?? 0,
+        updatedAt: Date.now()
+      }, { merge: true });
     } catch (err) {
       console.warn('Could not save location to user profile:', err);
     }

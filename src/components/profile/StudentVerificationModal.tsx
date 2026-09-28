@@ -286,23 +286,16 @@ export const StudentVerificationModal: React.FC<StudentVerificationModalProps> =
       const privateVerificationRef = doc(db, 'users', currentUser.uid, 'private', 'verification');
       await setDoc(privateVerificationRef, fullVerificationPayload);
 
-      // 2. PUBLIC PROFILE: Only save badge status and general non-sensitive metadata (Zero ID card photo / roll number leakage)
-      const safePublicSummary = {
-        collegeOrCoaching: coachingOrCollege.trim(),
-        courseOrExam: targetExam.trim(),
-        submittedAt: Date.now(),
-      };
-
+      // 2. PUBLIC PROFILE: Only save badge status (Zero ID card photo / roll number leakage to public doc)
       const userRef = doc(db, 'users', currentUser.uid);
       await updateDoc(userRef, {
         studentVerificationStatus: 'pending',
-        studentVerificationData: safePublicSummary,
         updatedAt: Date.now(),
       });
 
       updateLocalProfile({
         studentVerificationStatus: 'pending',
-        studentVerificationData: safePublicSummary,
+        studentVerificationData: fullVerificationPayload,
       });
 
       toast.success(

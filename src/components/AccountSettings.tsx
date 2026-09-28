@@ -63,24 +63,31 @@ export default function AccountSettings() {
     }
 
     try {
+      // 1. PUBLIC PROFILE: Save only non-sensitive public identity fields to /users/{uid}
       const userRef = doc(db, 'users', currentUser.uid);
-
-      const updateData: Record<string, any> = { 
+      const publicData: Record<string, any> = { 
         uid: currentUser.uid,
         name: trimmedName,
         email: currentUser.email || userProfile?.email || '',
         role: userProfile?.role || 'user',
         updatedAt: Date.now(),
       };
+      if (trimmedCity) publicData.city = trimmedCity;
+      if (userProfile?.createdAt) publicData.createdAt = userProfile.createdAt;
 
-      if (trimmedPhone) updateData.phone = trimmedPhone;
-      if (trimmedCity) updateData.city = trimmedCity;
-      if (trimmedAddress) updateData.address = trimmedAddress;
-      if (trimmedBusinessName) updateData.businessName = trimmedBusinessName;
-      if (trimmedBusinessType) updateData.businessType = trimmedBusinessType;
-      if (userProfile?.createdAt) updateData.createdAt = userProfile.createdAt;
+      await setDoc(userRef, publicData, { merge: true });
 
-      await setDoc(userRef, updateData, { merge: true });
+      // 2. PROTECTED PRIVATE DETAILS: Save sensitive contact, address and business fields to /users/{uid}/private/details
+      const privateDetailsRef = doc(db, 'users', currentUser.uid, 'private', 'details');
+      const privateData: Record<string, any> = {
+        phone: trimmedPhone || '',
+        address: trimmedAddress || '',
+        businessName: trimmedBusinessName || '',
+        businessType: trimmedBusinessType || '',
+        updatedAt: Date.now(),
+      };
+      await setDoc(privateDetailsRef, privateData, { merge: true });
+
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error: any) {
       try {
