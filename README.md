@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/princeraj-in/City-Helpline/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT"></a>
+  <a href="https://github.com/princeraj-in/Studolink/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT"></a>
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19"></a>
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="#-tech-stack"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"></a>
@@ -170,7 +170,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 ## 📂 Project Directory Structure
 
 ```text
-City-Helpline/
+Studolink/
 ├── api/
 │   ├── chat.ts                  # Vercel serverless AI chat handler (Gemini fallback)
 │   └── health.ts                # Serverless health check endpoint
@@ -296,8 +296,8 @@ Cloud Firestore and API routes are protected by defense-in-depth security:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/princeraj-in/City-Helpline.git
-cd City-Helpline
+git clone https://github.com/princeraj-in/Studolink.git
+cd Studolink
 npm install
 ```
 
