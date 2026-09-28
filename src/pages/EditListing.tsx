@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { db } from '../lib/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { uploadImage } from '../lib/storage';
-import { Listing, isSuperAdminEmail } from '../types';
+import { Listing } from '../types';
 import { UploadCloud, X, ArrowLeft, Tag, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 import { CATEGORIES, STATE_CITIES } from '../lib/constants';

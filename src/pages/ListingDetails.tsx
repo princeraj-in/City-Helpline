@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, addDoc, orderBy, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { Listing, Review, isSuperAdminEmail } from '../types';
+import { Listing, Review } from '../types';
 import { MapPin, Phone, User, Star, Calendar, MessageCircle, ArrowLeft, Heart, Share2, Check, MessageSquareText, Loader2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { APP_CONFIG } from '../lib/appConfig';

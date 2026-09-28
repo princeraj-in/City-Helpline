@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { isSuperAdminEmail } from '../types';
 import { Navigate } from 'react-router-dom';
 import { AdminConsole } from '../components/admin/AdminConsole';
 

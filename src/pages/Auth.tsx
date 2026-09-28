@@ -15,7 +15,7 @@ import {
   browserSessionPersistence
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { Role, isSuperAdminEmail } from '../types';
+import { Role } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Eye, EyeOff, Lock, User, AlertCircle, Phone, 
@@ -182,7 +182,7 @@ export default function Auth() {
         uid: user.uid,
         name: name.trim(),
         email: email.trim(),
-        role: isSuperAdminEmail(email) ? 'admin' : role,
+        role: role,
         banned: false,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),
@@ -275,7 +275,7 @@ export default function Auth() {
           name: cleanName,
           email: cleanEmail,
           photoURL: user.photoURL || '',
-          role: isSuperAdminEmail(cleanEmail) ? 'admin' : 'user',
+          role: 'user',
           banned: false,
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
@@ -430,7 +430,7 @@ export default function Auth() {
         name: pendingUser.displayName || 'User',
         email: pendingUser.email,
         photoURL: pendingUser.photoURL || '',
-        role: isSuperAdminEmail(pendingUser.email) ? 'admin' : selectedRole,
+        role: selectedRole,
         banned: false,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),

@@ -4,7 +4,7 @@ import {
   collection, query, getDocs, doc, updateDoc, deleteDoc, orderBy, setDoc, serverTimestamp 
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { Listing, UserProfile, MarketplaceItem, Role, isSuperAdminEmail } from '../../types';
+import { Listing, UserProfile, MarketplaceItem, Role } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
 
@@ -26,7 +26,7 @@ interface AdminConsoleProps {
 }
 
 export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentView }) => {
-  const { currentUser, userProfile, logout } = useAuth();
+  const { currentUser, userProfile, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
@@ -115,7 +115,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       }
 
       // 4. Secure Database RBAC: Ensure active admin has verified record in roles_admins
-      if (currentUser && (isSuperAdminEmail(currentUser.email) || userProfile?.role === 'admin')) {
+      if (currentUser && isAdmin) {
         setDoc(doc(db, 'roles_admins', currentUser.uid), {
           uid: currentUser.uid,
           email: currentUser.email || '',
@@ -194,8 +194,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   // Handlers for Users
   const handleRoleChange = async (uid: string, newRole: Role) => {
     const target = users.find(u => u.uid === uid);
-    if (isSuperAdminEmail(target?.email) && newRole !== 'admin') {
-      toast.error("Super Admin accounts cannot be demoted.");
+    if (uid === currentUser?.uid && newRole !== 'admin') {
+      toast.error("You cannot demote your own administrator account.");
       return;
     }
 
@@ -223,8 +223,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
 
   const handleBanToggle = async (uid: string, currentBanned: boolean) => {
     const target = users.find(u => u.uid === uid);
-    if (isSuperAdminEmail(target?.email)) {
-      toast.error("Super Admin accounts cannot be banned.");
+    if (uid === currentUser?.uid) {
+      toast.error("You cannot ban your own administrator account.");
       return;
     }
 
@@ -241,8 +241,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
 
   const handleDeleteUser = async (uid: string) => {
     const target = users.find(u => u.uid === uid);
-    if (isSuperAdminEmail(target?.email)) {
-      toast.error("Super Admin accounts cannot be deleted.");
+    if (uid === currentUser?.uid) {
+      toast.error("You cannot delete your own administrator account.");
       return;
     }
 
@@ -281,7 +281,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         uid: cleanUid,
         email: cleanEmail,
         name: userData.name?.trim() || cleanEmail.split('@')[0] || 'User',
-        role: userData.role || (isSuperAdminEmail(cleanEmail) ? 'admin' : 'user'),
+        role: userData.role || 'user',
         banned: false,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),

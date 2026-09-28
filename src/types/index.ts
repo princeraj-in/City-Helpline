@@ -1,16 +1,12 @@
 export type Role = 'user' | 'contributor' | 'admin';
 
-export const ADMIN_EMAILS = ['pkskkumar900@gmail.com', 'kusprince.raj@gmail.com', 'prkus82@gmail.com'];
-
-export function isSuperAdminEmail(email?: string | null): boolean {
-  if (!email) return false;
-  return ADMIN_EMAILS.includes(email.toLowerCase().trim());
+// Admin authorization is strictly handled via Firebase Custom Claims (request.auth.token.admin == true)
+// Zero hardcoded emails in code
+export function isSuperAdminEmail(_email?: string | null): boolean {
+  return false;
 }
 
-export function hasAdminPrivileges(user?: { email?: string | null } | null, profile?: { role?: Role; email?: string | null } | null): boolean {
-  if (isSuperAdminEmail(user?.email) || isSuperAdminEmail(profile?.email)) {
-    return true;
-  }
+export function hasAdminPrivileges(_user?: { email?: string | null } | null, profile?: { role?: Role; email?: string | null } | null): boolean {
   return profile?.role === 'admin';
 }
 

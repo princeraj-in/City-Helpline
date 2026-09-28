@@ -15,7 +15,6 @@ import { LocationSelectorModal } from './components/location/LocationSelectorMod
 import { SystemBroadcastBanner } from './components/layout/SystemBroadcastBanner';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
-import { isSuperAdminEmail } from './types';
 
 // Pages
 import Home from './pages/Home';

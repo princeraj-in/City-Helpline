@@ -4,7 +4,8 @@ import {
   LogOut, RefreshCw, PlusCircle, Shield, Radio, CheckCircle2,
   AlertTriangle, Eye, ArrowUpRight
 } from 'lucide-react';
-import { UserProfile, isSuperAdminEmail } from '../../types';
+import { UserProfile } from '../../types';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface AdminHeaderProps {
   userProfile: UserProfile | null;
@@ -33,7 +34,8 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   onLogout,
   loading,
 }) => {
-  const isSuper = isSuperAdminEmail(userProfile?.email);
+  const { isAdmin } = useAuth();
+  const isSuper = isAdmin;
 
   return (
     <header className="sticky top-0 z-40 bg-[#07090E]/90 backdrop-blur-2xl border-b border-white/10 px-4 sm:px-6 lg:px-8 py-3 transition-all">

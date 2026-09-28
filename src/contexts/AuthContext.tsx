@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, User as FirebaseUser, signOut } from 'firebase/auth';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
-import { UserProfile, isSuperAdminEmail, hasAdminPrivileges } from '../types';
+import { UserProfile } from '../types';
 
 interface AuthContextType {
   currentUser: FirebaseUser | null;
@@ -24,21 +24,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const cachedProfile = localStorage.getItem('userProfile');
       if (!cachedProfile) return null;
-      const parsed = JSON.parse(cachedProfile) as UserProfile;
-      // Sanitize privilege escalation in local cache: only authorized admin emails can be 'admin'
-      if (parsed.role === 'admin' && !isSuperAdminEmail(parsed.email)) {
-        parsed.role = 'user';
-        localStorage.setItem('userProfile', JSON.stringify(parsed));
-      }
-      return parsed;
+      return JSON.parse(cachedProfile) as UserProfile;
     } catch {
       return null;
     }
   });
   const [loading, setLoading] = useState(true);
 
-  const isSuperAdmin = isSuperAdminEmail(currentUser?.email) || isSuperAdminEmail(userProfile?.email);
-  const isAdmin = hasCustomClaimAdmin || hasAdminPrivileges(currentUser, userProfile);
+  // Authoritatively driven by Firebase Auth Custom Claim (request.auth.token.admin == true)
+  const isAdmin = hasCustomClaimAdmin;
+  const isSuperAdmin = hasCustomClaimAdmin;
 
   useEffect(() => {
     let unsubscribeProfile: () => void;
@@ -48,17 +43,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     }, 2500);
 
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       clearTimeout(safetyTimeout);
       setCurrentUser(user);
       if (user) {
-        // Inspect Firebase Auth Custom Claims directly on user ID Token
-        user.getIdTokenResult().then((tokenResult) => {
-          const isAdminClaim = tokenResult.claims.admin === true || tokenResult.claims.role === 'admin';
+        // Inspect Firebase Auth Custom Claims directly on user ID Token (forceRefresh ensures freshest state)
+        try {
+          const tokenResult = await user.getIdTokenResult(true);
+          const isAdminClaim = tokenResult.claims.admin === true;
           setHasCustomClaimAdmin(Boolean(isAdminClaim));
-        }).catch(() => {
+        } catch {
           setHasCustomClaimAdmin(false);
-        });
+        }
 
         const docRef = doc(db, 'users', user.uid);
         unsubscribeProfile = onSnapshot(docRef, (docSnap) => {
@@ -70,10 +66,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               setCurrentUser(null);
               localStorage.removeItem('userProfile');
             } else {
-              // Authoritatively ensure Super Admin email role is 'admin'
-              if (isSuperAdminEmail(user.email) || isSuperAdminEmail(data.email)) {
-                data.role = 'admin';
-              }
               setUserProfile(data);
               localStorage.setItem('userProfile', JSON.stringify(data));
             }
@@ -86,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               name: cleanName,
               email: cleanEmail,
               photoURL: user.photoURL || '',
-              role: isSuperAdminEmail(cleanEmail) ? 'admin' : 'user',
+              role: hasCustomClaimAdmin ? 'admin' : 'user',
               banned: false,
               createdAt: Date.now() as any,
               lastLogin: Date.now() as any,
@@ -111,6 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
       } else {
         setUserProfile(null);
+        setHasCustomClaimAdmin(false);
         localStorage.removeItem('userProfile');
         setLoading(false);
         if (unsubscribeProfile) {

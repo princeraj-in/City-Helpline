@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, ShoppingBag, PlusCircle, User, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useAuth } from '../../contexts/AuthContext';
-import { isSuperAdminEmail } from '../../types';
 import { UserAvatar } from '../common/UserAvatar';
 
 export function BottomNav() {
