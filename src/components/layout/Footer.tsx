@@ -87,14 +87,14 @@ export function Footer() {
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/logo.svg';
                   }}
-                  alt="City Helpline 3D Logo"
+                  alt="Studolink 3D Logo"
                   className="h-9 w-9 object-contain rounded-full"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-white tracking-tight">
-                  City <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">Helpline</span>
+                  Studo<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">link</span>
                 </span>
                 <span className="px-2 py-0.5 text-[9px] font-black uppercase rounded-full bg-[#F5B731]/10 text-[#F5B731] border border-[#F5B731]/30">
                   OFFICIAL 3D
@@ -103,7 +103,7 @@ export function Footer() {
             </Link>
 
             <p className="text-xs text-gray-400 leading-relaxed">
-              India's student-first zero-brokerage educational helpline & habitat directory. Supporting aspirants in Kota, Patna, Delhi, Sikar, and 20+ study hubs with verified PGs, clean food & quiet libraries.
+              Studolink — Your City. Your Student Ecosystem. India's student-first zero-brokerage educational helpline & habitat directory. Supporting aspirants in Kota, Patna, Delhi, Sikar, and 20+ study hubs with verified PGs, clean food & quiet libraries.
             </p>
 
             {/* Official Domain & Server Status */}
@@ -347,7 +347,7 @@ export function Footer() {
       {/* 3.5 Intermediary Disclaimer Bar */}
       <div className="border-t border-white/5 py-3 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-[11px] text-gray-500 text-center leading-relaxed">
         <p>
-          <strong className="text-gray-400">Intermediary Notice:</strong> City Helpline is a technology directory connecting students with independent property owners under Section 79 of the Information Technology Act, 2000. We do not own, manage, or operate listed properties. Please physically inspect premises, verify identity, and review our{' '}
+          <strong className="text-gray-400">Intermediary Notice:</strong> Studolink is a technology directory connecting students with independent property owners under Section 79 of the Information Technology Act, 2000. We do not own, manage, or operate listed properties. Please physically inspect premises, verify identity, and review our{' '}
           <Link to="/terms" className="text-[#00E5FF] hover:underline font-semibold">
             Terms of Service
           </Link>{' '}
@@ -363,7 +363,7 @@ export function Footer() {
       <div className="py-6 pb-24 md:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} <strong>City Helpline</strong> (app.imprince.me). All rights reserved.
+            © {new Date().getFullYear()} <strong>Studolink</strong> (app.imprince.me). All rights reserved.
           </p>
           <span className="hidden sm:inline text-gray-600">•</span>
           <p className="text-gray-400">

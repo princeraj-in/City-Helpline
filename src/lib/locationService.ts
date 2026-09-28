@@ -113,7 +113,7 @@ export async function reverseGeocodeCoordinates(latitude: number, longitude: num
         signal: controller.signal,
         headers: {
           'Accept-Language': 'en',
-          'User-Agent': 'CityHelplineApp/1.0'
+          'User-Agent': 'StudolinkApp/1.0'
         }
       }
     );

@@ -43,7 +43,7 @@ export const AdminBroadcastTab: React.FC = () => {
           Platform System Broadcast Manager
         </h3>
         <p className="text-xs text-gray-400">
-          Publish real-time announcement banners to all students visiting City Helpline.
+          Publish real-time announcement banners to all students visiting Studolink.
         </p>
       </div>
 

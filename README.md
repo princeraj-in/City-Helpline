@@ -1,11 +1,11 @@
-# 🌟 City Helpline
+# 🌟 Studolink
 
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80" alt="City Helpline Hero Banner" width="100%" style="border-radius: 16px; max-height: 400px; object-fit: cover;" />
+  <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80" alt="Studolink Hero Banner" width="100%" style="border-radius: 16px; max-height: 400px; object-fit: cover;" />
 </p>
 
 <p align="center">
-  <strong>A hyper-local student ecosystem platform connecting students and coaching aspirants with verified PGs, Hostels, Mess facilities, Study Libraries, Second-Hand Marketplace, Roommate Discovery, and Monthly Budget Intelligence across India.</strong>
+  <strong>Your City. Your Student Ecosystem. A hyper-local student ecosystem platform connecting students and coaching aspirants with verified PGs, Hostels, Mess facilities, Study Libraries, Second-Hand Marketplace, Roommate Discovery, and Monthly Budget Intelligence across India.</strong>
 </p>
 
 <p align="center">
@@ -23,9 +23,9 @@
 
 ## 📌 Overview
 
-**City Helpline** is a comprehensive full-stack web application engineered to eliminate the stress, high brokerages, and misinformation students face when relocating to premier educational and coaching hubs across India (including Kota, Patna, Delhi NCR, Sikar, Prayagraj, Lucknow, Indore, Pune, and Nawada).
+**Studolink** is a comprehensive full-stack web application engineered to eliminate the stress, high brokerages, and misinformation students face when relocating to premier educational and coaching hubs across India (including Kota, Patna, Delhi NCR, Sikar, Prayagraj, Lucknow, Indore, Pune, and Nawada).
 
-Finding affordable accommodation, hygienic food, and reliable study infrastructure often involves middleman fees and unverified listings. City Helpline solves this with:
+Finding affordable accommodation, hygienic food, and reliable study infrastructure often involves middleman fees and unverified listings. Studolink solves this with:
 - **Zero-Brokerage Verified Listings**: Verified PGs, hostels, mess/tiffin services, and 24x7 study libraries with direct owner contact.
 - **AI Mitra (Intelligent Student Advisor)**: A localized AI assistant powered by Google Gemini with 4-tier cascading fallback for hostel guidance, student living benchmarks, and mental health support.
 - **Direct In-App Messaging**: Real-time 1-on-1 chat between students, property owners, and marketplace sellers.
@@ -46,8 +46,8 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 - **Instant Search**: Real-time client-side search across listings by title, address, description, and amenities.
 - **Zero-Brokerage Guarantee**: Direct contact with owners via phone call, WhatsApp, or integrated in-app messaging.
 
-### 🤖 2. City Helpline AI Mitra (`/ai-chat`)
-- **Dedicated Student AI Guide**: Official AI mentor ("सिटी हेल्पलाइन एआई मित्र") communicating in natural Hinglish, Hindi, or English.
+### 🤖 2. Studolink AI Mitra (`/ai-chat`)
+- **Dedicated Student AI Guide**: Official AI mentor ("स्टुडोलिंक एआई मित्र") communicating in natural Hinglish, Hindi, or English.
 - **Cascading Multi-Model Fallback**:
   1. `gemini-3.8-flash` (Primary high-intelligence model)
   2. `gemini-3.6-flash` (First fallback)
@@ -115,7 +115,7 @@ Finding affordable accommodation, hygienic food, and reliable study infrastructu
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                          City Helpline Client                           │
+│                            Studolink Client                             │
 │              React 19 • TypeScript • Vite • Tailwind CSS v4             │
 │                     PWA Service Worker & Offline Cache                  │
 └──────────────┬──────────────────┬─────────────────┬─────────────────────┘
@@ -332,7 +332,7 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-> **Note**: `server.ts` handles `/api/chat` and `/api/health` locally. Make sure `GEMINI_API_KEY` is provided in `.env` to test City Helpline AI Mitra.
+> **Note**: `server.ts` handles `/api/chat` and `/api/health` locally. Make sure `GEMINI_API_KEY` is provided in `.env` to test Studolink AI Mitra.
 
 ### 4. Build for Production
 To compile and bundle for production deployment:
@@ -363,5 +363,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 ---
 
 <p align="center">
-  Crafted with precision for students across India • <strong>City Helpline</strong>
+  Crafted with precision for students across India • <strong>Studolink</strong>
 </p>

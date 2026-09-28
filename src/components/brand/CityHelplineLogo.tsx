@@ -36,7 +36,7 @@ export const CityHelplineLogo: React.FC<CityHelplineLogoProps> = ({
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = '/logo.svg';
             }}
-            alt="City Helpline Official 3D Medallion Logo"
+            alt="Studolink Official 3D Logo"
             className="w-full h-full object-contain filter drop-shadow-md"
             referrerPolicy="no-referrer"
           />
@@ -47,17 +47,19 @@ export const CityHelplineLogo: React.FC<CityHelplineLogoProps> = ({
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
             <span className={`font-black text-white tracking-tight ${currentSize.text} leading-none`}>
-              City <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">Helpline</span>
+              Studo<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">link</span>
             </span>
             <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30">
               3D
             </span>
           </div>
           <span className="text-[10px] text-gray-400 font-medium tracking-wide">
-            Student Habitat & Education Directory
+            Your City. Your Student Ecosystem.
           </span>
         </div>
       )}
     </div>
   );
 };
+
+export const StudolinkLogo = CityHelplineLogo;

@@ -59,7 +59,7 @@ export const AiFloatingAssistant: React.FC = () => {
     {
       id: 'welcome-1',
       role: 'model',
-      text: `Namaste! Main **City Helpline AI Mitra** hu. 🎓\n\nAap mujhse kisi bhi educational hub (Kota, Patna, Delhi, Sikar) ke PGs, student room rent, mess food quality, ya safe booking advisory ke baare me pooch sakte hain. Bataiye, main aapki kya madad kar sakta hu?`,
+      text: `Namaste! Main **Studolink AI Mitra** hu. 🎓\n\nAap mujhse kisi bhi educational hub (Kota, Patna, Delhi, Sikar) ke PGs, student room rent, mess food quality, ya safe booking advisory ke baare me pooch sakte hain. Bataiye, main aapki kya madad kar sakta hu?`,
       timestamp: Date.now(),
       suggestions: [
         'Kota me best PGs under ₹7,000?',

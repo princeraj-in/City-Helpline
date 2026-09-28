@@ -79,7 +79,7 @@ export const CITY_BENCHMARKS: Record<string, CityBudgetBenchmark> = {
     savingTips: [
       'Take a room in Talwandi or Vigyan Nagar rather than Landmark City to save ₹2,000/mo.',
       'Opt for double-sharing rooms to reduce electricity and AC power bills by 50%.',
-      'Buy second-hand cycle on City Helpline Marketplace instead of taking auto daily.'
+      'Buy second-hand cycle on Studolink Marketplace instead of taking auto daily.'
     ]
   },
   'Patna': {

@@ -48,7 +48,7 @@ export const BudgetShareModal: React.FC<BudgetShareModalProps> = ({
 📋 *Itemized Expense Breakdown:*
 ${lines}
 
-💡 Estimated via City Helpline Student Budget Calculator
+💡 Estimated via Studolink Student Budget Calculator
 🔗 Find verified PGs, Mess & Libraries at: ${APP_CONFIG.getSearchUrl(city)}`;
 
   const handleCopy = () => {
@@ -73,7 +73,7 @@ ${lines}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Monthly Budget - ${city} - City Helpline</title>
+  <title>Student Monthly Budget - ${city} - Studolink</title>
   <style>
     @page { size: A4; margin: 15mm; }
     * { box-sizing: border-box; }
@@ -215,7 +215,7 @@ ${lines}
   <div class="container">
     <div class="header">
       <div>
-        <div class="brand-title">🎓 City Helpline</div>
+        <div class="brand-title">🎓 Studolink</div>
         <div class="brand-sub">Student Ecosystem & Living Expense Plan</div>
       </div>
       <div class="header-meta">
@@ -262,7 +262,7 @@ ${lines}
     </div>
 
     <div class="footer">
-      Generated via City Helpline (${APP_CONFIG.baseUrl}) • Student Budget Calculator • Save or print this document for parent or room partner records.
+      Generated via Studolink (${APP_CONFIG.baseUrl}) • Student Budget Calculator • Save or print this document for parent or room partner records.
     </div>
   </div>
 </body>
@@ -276,7 +276,7 @@ ${lines}
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `CityHelpline-Student-Budget-${city.replace(/\s+/g, '_')}.html`;
+      a.download = `Studolink-Student-Budget-${city.replace(/\s+/g, '_')}.html`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -322,7 +322,7 @@ ${lines}
               <span className="text-xs font-semibold uppercase text-cyan-300 tracking-wider">
                 Monthly Estimate • {city}
               </span>
-              <span className="text-xs text-gray-400">City Helpline</span>
+              <span className="text-xs text-gray-400">Studolink</span>
             </div>
 
             <div className="flex items-baseline gap-1 py-1">

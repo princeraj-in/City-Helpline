@@ -1,5 +1,5 @@
 /**
- * Client service to communicate with the City Helpline AI Mitra server route (/api/chat).
+ * Client service to communicate with the Studolink AI Mitra server route (/api/chat).
  * Also includes an intelligent offline domain knowledge base if running in purely static
  * hosting environments (e.g., Firebase Hosting static SPA without Cloud Functions).
  */
@@ -36,7 +36,7 @@ const STATIC_KNOWLEDGE_BASE = [
   {
     keywords: ['hostel', 'hostal', 'pg', 'room', 'lodge', 'kamra', 'kiraya', 'rent'],
     reply: `🏠 **Student Hostel & PG Finder Guide:**
-- **Zero-Brokerage Guarantee:** City Helpline par sabhi listings direct verified owners dwara post hoti hain. Kisi bhi broker ko commission dene ki zaroorat nahi hai.
+- **Zero-Brokerage Guarantee:** Studolink par sabhi listings direct verified owners dwara post hoti hain. Kisi bhi broker ko commission dene ki zaroorat nahi hai.
 - **Room Inspection Checklist:**
   1. **Daylight Visit:** Din ke samay room ka natural sunlight aur ventilation zaroor dekhein.
   2. **Water & Power:** 24x7 drinking water, bathroom supply aur summer power backup confirm karein.
@@ -105,7 +105,7 @@ const STATIC_KNOWLEDGE_BASE = [
 2. **Physical Inspection in Daylight:** Hamesha din ke ujale me room, bathroom ka paani pressure, aur ceiling fans check karein.
 3. **Electricity Sub-Meter Reading:** Agreement par entry ke din ka exact meter unit likhein.
 4. **Written Rent Receipts:** Har mahine rent cash ya UPI se dete waqt signed receipt zaroor lein.
-5. **No Brokerage:** City Helpline par 100% listings zero brokerage hain. Kisi broker ko commision na dein!`,
+5. **No Brokerage:** Studolink par 100% listings zero brokerage hain. Kisi broker ko commision na dein!`,
     suggestions: ['Read Full Safety Policy', 'Calculate Monthly Budget'],
     actionLink: { text: 'View Safety Advisory', url: '/safety' },
   },
@@ -138,7 +138,7 @@ Exam ki taiyari me pressure aur loneliness feel hona bohot normal hai. Lekin yaa
   },
   {
     keywords: ['marketplace', 'book', 'cycle', 'cooler', 'second hand', 'purana', 'bechna', 'khareedna'],
-    reply: `🛒 **City Helpline Student Marketplace:**
+    reply: `🛒 **Studolink Student Marketplace:**
 - Aap seniors ke second-hand books (Allen, Resonance, PW modules), room coolers, study tables, cycle, aur calculators seedhe students se bina kisi middleman ke le sakte hain.
 - **Rule:** Physical meetup karke item check karein, tabhi UPI payment karein.`,
     suggestions: ['Browse Marketplace', 'Post an Item for Sale'],
@@ -237,7 +237,7 @@ export async function sendChatMessage(
 
   // Default helpful response
   return {
-    text: `Namaste! Main **City Helpline AI Mitra** hu — aapka student advisor aur local guide. 🎓
+    text: `Namaste! Main **Studolink AI Mitra** hu — aapka student advisor aur local guide. 🎓
 
 Aap mujhse kisi bhi educational hub ke baare me pooch sakte hain:
 - 🏢 **PGs, Hostels & Rooms:** Kota, Patna, Delhi NCR, Sikar, Prayagraj, Indore, Bengaluru

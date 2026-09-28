@@ -17,7 +17,7 @@ interface RoommateConnectModalProps {
 export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalProps) {
   const { currentUser, userProfile } = useAuth();
   const [message, setMessage] = useState(
-    'Hi! I saw your roommate requirement on City Helpline. I would like to discuss room sharing and visit the place.'
+    'Hi! I saw your roommate requirement on Studolink. I would like to discuss room sharing and visit the place.'
   );
   const [sentSuccess, setSentSuccess] = useState(false);
 
@@ -25,7 +25,7 @@ export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalP
 
   const handleWhatsApp = () => {
     const phone = profile.whatsappNumber || profile.userPhone;
-    const text = `Hi ${profile.userName}, I saw your Roommate listing for ${profile.locality}, ${profile.city} on City Helpline. I am preparing for ${profile.targetExam} and would like to connect!\n\nMessage: ${message}`;
+    const text = `Hi ${profile.userName}, I saw your Roommate listing for ${profile.locality}, ${profile.city} on Studolink. I am preparing for ${profile.targetExam} and would like to connect!\n\nMessage: ${message}`;
     window.open(formatWhatsAppUrl(phone, text), '_blank');
   };
 

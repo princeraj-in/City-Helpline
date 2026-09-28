@@ -26,14 +26,14 @@ export const LOCALIZED_FAQS: HelpFaqLocalized[] = [
     id: 'zero-brokerage',
     category: 'students',
     question: {
-      en: 'Is there any brokerage or commission charged on City Helpline?',
-      hi: 'क्या सिटी हेल्पलाइन पर कोई ब्रोकरेज या दलाली शुल्क लगता है?',
-      hinglish: 'Kya City Helpline par koi brokerage ya commission lagta hai?'
+      en: 'Is there any brokerage or commission charged on Studolink?',
+      hi: 'क्या स्टुडोलिंक (Studolink) पर कोई ब्रोकरेज या दलाली शुल्क लगता है?',
+      hinglish: 'Kya Studolink par koi brokerage ya commission lagta hai?'
     },
     answer: {
-      en: 'No, absolutely not! City Helpline is a 100% zero-brokerage platform. All rooms, PGs, hostels, and mess listings are posted directly by verified property owners. You communicate directly via call or WhatsApp without any middleman fees.',
-      hi: 'नहीं, बिल्कुल नहीं! सिटी हेल्पलाइन 100% जीरो-ब्रोकरेज प्लेटफॉर्म है। सभी रूम, पीजी, हॉस्टल और मेस लिस्टिंग सीधे असली मालिकों द्वारा पोस्ट की जाती हैं। आप सीधे फोन या व्हाट्सएप पर बात कर सकते हैं, कोई दलाली नहीं ली जाती।',
-      hinglish: 'Nahi, bilkul nahi! City Helpline 100% zero-brokerage platform hai. Sabhi rooms, PGs, hostels aur mess listings verified property owners dwara directly post kiye jaate hain. Aap directly owner se call ya WhatsApp par baat kar sakte hain bina kisi middleman ke.'
+      en: 'No, absolutely not! Studolink is a 100% zero-brokerage platform. All rooms, PGs, hostels, and mess listings are posted directly by verified property owners. You communicate directly via call or WhatsApp without any middleman fees.',
+      hi: 'नहीं, बिल्कुल नहीं! स्टुडोलिंक 100% जीरो-ब्रोकरेज प्लेटफॉर्म है। सभी रूम, पीजी, हॉस्टल और मेस लिस्टिंग सीधे असली मालिकों द्वारा पोस्ट की जाती हैं। आप सीधे फोन या व्हाट्सएप पर बात कर सकते हैं, कोई दलाली नहीं ली जाती।',
+      hinglish: 'Nahi, bilkul nahi! Studolink 100% zero-brokerage platform hai. Sabhi rooms, PGs, hostels aur mess listings verified property owners dwara directly post kiye jaate hain. Aap directly owner se call ya WhatsApp par baat kar sakte hain bina kisi middleman ke.'
     },
     action: {
       text: {
@@ -75,9 +75,9 @@ export const LOCALIZED_FAQS: HelpFaqLocalized[] = [
       hinglish: 'Kya room owners aur landlords ke liye listing post karna free hai?'
     },
     answer: {
-      en: 'Yes! Room owners, PG managers, hostel caretakers, and library operators can list their facilities 100% FREE on City Helpline. Our verification team reviews and publishes the listing within 12-24 hours.',
+      en: 'Yes! Room owners, PG managers, hostel caretakers, and library operators can list their facilities 100% FREE on Studolink. Our verification team reviews and publishes the listing within 12-24 hours.',
       hi: 'हाँ, रूम मालिक, पीजी प्रबंधक, हॉस्टल संचालक और लाइब्रेरी ऑपरेटर अपनी प्रॉपर्टी बिल्कुल मुफ्त (FREE) में लिस्ट कर सकते हैं। हमारी वेरिफिकेशन टीम 12-24 घंटे के अंदर लिस्टिंग अप्रूव कर देती है।',
-      hinglish: 'Haan, room owners, PG managers, hostel sanchalak aur library operators City Helpline par apni properties bilkul muft (FREE) me post kar sakte hain. Post karne ke baad hamari verification team 12-24 ghante ke andar listing verify kar deti hai.'
+      hinglish: 'Haan, room owners, PG managers, hostel sanchalak aur library operators Studolink par apni properties bilkul muft (FREE) me post kar sakte hain. Post karne ke baad hamari verification team 12-24 ghante ke andar listing verify kar deti hai.'
     },
     action: {
       text: {

@@ -1,6 +1,6 @@
-# Contributing to City Helpline
+# Contributing to Studolink
 
-Thank you for your interest in contributing to **City Helpline**! We are building a modern, student-centric ecosystem to eliminate high brokerages, misinformation, and stress for students relocating to educational hubs across India.
+Thank you for your interest in contributing to **Studolink**! We are building a modern, student-centric ecosystem to eliminate high brokerages, misinformation, and stress for students relocating to educational hubs across India.
 
 Every contribution—whether fixing a typo, improving documentation, reporting a bug, or building a brand new feature—is deeply appreciated.
 
@@ -195,7 +195,7 @@ When your changes are ready:
    git push origin feat/my-new-feature
    ```
 2. **Open a Pull Request**:
-   - Go to [City Helpline Pull Requests](https://github.com/princeraj-in/City-Helpline/pulls).
+   - Go to [Studolink Pull Requests](https://github.com/princeraj-in/City-Helpline/pulls).
    - Click **New pull request**.
    - Provide a clear title following Conventional Commits format.
    - Describe what was changed and why.

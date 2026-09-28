@@ -49,7 +49,7 @@ export const VerifiedStudentBadge: React.FC<BadgeProps> = ({
           setShowModal(true);
         }
       }}
-      title="Verified Student Aspirant - City Helpline Trust"
+      title="Verified Student Aspirant - Studolink Trust"
       className={`inline-flex items-center rounded-full font-bold transition-all ${
         showModalOnClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''
       } bg-gradient-to-r from-[#00E5FF]/15 to-[#8A2BE2]/15 text-[#00E5FF] border border-[#00E5FF]/40 shadow-[0_0_12px_rgba(0,229,255,0.25)] backdrop-blur-md ${sizeClasses} ${className}`}
@@ -174,7 +174,7 @@ export const StudentTrustModal: React.FC<{ onClose: () => void }> = ({ onClose }
               <CheckCircle2 className="w-4 h-4 text-[#00E5FF]" />
             </div>
             <p className="text-xs text-gray-400">
-              City Helpline Aspirant Community Trust
+              Studolink Aspirant Community Trust
             </p>
           </div>
         </div>
@@ -268,7 +268,7 @@ export const PGTrustModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             </div>
             <p className="text-xs text-gray-400">
-              City Helpline Anti-Scam Standard
+              Studolink Anti-Scam Standard
             </p>
           </div>
         </div>

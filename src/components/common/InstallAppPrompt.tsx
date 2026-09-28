@@ -60,7 +60,7 @@ export const InstallAppPrompt: React.FC = () => {
       setShowPrompt(false);
       setDeferredPrompt(null);
       (window as unknown as { deferredPWAInstallPrompt?: BeforeInstallPromptEvent }).deferredPWAInstallPrompt = undefined;
-      toast.success('City Helpline app installed successfully! 🎉');
+      toast.success('Studolink app installed successfully! 🎉');
     });
 
     // On mobile or web, ensure banner shows after a brief delay if not dismissed
@@ -129,7 +129,7 @@ export const InstallAppPrompt: React.FC = () => {
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/logo.svg';
                   }}
-                  alt="City Helpline App"
+                  alt="Studolink App"
                   className="w-full h-full object-contain p-1"
                 />
               </div>
@@ -139,7 +139,7 @@ export const InstallAppPrompt: React.FC = () => {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
                 <h4 className="text-[14px] font-bold text-white tracking-tight leading-tight truncate">
-                  Install City Helpline
+                  Install Studolink
                 </h4>
               </div>
               <p className="text-[12px] text-gray-400 tracking-wide font-normal truncate mt-0.5">
@@ -181,7 +181,7 @@ export const InstallAppPrompt: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Install City Helpline</h3>
+                  <h3 className="text-sm font-bold text-white">Install Studolink</h3>
                   <p className="text-[11px] text-gray-400">{isIOS ? 'iPhone / iPad Safari' : 'Android / Chrome Browser'}</p>
                 </div>
               </div>
@@ -219,7 +219,7 @@ export const InstallAppPrompt: React.FC = () => {
                     3
                   </span>
                   <p>
-                    Tap <strong className="text-white">"Add"</strong> in the top right. City Helpline will install instantly on your home screen!
+                    Tap <strong className="text-white">"Add"</strong> in the top right. Studolink will install instantly on your home screen!
                   </p>
                 </div>
               </div>
@@ -249,7 +249,7 @@ export const InstallAppPrompt: React.FC = () => {
                     3
                   </span>
                   <p>
-                    <strong className="text-white">Install</strong> पर टैप करें। City Helpline ऐप आपके फ़ोन में ऐप की तरह इंस्टॉल हो जाएगा!
+                    <strong className="text-white">Install</strong> पर टैप करें। Studolink ऐप आपके फ़ोन में ऐप की तरह इंस्टॉल हो जाएगा!
                   </p>
                 </div>
               </div>

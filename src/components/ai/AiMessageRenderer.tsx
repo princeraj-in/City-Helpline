@@ -295,7 +295,7 @@ export const AiMessageRenderer: React.FC<AiMessageRendererProps> = ({
         ) : (
           <div className="w-full flex items-center justify-between">
             <a
-              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`*City Helpline Student Guide - AI Mitra:*\n\n${content}\n\n📍 Check more on: https://app.imprince.me/chat`)}`}
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`*Studolink Student Guide - AI Mitra:*\n\n${content}\n\n📍 Check more on: https://app.imprince.me/chat`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors py-0.5 px-1.5 rounded hover:bg-emerald-500/10"

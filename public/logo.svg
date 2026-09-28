@@ -1,128 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <defs>
-    <!-- Gold Metallic Gradients -->
-    <linearGradient id="goldRimOuter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFEFA7"/>
-      <stop offset="18%" stop-color="#E5AA38"/>
-      <stop offset="35%" stop-color="#FFF8D6"/>
-      <stop offset="55%" stop-color="#9C6817"/>
-      <stop offset="75%" stop-color="#E0A330"/>
-      <stop offset="90%" stop-color="#FFF0A0"/>
-      <stop offset="100%" stop-color="#7A4F0B"/>
-    </linearGradient>
-
-    <linearGradient id="goldRimInner" x1="100%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#543305"/>
-      <stop offset="25%" stop-color="#C68A20"/>
-      <stop offset="50%" stop-color="#FFF3B0"/>
-      <stop offset="75%" stop-color="#915B0E"/>
-      <stop offset="100%" stop-color="#362002"/>
-    </linearGradient>
-
-    <linearGradient id="goldOrbit" x1="0%" y1="0%" x2="100%" y2="80%">
-      <stop offset="0%" stop-color="#FFF8D6"/>
-      <stop offset="20%" stop-color="#F3BA42"/>
-      <stop offset="45%" stop-color="#966113"/>
-      <stop offset="70%" stop-color="#FFDF73"/>
-      <stop offset="90%" stop-color="#E2A127"/>
-      <stop offset="100%" stop-color="#804C06"/>
-    </linearGradient>
-
-    <linearGradient id="goldTassel" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF7C2"/>
-      <stop offset="40%" stop-color="#F5B731"/>
-      <stop offset="80%" stop-color="#A86E12"/>
-      <stop offset="100%" stop-color="#FFE685"/>
-    </linearGradient>
-
-    <linearGradient id="goldBook" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FAD961"/>
-      <stop offset="50%" stop-color="#F76B1C"/>
-      <stop offset="100%" stop-color="#A73A00"/>
-    </linearGradient>
-
-    <!-- Deep Blue Medallion Face Gradient -->
-    <radialGradient id="dialGrad" cx="45%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#14346B"/>
-      <stop offset="40%" stop-color="#0A1D42"/>
-      <stop offset="75%" stop-color="#050E24"/>
-      <stop offset="100%" stop-color="#020612"/>
+    <!-- Background Radial Glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#11162D"/>
+      <stop offset="60%" stop-color="#080A14"/>
+      <stop offset="100%" stop-color="#030408"/>
     </radialGradient>
 
-    <!-- Glowing Sun/Moon Inside Pin -->
-    <radialGradient id="sunGlow" cx="50%" cy="45%" r="55%">
-      <stop offset="0%" stop-color="#FFFDF0"/>
-      <stop offset="35%" stop-color="#FFE26A"/>
-      <stop offset="75%" stop-color="#FFB319"/>
-      <stop offset="100%" stop-color="#E07A00"/>
-    </radialGradient>
-
-    <!-- Pin 3D Metallic Blue Gradient -->
-    <linearGradient id="pinBody" x1="15%" y1="10%" x2="85%" y2="90%">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="30%" stop-color="#0284C7"/>
-      <stop offset="70%" stop-color="#0369A1"/>
-      <stop offset="100%" stop-color="#075985"/>
-    </linearGradient>
-
-    <linearGradient id="pinHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#BAE6FD"/>
-      <stop offset="50%" stop-color="#38BDF8"/>
-      <stop offset="100%" stop-color="#0284C7"/>
-    </linearGradient>
-
-    <linearGradient id="pinInnerShadow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#082F49"/>
-      <stop offset="100%" stop-color="#0C4A6E"/>
-    </linearGradient>
-
-    <!-- 3D Skyscraper Gradients -->
-    <linearGradient id="towerFaceCenter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A5F"/>
-      <stop offset="100%" stop-color="#0B192C"/>
-    </linearGradient>
-    <linearGradient id="towerSideCenter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F243E"/>
-      <stop offset="100%" stop-color="#060E1A"/>
-    </linearGradient>
-
-    <linearGradient id="towerFaceLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#24476E"/>
-      <stop offset="100%" stop-color="#0E2138"/>
-    </linearGradient>
-
-    <linearGradient id="towerFaceRight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1B385C"/>
-      <stop offset="100%" stop-color="#081422"/>
-    </linearGradient>
-
-    <!-- Academic Cap Gradients -->
-    <linearGradient id="capTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2A3B5C"/>
-      <stop offset="40%" stop-color="#131F38"/>
-      <stop offset="100%" stop-color="#0A1020"/>
-    </linearGradient>
-
-    <linearGradient id="capRim" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FFE685"/>
-      <stop offset="50%" stop-color="#F5B731"/>
-      <stop offset="100%" stop-color="#8F590A"/>
-    </linearGradient>
-
-    <!-- Blue Hardcover Book Gradient -->
-    <linearGradient id="blueBook" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="60%" stop-color="#1D4ED8"/>
-      <stop offset="100%" stop-color="#172554"/>
-    </linearGradient>
-
-    <!-- 3D Shadow and Glow Filters -->
-    <filter id="medallionShadow" x="-15%" y="-15%" width="130%" height="135%">
-      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.65"/>
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#E5AA38" flood-opacity="0.3"/>
-    </filter>
-
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+    <!-- Neon Glow Filter -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="10" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
@@ -130,284 +16,283 @@
       </feMerge>
     </filter>
 
-    <filter id="intenseBeacon" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="14" result="blur"/>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+
+    <filter id="subtleGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- S Top Ribbon Cyan to Blue Gradient -->
+    <linearGradient id="topRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="40%" stop-color="#0284C7"/>
+      <stop offset="75%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+
+    <linearGradient id="topRibbonHighlight" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" stop-color="#E0F2FE"/>
+      <stop offset="50%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+
+    <!-- S Center Transition Gradient (Cyan to Purple) -->
+    <linearGradient id="centerRibbon" x1="0%" y1="20%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="35%" stop-color="#3B82F6"/>
+      <stop offset="70%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#9333EA"/>
+    </linearGradient>
+
+    <!-- S Bottom Ribbon Purple to Magenta Gradient -->
+    <linearGradient id="bottomRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9333EA"/>
+      <stop offset="45%" stop-color="#C026D3"/>
+      <stop offset="80%" stop-color="#DB2777"/>
+      <stop offset="100%" stop-color="#7E22CE"/>
+    </linearGradient>
+
+    <!-- Winding Highway / Road Glow -->
+    <linearGradient id="roadGlow" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#E879F9"/>
+      <stop offset="50%" stop-color="#F472B6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+
+    <!-- Graduation Cap Gradients -->
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="35%" stop-color="#1E3A8A"/>
+      <stop offset="70%" stop-color="#312E81"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+
+    <linearGradient id="tasselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="50%" stop-color="#E879F9"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+
+    <!-- City Skyline Silhouette Gradient -->
+    <linearGradient id="skylineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#67E8F9"/>
+      <stop offset="60%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Location Pin Gradient -->
+    <linearGradient id="pinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E879F9"/>
+      <stop offset="50%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
   </defs>
 
-  <!-- Group for whole Medallion with Realistic Shadow -->
-  <g filter="url(#medallionShadow)">
-    <!-- 1. Outer Beveled Gold Rim -->
-    <circle cx="512" cy="512" r="460" fill="url(#goldRimOuter)"/>
-    
-    <!-- 2. Dark Recessed Ring Step -->
-    <circle cx="512" cy="512" r="436" fill="url(#goldRimInner)"/>
+  <!-- Dark Rounded Container / Canvas -->
+  <rect width="512" height="512" rx="100" fill="url(#bgGlow)"/>
+  <rect width="508" height="508" x="2" y="2" rx="98" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-opacity="0.2"/>
 
-    <!-- 3. Inner Fine Polished Gold Pinstripe Ring -->
-    <circle cx="512" cy="512" r="424" fill="none" stroke="url(#goldRimOuter)" stroke-width="4"/>
+  <!-- Subtle Ambient Glow Rings -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.15" stroke-dasharray="6 6"/>
+  <circle cx="256" cy="256" r="215" fill="none" stroke="#00E5FF" stroke-width="1" stroke-opacity="0.08"/>
 
-    <!-- 4. Deep Sapphire Circular Coin Dial -->
-    <circle cx="512" cy="512" r="416" fill="url(#dialGrad)"/>
+  <!-- ============================================ -->
+  <!-- 1. INSIDE S: CITY SKYLINE BUILDINGS -->
+  <!-- ============================================ -->
+  <g transform="translate(160, 168)" opacity="0.95">
+    <!-- City Skyline Silhouette Buildings -->
+    <!-- Tower 1 -->
+    <rect x="18" y="44" width="22" height="66" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <line x1="24" y1="52" x2="34" y2="52" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="24" y1="60" x2="34" y2="60" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="24" y1="68" x2="34" y2="68" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
 
-    <!-- Dial Specular Ambient Arch (Top glass reflection) -->
-    <path d="M180 320 C240 180 400 130 512 130 C624 130 784 180 844 320 C740 230 630 190 512 190 C394 190 284 230 180 320 Z" 
-          fill="#FFFFFF" opacity="0.08"/>
+    <!-- Tower 2 (Tall Central Tower with Dome / Spire) -->
+    <rect x="46" y="22" width="26" height="88" rx="2" fill="url(#skylineGrad)" stroke="#00E5FF" stroke-width="1.4"/>
+    <path d="M46 24 C46 12 72 12 72 24 Z" fill="#38BDF8"/>
+    <line x1="59" y1="6" x2="59" y2="16" stroke="#00E5FF" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="59" cy="5" r="2" fill="#F43F5E"/>
+    <!-- Windows Matrix -->
+    <rect x="52" y="32" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="62" y="32" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="52" y="44" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="62" y="44" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="52" y="56" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="62" y="56" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="52" y="68" width="4" height="6" rx="1" fill="#FEF08A"/>
+    <rect x="62" y="68" width="4" height="6" rx="1" fill="#FEF08A"/>
+
+    <!-- Tower 3 (Angle Roof) -->
+    <polygon points="78,38 100,48 100,110 78,110" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <line x1="84" y1="58" x2="94" y2="62" stroke="#BAE6FD" stroke-width="1.5"/>
+    <line x1="84" y1="68" x2="94" y2="72" stroke="#BAE6FD" stroke-width="1.5"/>
+    <line x1="84" y1="78" x2="94" y2="82" stroke="#BAE6FD" stroke-width="1.5"/>
+
+    <!-- Tower 4 -->
+    <rect x="106" y="52" width="20" height="58" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <line x1="111" y1="62" x2="121" y2="62" stroke="#BAE6FD" stroke-width="1.5"/>
+    <line x1="111" y1="72" x2="121" y2="72" stroke="#BAE6FD" stroke-width="1.5"/>
+
+    <!-- Tower 5 Small -->
+    <rect x="132" y="64" width="16" height="46" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1"/>
+    <line x1="136" y1="72" x2="144" y2="72" stroke="#BAE6FD" stroke-width="1.2"/>
+    <line x1="136" y1="80" x2="144" y2="80" stroke="#BAE6FD" stroke-width="1.2"/>
+
+    <!-- Tower 6 Spire Line -->
+    <rect x="154" y="74" width="12" height="36" rx="1.5" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 5. BACK ARC OF THE GOLDEN ORBITAL RING -->
-  <!-- ========================================== -->
-  <path d="M260 560 C230 500 310 410 460 380 C580 355 690 380 750 425" 
-        stroke="url(#goldOrbit)" stroke-width="26" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <!-- ============================================ -->
+  <!-- 2. SCULPTURAL 3D GLOWING "S" RIBBONS -->
+  <!-- ============================================ -->
 
-  <!-- ========================================== -->
-  <!-- 6. BOTTOM UNFOLDED ISOMETRIC 3D MAP -->
-  <!-- ========================================== -->
-  <g transform="translate(512, 705)">
-    <!-- Map Drop Shadow -->
-    <path d="M-280 20 L-60 -70 L60 -70 L280 20 L80 120 L-80 120 Z" 
-          fill="#000000" opacity="0.45" filter="url(#softGlow)"/>
-
-    <!-- Map 3D Base Thickness / Fold Underlay -->
-    <path d="M-260 15 L-80 -60 L80 -60 L260 15 L260 27 L80 -48 L-80 -48 L-260 27 Z" fill="#94A3B8"/>
-    <path d="M-260 27 L-80 115 L80 115 L260 27 L260 34 L80 122 L-80 122 L-260 34 Z" fill="#64748B"/>
-
-    <!-- Left Panel -->
-    <path d="M-260 15 L-90 -55 L-80 105 L-250 25 Z" fill="#0F766E"/>
-    <!-- Center Panel -->
-    <path d="M-90 -55 L80 -55 L90 105 L-80 105 Z" fill="#155E75"/>
-    <!-- Right Panel -->
-    <path d="M80 -55 L250 15 L240 25 L90 105 Z" fill="#1E40AF"/>
-
-    <!-- Map Surface Roads & Grid Network (White/Cyan lines) -->
-    <!-- Left Panel Roads -->
-    <path d="M-230 20 L-110 -40 M-170 -10 L-140 85 M-210 22 L-110 50" 
-          stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-    <!-- Center Panel Roads -->
-    <path d="M-70 -40 L70 90 M60 -40 L-60 90 M-80 25 L80 25" 
-          stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
-    <!-- Right Panel Roads -->
-    <path d="M100 -40 L230 18 M130 85 L180 -10 M110 45 L210 20" 
-          stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-
-    <!-- Green Land Parcels on Map -->
-    <polygon points="-65,-25 -20,-25 -30,10 -75,10" fill="#2DD4BF" opacity="0.75"/>
-    <polygon points="20,-25 65,-25 75,10 30,10" fill="#2DD4BF" opacity="0.75"/>
-    <polygon points="-75,40 -30,40 -20,75 -65,75" fill="#38BDF8" opacity="0.75"/>
-    <polygon points="30,40 75,40 65,75 20,75" fill="#38BDF8" opacity="0.75"/>
-
-    <!-- Glowing Target Radar Pulse directly under Pin Tip -->
-    <g filter="url(#intenseBeacon)">
-      <ellipse cx="0" cy="25" rx="55" ry="24" fill="none" stroke="#FDE047" stroke-width="7" opacity="0.85"/>
-      <ellipse cx="0" cy="25" rx="32" ry="14" fill="#FACC15" opacity="0.5"/>
-      <ellipse cx="0" cy="25" rx="14" ry="7" fill="#FFFFFF"/>
-    </g>
+  <!-- S: Lower Outer Curve & Leaf Tip (Glow + Body) -->
+  <g filter="url(#subtleGlow)">
+    <!-- Lower Left Wing / Ribbon -->
+    <path d="M120 295 
+             C112 345 132 395 180 415 
+             C240 440 330 425 365 375 
+             C390 340 375 295 330 270 
+             C285 245 220 235 180 215 
+             C155 202 135 180 135 155
+             C135 135 150 115 175 105
+             C155 125 150 150 165 175
+             C185 205 235 218 280 238
+             C340 265 385 305 385 365
+             C385 425 315 455 230 450
+             C160 445 110 395 105 335
+             C102 305 110 278 120 295 Z"
+          fill="url(#bottomRibbon)"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 7. MAIN 3D LOCATION PIN (STYLED LETTER "C") -->
-  <!-- ========================================== -->
-  <g filter="url(#medallionShadow)">
-    <!-- Golden Sun/Moon Backdrop inside Aperture -->
-    <circle cx="528" cy="420" r="148" fill="url(#sunGlow)"/>
-    <circle cx="528" cy="420" r="148" fill="none" stroke="#FFEBA3" stroke-width="4" opacity="0.5"/>
+  <!-- S: Top Curve & Sweeping Upper Ribbon -->
+  <g filter="url(#subtleGlow)">
+    <!-- Upper Sweeping Ribbon forming Top of S -->
+    <path d="M148 215 
+             C142 165 175 115 245 105 
+             C315 95 360 135 345 190 
+             C335 225 295 245 235 245
+             C190 245 155 235 148 215 Z"
+          fill="url(#topRibbon)"/>
 
-    <!-- 3D Miniature City Skylines Inside Pin Aperture -->
-    <g>
-      <!-- Background Left Tower -->
-      <polygon points="420,440 455,420 455,540 420,540" fill="url(#towerFaceLeft)"/>
-      <polygon points="455,420 480,432 480,540 455,540" fill="url(#towerSideCenter)"/>
-      <polygon points="420,440 445,428 480,432 455,420" fill="#38BDF8" opacity="0.5"/>
-      <!-- Window Lights Left Tower -->
-      <rect x="430" y="450" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="442" y="445" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="430" y="470" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="442" y="465" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="430" y="490" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="442" y="485" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-
-      <!-- Center Tallest Skyscraper (Living Tower Hub) -->
-      <!-- Spire / Antenna -->
-      <line x1="528" y1="310" x2="528" y2="350" stroke="#FDE047" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="528" cy="308" r="4" fill="#FF4444" filter="url(#softGlow)"/>
-
-      <polygon points="485,360 535,340 535,540 485,540" fill="url(#towerFaceCenter)"/>
-      <polygon points="535,340 568,355 568,540 535,540" fill="url(#towerSideCenter)"/>
-      <polygon points="485,360 518,348 568,355 535,340" fill="#60A5FA"/>
-
-      <!-- Illuminated Windows Matrix (Center High-Rise) -->
-      <rect x="496" y="375" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="368" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="402" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="395" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="430" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="422" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="458" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="450" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="486" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="478" width="9" height="14" rx="2" fill="#FEF08A"/>
-
-      <!-- Right Tower -->
-      <polygon points="568,395 615,405 615,540 568,540" fill="url(#towerFaceRight)"/>
-      <polygon points="615,405 638,418 638,540 615,540" fill="#030712"/>
-      <polygon points="568,395 590,390 638,418 615,405" fill="#38BDF8" opacity="0.6"/>
-
-      <!-- Right Tower Windows -->
-      <rect x="580" y="420" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="598" y="425" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="580" y="445" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="598" y="450" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="580" y="470" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="598" y="475" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-
-      <!-- Foreground Low-Rise Buildings & Trees -->
-      <rect x="400" y="480" width="35" height="60" rx="3" fill="#1E293B"/>
-      <rect x="408" y="490" width="6" height="8" fill="#FDE047"/>
-      <rect x="408" y="505" width="6" height="8" fill="#FDE047"/>
-
-      <rect x="625" y="465" width="45" height="75" rx="3" fill="#1E293B"/>
-      <rect x="635" y="478" width="7" height="9" fill="#FDE047"/>
-      <rect x="650" y="482" width="7" height="9" fill="#FDE047"/>
-
-      <!-- Miniature Green Trees at Base of Towers -->
-      <circle cx="430" cy="528" r="14" fill="#15803D"/>
-      <circle cx="450" cy="532" r="16" fill="#16A34A"/>
-      <circle cx="475" cy="535" r="13" fill="#22C55E"/>
-      <circle cx="585" cy="534" r="15" fill="#15803D"/>
-      <circle cx="610" cy="530" r="17" fill="#16A34A"/>
-      <circle cx="635" cy="536" r="14" fill="#22C55E"/>
-    </g>
-
-    <!-- 3D Blue Pin Structure (Letter "C" Profile) -->
-    <!-- Pin Exterior Shell -->
-    <path d="M512 215 
-             C350 215 315 350 315 450 
-             C315 540 400 640 512 725 
-             C624 640 709 540 709 450 
-             C709 390 690 350 645 310 
-             C635 300 620 315 628 326 
-             C665 370 675 410 675 450 
-             C675 525 600 610 512 680 
-             C424 610 349 525 349 450 
-             C349 370 380 250 512 250 
-             C600 250 670 310 690 380 
-             C693 392 710 392 712 380 
-             C690 280 610 215 512 215 Z" 
-          fill="url(#pinBody)" 
-          stroke="url(#pinHighlight)" 
-          stroke-width="5"/>
-
-    <!-- Pin Beveled Inner Rim with Depth Accent -->
-    <path d="M512 240 C370 240 340 360 340 450 C340 530 420 620 512 695 C604 620 684 530 684 450 C684 395 665 350 635 315" 
-          stroke="#0284C7" stroke-width="12" fill="none" opacity="0.6"/>
-
-    <!-- Highlight Reflection on the Pin Curve -->
-    <path d="M350 380 C340 420 340 460 355 500" 
-          stroke="#BAE6FD" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <!-- Shiny Specular Glass Edge along Top S -->
+    <path d="M175 118 
+             C235 102 310 108 340 148 
+             C355 170 350 205 320 225
+             C275 225 215 215 180 185
+             C165 168 162 142 175 118 Z"
+          fill="url(#topRibbonHighlight)" opacity="0.85"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 8. FRONT ARC OF GOLDEN ORBITAL RING -->
-  <!-- ========================================== -->
+  <!-- S: Main Continuous Glowing 3D Body Ribbon -->
+  <g filter="url(#neonGlow)">
+    <path d="M342 160 
+             C330 130 295 112 245 115 
+             C180 118 140 160 145 215 
+             C150 260 200 280 265 300 
+             C345 325 388 355 380 405 
+             C370 455 290 468 215 450 
+             C160 436 120 390 120 335 
+             C120 315 130 295 138 310
+             C142 355 175 405 230 415 
+             C290 425 345 405 350 365 
+             C355 325 315 300 250 275 
+             C180 248 128 220 128 165 
+             C128 115 180 85 255 85 
+             C315 85 360 115 368 155 Z"
+          fill="url(#centerRibbon)"/>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- 3. WINDING HIGHWAY ROAD WITH NEON MAGENTA GLOW -->
+  <!-- ============================================ -->
   <g filter="url(#softGlow)">
-    <path d="M210 575 C205 600 235 620 300 628 C420 642 620 610 740 535 C810 490 825 440 780 405 C755 385 715 378 665 380 C650 380 650 404 665 404 C705 404 735 410 750 425 C780 450 760 480 710 512 C600 580 420 610 310 598 C260 592 235 580 238 565 C240 550 215 550 210 575 Z" 
-          fill="url(#goldOrbit)"/>
-    <path d="M245 580 C360 615 570 595 720 515" 
-          stroke="#FFFBEB" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <!-- Curving Winding Road Path Inside Lower Loop -->
+    <path d="M165 240 
+             C215 248 270 265 320 290 
+             C375 320 395 360 380 405 
+             C360 450 280 455 220 435 
+             C190 425 160 390 180 345 
+             C200 305 260 345 275 385" 
+          stroke="url(#roadGlow)" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          fill="none"/>
+
+    <!-- High-Intensity Centerline Road Glow -->
+    <path d="M175 242 
+             C220 252 272 270 318 294 
+             C365 322 380 358 368 395 
+             C350 435 285 440 230 422" 
+          stroke="#FFFFFF" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          fill="none" 
+          opacity="0.95"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 9. TOP: 3D GRADUATION CAP (MORTARBOARD) -->
-  <!-- ========================================== -->
-  <g filter="url(#medallionShadow)">
-    <!-- Skull Cap Fitting -->
-    <path d="M420 220 C420 270 600 270 600 220 Z" fill="#0C1527"/>
-    <path d="M430 225 C450 260 570 260 590 225 Z" fill="#030712"/>
-
-    <!-- Diamond Mortarboard Top (Tilted Isometric 3D) -->
-    <!-- Cap Thickness/Underplate -->
-    <polygon points="505,108 700,188 700,202 505,122" fill="#0A111F"/>
-    <polygon points="505,122 700,202 505,278 505,264" fill="#1E293B"/>
-    <polygon points="310,188 505,264 505,278 310,202" fill="#0F172A"/>
-    <polygon points="310,202 505,122 505,108 310,188" fill="#1E293B"/>
-
-    <!-- Cap Top Surface -->
-    <polygon points="505,110 700,190 505,266 310,190" fill="url(#capTop)" stroke="url(#capRim)" stroke-width="5"/>
-
-    <!-- Center Apex Golden Button -->
-    <ellipse cx="505" cy="188" rx="14" ry="10" fill="url(#goldTassel)"/>
-    <ellipse cx="505" cy="186" rx="8" ry="6" fill="#FFF9C4"/>
-
-    <!-- Golden Braided Tassel Cord draping down Left -->
-    <path d="M505 188 Q370 195 320 265" stroke="url(#goldTassel)" stroke-width="6" stroke-linecap="round" fill="none"/>
-    <circle cx="320" cy="265" r="7" fill="#FFE082"/>
-
-    <!-- Hanging Golden Tassel Body -->
-    <path d="M312 268 C305 300 295 350 300 370 C312 375 332 375 340 370 C335 350 325 300 322 268 Z" 
-          fill="url(#goldTassel)"/>
-    <!-- Tassel Strands / Highlights -->
-    <line x1="310" y1="370" x2="308" y2="385" stroke="#FBBF24" stroke-width="2.5"/>
-    <line x1="316" y1="372" x2="315" y2="388" stroke="#FDE68A" stroke-width="2.5"/>
-    <line x1="322" y1="373" x2="323" y2="390" stroke="#FBBF24" stroke-width="2.5"/>
-    <line x1="328" y1="372" x2="330" y2="387" stroke="#FDE68A" stroke-width="2.5"/>
-    <line x1="334" y1="370" x2="336" y2="384" stroke="#FBBF24" stroke-width="2.5"/>
+  <!-- ============================================ -->
+  <!-- 4. GLOWING PURPLE/MAGENTA LOCATION PIN -->
+  <!-- ============================================ -->
+  <g transform="translate(320, 310)" filter="url(#subtleGlow)">
+    <!-- Location Pin Body -->
+    <path d="M24 0 
+             C10.7 0 0 10.7 0 24 
+             C0 39 20 54 24 58 
+             C28 54 48 39 48 24 
+             C48 10.7 37.3 0 24 0 Z" 
+          fill="url(#pinGrad)" 
+          stroke="#F472B6" 
+          stroke-width="2"/>
+    
+    <!-- Pin Aperture Center Hole -->
+    <circle cx="24" cy="22" r="8" fill="#11162D" stroke="#00E5FF" stroke-width="2"/>
+    <circle cx="24" cy="22" r="3.5" fill="#00E5FF"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 10. BOTTOM RIGHT: STACK OF 3D STUDENT BOOKS -->
-  <!-- ========================================== -->
-  <g transform="translate(680, 615)" filter="url(#medallionShadow)">
-    <!-- BOTTOM BOOK (Golden Amber Hardcover) -->
-    <!-- Book Shadow -->
-    <ellipse cx="60" cy="95" rx="90" ry="20" fill="#000000" opacity="0.4" filter="url(#softGlow)"/>
+  <!-- ============================================ -->
+  <!-- 5. TOP: 3D GRADUATION CAP (MORTARBOARD) -->
+  <!-- ============================================ -->
+  <g transform="translate(145, 68)" filter="url(#subtleGlow)">
+    <!-- Graduation Cap Skull Base -->
+    <ellipse cx="110" cy="50" rx="34" ry="12" fill="#0F172A" opacity="0.9"/>
+    
+    <!-- Mortarboard Diamond 3D Plate Underlayer -->
+    <polygon points="110,6 235,52 110,92 -15,46" fill="#090D1A"/>
+    <polygon points="110,12 235,58 110,98 -15,52" fill="#020617"/>
 
-    <!-- Pages Block (Cream White) -->
-    <polygon points="-30,60 120,30 160,55 10,85" fill="#F1F5F9"/>
-    <polygon points="10,85 160,55 160,82 10,112" fill="#E2E8F0"/>
-    <polygon points="-30,60 10,85 10,112 -30,87" fill="#CBD5E1"/>
+    <!-- Mortarboard Top Surface (Glossy Cyan & Navy Gradient) -->
+    <polygon points="110,6 235,52 110,92 -15,46" 
+             fill="url(#capGrad)" 
+             stroke="#38BDF8" 
+             stroke-width="2.5" 
+             stroke-linejoin="round"/>
 
-    <!-- Cover Pages / Boards -->
-    <polygon points="-35,55 125,25 125,32 -35,62" fill="url(#goldBook)"/>
-    <polygon points="10,110 165,80 165,88 10,118" fill="url(#goldBook)"/>
-    <!-- Spine -->
-    <path d="M-35 55 L-35 87 C-35 90 -30 92 10 118 L10 110 C-20 86 -25 84 -25 62 Z" fill="#9A3412"/>
+    <!-- Center Button on Mortarboard -->
+    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#E0F2FE"/>
+    <circle cx="110" cy="49" r="2.5" fill="#00E5FF"/>
 
-    <!-- TOP BOOK (Cobalt Blue Hardcover resting slightly angled) -->
-    <!-- Pages Block -->
-    <polygon points="-45,15 95,-15 138,10 -2,40" fill="#FFFFFF"/>
-    <polygon points="-2,40 138,10 138,36 -2,66" fill="#E2E8F0"/>
-    <polygon points="-45,15 -2,40 -2,66 -45,41" fill="#94A3B8"/>
+    <!-- Tassel Ribbon & Cord Draping to Right -->
+    <path d="M110 50 Q160 52 195 85" stroke="url(#tasselGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <circle cx="195" cy="85" r="3.5" fill="#E879F9"/>
 
-    <!-- Blue Top Board Cover -->
-    <polygon points="-50,10 100,-20 144,7 -6,37" fill="url(#blueBook)"/>
-    <!-- Top Cover Metallic Edge Line -->
-    <line x1="-50" y1="10" x2="-6" y2="37" stroke="#93C5FD" stroke-width="2"/>
-    <line x1="-6" y1="37" x2="144" y2="7" stroke="#93C5FD" stroke-width="2"/>
-
-    <!-- Bottom Board Cover -->
-    <polygon points="-2,64 142,34 142,42 -2,72" fill="#1E3A8A"/>
-    <!-- Blue Spine Ribbing -->
-    <path d="M-50 10 L-50 41 C-50 44 -45 46 -2 72 L-2 64 C-35 40 -40 38 -40 18 Z" fill="#172554"/>
-    <line x1="-46" y1="20" x2="-40" y2="24" stroke="#60A5FA" stroke-width="2"/>
-    <line x1="-46" y1="30" x2="-40" y2="34" stroke="#60A5FA" stroke-width="2"/>
+    <!-- Tassel Hanging Body (3D Tiered) -->
+    <polygon points="190,90 200,90 205,124 185,124" fill="url(#tasselGrad)" stroke="#F472B6" stroke-width="1"/>
+    <polygon points="188,124 202,124 200,132 190,132" fill="#E879F9"/>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 11. SPECULAR FLARES & SPARKS -->
-  <!-- ========================================== -->
-  <!-- Star Sparkle on Gold Orbital Edge -->
-  <g transform="translate(740, 420)" filter="url(#softGlow)">
-    <circle cx="0" cy="0" r="5" fill="#FFFFFF"/>
-    <path d="M0 -22 L0 22 M-22 0 L22 0" stroke="#FFFBEB" stroke-width="3"/>
-  </g>
-
-  <!-- Star Sparkle on Graduation Cap Gold Corner -->
-  <g transform="translate(695, 188)" filter="url(#softGlow)">
-    <circle cx="0" cy="0" r="4" fill="#FFFFFF"/>
-    <path d="M0 -16 L0 16 M-16 0 L16 0" stroke="#FFFBEB" stroke-width="2.5"/>
-  </g>
+  <!-- Specular Shimmer Flares -->
+  <circle cx="150" cy="115" r="3" fill="#FFFFFF" filter="url(#softGlow)"/>
+  <circle cx="340" cy="155" r="2.5" fill="#00E5FF" filter="url(#softGlow)"/>
+  <circle cx="370" cy="380" r="3" fill="#F472B6" filter="url(#softGlow)"/>
 </svg>

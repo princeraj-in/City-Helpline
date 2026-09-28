@@ -23,7 +23,7 @@ export const RoommateCard: React.FC<RoommateCardProps> = ({ profile, onConnect, 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.stopPropagation();
     const phone = profile.whatsappNumber || profile.userPhone;
-    const text = `Hi ${profile.userName}, I saw your Roommate / Flatmate profile on City Helpline for ${profile.locality}, ${profile.city}. I am preparing for ${profile.targetExam} and looking for a flatmate in budget ₹${profile.budgetMin}-${profile.budgetMax}. Let's connect!`;
+    const text = `Hi ${profile.userName}, I saw your Roommate / Flatmate profile on Studolink for ${profile.locality}, ${profile.city}. I am preparing for ${profile.targetExam} and looking for a flatmate in budget ₹${profile.budgetMin}-${profile.budgetMax}. Let's connect!`;
     window.open(formatWhatsAppUrl(phone, text), '_blank');
   };
 

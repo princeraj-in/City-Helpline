@@ -151,11 +151,11 @@ export default function ListingDetails() {
   const handleShare = () => {
     if (!listing) return;
     const listingUrl = APP_CONFIG.getListingUrl(listing.id);
-    const shareText = `Check out "${listing.title}" (₹${listing.price.toLocaleString('en-IN')}/mo) in ${listing.city} on City Helpline: ${listingUrl}`;
+    const shareText = `Check out "${listing.title}" (₹${listing.price.toLocaleString('en-IN')}/mo) in ${listing.city} on Studolink: ${listingUrl}`;
     
     if (navigator.share) {
       navigator.share({
-        title: `${listing.title} - City Helpline`,
+        title: `${listing.title} - Studolink`,
         text: shareText,
         url: listingUrl
       }).catch(() => {
@@ -371,7 +371,7 @@ export default function ListingDetails() {
                 <a
                   href={formatWhatsAppUrl(
                     listing.contact,
-                    `Hi ${listing.authorName}, I saw your listing "${listing.title}" on City Helpline (${APP_CONFIG.getListingUrl(listing.id)}). Is it still available?`
+                    `Hi ${listing.authorName}, I saw your listing "${listing.title}" on Studolink (${APP_CONFIG.getListingUrl(listing.id)}). Is it still available?`
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -600,7 +600,7 @@ export default function Home() {
               Built For Aspirants & Parents
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Why Choose City Helpline?
+              Why Choose Studolink?
             </h2>
             <p className="text-gray-300/80 text-sm mt-2">
               We eliminate deceptive brokers, hidden charges, and fake listings with direct transparent verification.
@@ -885,7 +885,7 @@ export default function Home() {
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
                 Own a PG, Library or Mess? <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-purple-400">
-                  List On City Helpline Free
+                  List On Studolink Free
                 </span>
               </h2>
               <p className="text-gray-300 text-sm sm:text-base max-w-2xl leading-relaxed">

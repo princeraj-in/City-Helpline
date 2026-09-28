@@ -459,7 +459,7 @@ export default function Auth() {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-gray-400 font-medium text-sm">Loading City Helpline Authentication...</p>
+          <p className="text-gray-400 font-medium text-sm">Loading Studolink Authentication...</p>
         </div>
       </div>
     );
@@ -468,7 +468,7 @@ export default function Auth() {
   return (
     <div className="auth-page-container">
       <p className="tip">
-        Direct & Zero-Brokerage Student Housing • City Helpline
+        Direct & Zero-Brokerage Student Housing • Studolink
       </p>
 
       {/* Main Sliding Double Card */}
@@ -857,7 +857,7 @@ export default function Auth() {
               className="relative w-full max-w-lg bg-[#0e121b] border border-white/10 rounded-3xl p-8 shadow-2xl z-10 text-center"
             >
               <h3 className="text-2xl font-bold text-white mb-2">Select Your Role</h3>
-              <p className="text-gray-400 text-xs mb-6">Choose how you plan to use City Helpline</p>
+              <p className="text-gray-400 text-xs mb-6">Choose how you plan to use Studolink</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
@@ -882,7 +882,7 @@ export default function Auth() {
               </div>
 
               <p className="text-[11px] text-gray-400 mt-6 leading-relaxed">
-                By continuing, you agree to City Helpline's{' '}
+                By continuing, you agree to Studolink's{' '}
                 <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] underline font-semibold">
                   Terms of Service
                 </Link>{' '}

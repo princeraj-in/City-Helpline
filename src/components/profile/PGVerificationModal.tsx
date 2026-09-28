@@ -289,7 +289,7 @@ export const PGVerificationModal: React.FC<PGVerificationModalProps> = ({ listin
               className="mt-0.5 rounded border-white/20 text-emerald-400 focus:ring-emerald-400"
             />
             <span className="text-xs text-gray-300 leading-relaxed">
-              I certify that all uploaded room photos are genuine and taken in daylight. I agree to allow a physical inspection by a City Helpline student ambassador if requested.
+              I certify that all uploaded room photos are genuine and taken in daylight. I agree to allow a physical inspection by a Studolink student ambassador if requested.
             </span>
           </label>
 

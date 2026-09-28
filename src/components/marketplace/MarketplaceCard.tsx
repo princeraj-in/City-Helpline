@@ -22,8 +22,8 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
     const phone = item.whatsappNumber || item.sellerPhone;
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
     const text = item.price === 0
-      ? `Hi ${item.sellerName}, maine City Helpline par aapka Free Study Material Giveaway "${item.title}" dekha. Kya ye abhi available hai collect karne ke liye?`
-      : `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
+      ? `Hi ${item.sellerName}, maine Studolink par aapka Free Study Material Giveaway "${item.title}" dekha. Kya ye abhi available hai collect karne ke liye?`
+      : `Hi ${item.sellerName}, maine Studolink Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
     window.open(formatWhatsAppUrl(phone, text), '_blank', 'noopener,noreferrer');
   };
 

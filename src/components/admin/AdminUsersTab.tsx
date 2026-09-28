@@ -672,7 +672,7 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
                     {inspectStudentVerification.isStudentVerified && <VerifiedStudentBadge size="sm" />}
                   </div>
                   <p className="text-xs text-gray-400">
-                    City Helpline Trust & Aspirant Verification
+                    Studolink Trust & Aspirant Verification
                   </p>
                 </div>
               </div>

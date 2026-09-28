@@ -21,7 +21,7 @@ export default function handler(req: any, res: any) {
 
   res.status(200).json({
     status: 'healthy',
-    service: 'City Helpline AI Mitra Service',
+    service: 'Studolink AI Mitra Service',
     timestamp: new Date().toISOString(),
     geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
     nodeEnv: process.env.NODE_ENV || 'production',

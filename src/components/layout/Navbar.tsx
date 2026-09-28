@@ -29,7 +29,7 @@ export function Navbar() {
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/logo.svg';
                   }}
-                  alt="City Helpline 3D Logo"
+                  alt="Studolink 3D Logo"
                   className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-full"
                   referrerPolicy="no-referrer"
                 />
@@ -37,7 +37,7 @@ export function Navbar() {
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base sm:text-xl font-black text-white tracking-tight whitespace-nowrap">
-                    City <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">Helpline</span>
+                    Studo<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2]">link</span>
                   </span>
                   <span className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.2 text-[9px] font-black tracking-wider uppercase rounded-full bg-[#F5B731]/10 text-[#F5B731] border border-[#F5B731]/30 select-none">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#F5B731] animate-pulse" />

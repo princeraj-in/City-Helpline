@@ -49,7 +49,7 @@ const TOPIC_SHORTCUTS = [
   {
     icon: ShoppingBag,
     title: '2nd-Hand Books & Cooler',
-    prompt: 'City Helpline marketplace par second-hand cooler aur coaching modules kaise milenge?',
+    prompt: 'Studolink marketplace par second-hand cooler aur coaching modules kaise milenge?',
     badge: 'Save Money',
   },
   {
@@ -66,7 +66,7 @@ export default function AiChatPage() {
       {
         id: 'init-msg',
         role: 'model',
-        text: `Namaste! Main **City Helpline AI Mitra** hu. 🎓\n\nMain desh bhar ke coaching hubs (Kota, Patna, Delhi NCR, Sikar, Prayagraj, Indore) me students ki accommodation, monthly budget, safe room booking, aur coaching guide me help karta hu.\n\nAap mujhse kisi bhi sawal ka jawab le sakte hain. Niche diye gaye topics par click karein ya apna sawal type karein!`,
+        text: `Namaste! Main **Studolink AI Mitra** hu. 🎓\n\nMain desh bhar ke coaching hubs (Kota, Patna, Delhi NCR, Sikar, Prayagraj, Indore) me students ki accommodation, monthly budget, safe room booking, aur coaching guide me help karta hu.\n\nAap mujhse kisi bhi sawal ka jawab le sakte hain. Niche diye gaye topics par click karein ya apna sawal type karein!`,
         timestamp: Date.now(),
         suggestions: [
           'Kota me Allen ke paas best PGs?',
@@ -139,7 +139,7 @@ export default function AiChatPage() {
 
   // Sync title and SEO
   useEffect(() => {
-    document.title = 'AI Mitra - 24/7 Student Advisor | City Helpline';
+    document.title = 'AI Mitra - 24/7 Student Advisor | Studolink';
   }, []);
 
   // Cleanup typewriter interval on unmount
@@ -276,7 +276,7 @@ export default function AiChatPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                    City Helpline AI Mitra
+                    Studolink AI Mitra
                   </h1>
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#8A2BE2]/30 text-[#00E5FF] border border-[#00E5FF]/30">
                     24/7 Student Guide
@@ -382,7 +382,7 @@ export default function AiChatPage() {
                   <strong className="text-amber-400">112</strong>
                 </li>
                 <li className="flex items-center justify-between">
-                  <span>City Helpline Support:</span>
+                  <span>Studolink Support:</span>
                   <span className="text-gray-400">support@imprince.me</span>
                 </li>
               </ul>

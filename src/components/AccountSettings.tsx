@@ -526,9 +526,9 @@ export default function AccountSettings() {
               <ChevronRight className="h-4 w-4 text-gray-400 group-open:rotate-90 transition-transform" />
             </summary>
             <div className="p-4 pt-0 text-xs text-gray-300 border-t border-gray-700/50 mt-2 space-y-2.5 leading-relaxed">
-              <p className="font-bold text-white mt-2">Privacy Commitment – City Helpline (app.imprince.me)</p>
+              <p className="font-bold text-white mt-2">Privacy Commitment – Studolink (app.imprince.me)</p>
               <p>
-                City Helpline is an educational student community network. We strictly comply with the Indian Information Technology Act, 2000 and Digital Personal Data Protection (DPDP) principles.
+                Studolink is an educational student community network. We strictly comply with the Indian Information Technology Act, 2000 and Digital Personal Data Protection (DPDP) principles.
               </p>
               
               <p className="font-bold text-white">Data Protection & Non-Commercialization:</p>
@@ -559,7 +559,7 @@ export default function AccountSettings() {
             <div className="p-4 pt-0 text-xs text-gray-300 border-t border-gray-700/50 mt-2 space-y-2.5 leading-relaxed">
               <p className="font-bold text-white mt-2">Information Intermediary Guidelines</p>
               <p>
-                City Helpline operates as a zero-brokerage digital intermediary under Section 79 of the IT Act, 2000. We connect aspirants directly with property owners and peer students.
+                Studolink operates as a zero-brokerage digital intermediary under Section 79 of the IT Act, 2000. We connect aspirants directly with property owners and peer students.
               </p>
               
               <p className="font-bold text-white">Key User Responsibilities:</p>
@@ -611,14 +611,14 @@ export default function AccountSettings() {
             <summary className="flex items-center justify-between p-4 cursor-pointer font-medium text-white">
               <div className="flex items-center gap-2">
                 <Code className="h-4 w-4 text-gray-400" />
-                About City Helpline & Founder
+                About Studolink & Founder
               </div>
               <ChevronRight className="h-4 w-4 text-gray-400 group-open:rotate-90 transition-transform" />
             </summary>
             <div className="p-4 pt-0 text-xs text-gray-300 border-t border-gray-700/50 mt-2 space-y-2.5 leading-relaxed">
               <p className="font-bold text-white mt-2">Mission & Founder Details</p>
               <p>
-                City Helpline (<a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline">app.imprince.me</a>) was created by Prince Raj (Prince Kushwaha) with a mission to eliminate broker exploitation for Indian aspirants relocating far from home for competitive exams.
+                Studolink (<a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline">app.imprince.me</a>) was created by Prince Raj (Prince Kushwaha) with a mission to eliminate broker exploitation for Indian aspirants relocating far from home for competitive exams.
               </p>
               <p className="text-gray-400">
                 Covering educational hubs in Kota, Patna, Delhi NCR, Sikar, Prayagraj, Indore, Bengaluru, Lucknow, and Jaipur.
@@ -646,7 +646,7 @@ export default function AccountSettings() {
       {/* Footer */}
       <div className="mt-12 pt-6 border-t border-gray-800 text-center pb-8 space-y-1">
         <p className="text-sm text-gray-400">
-          © 2026 City Helpline • Official Portal: <a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline font-semibold">app.imprince.me</a>
+          © 2026 Studolink • Official Portal: <a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline font-semibold">app.imprince.me</a>
         </p>
         <p className="text-xs text-gray-500">
           Developed by Prince Kushwaha | Support: <a href="mailto:Support@imprince.me" className="text-blue-400 hover:underline">Support@imprince.me</a> | App Issues: <a href="mailto:Developer@imprince.me" className="text-[#00E5FF] hover:underline">Developer@imprince.me</a>

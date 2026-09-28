@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cityhelpline-pwa-v1';
+const CACHE_NAME = 'studolink-pwa-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

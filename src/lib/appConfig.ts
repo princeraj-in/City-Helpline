@@ -4,7 +4,8 @@
  */
 
 export const APP_CONFIG = {
-  name: 'City Helpline',
+  name: 'Studolink',
+  tagline: 'Your City. Your Student Ecosystem.',
   domain: 'app.imprince.me',
   baseUrl: 'https://app.imprince.me',
   supportEmail: 'Support@imprince.me',

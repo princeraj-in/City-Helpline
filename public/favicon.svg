@@ -1,284 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <defs>
-    <!-- Gold Metallic Gradients -->
-    <linearGradient id="goldRimOuter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFEFA7"/>
-      <stop offset="18%" stop-color="#E5AA38"/>
-      <stop offset="35%" stop-color="#FFF8D6"/>
-      <stop offset="55%" stop-color="#9C6817"/>
-      <stop offset="75%" stop-color="#E0A330"/>
-      <stop offset="90%" stop-color="#FFF0A0"/>
-      <stop offset="100%" stop-color="#7A4F0B"/>
-    </linearGradient>
-
-    <linearGradient id="goldRimInner" x1="100%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#543305"/>
-      <stop offset="25%" stop-color="#C68A20"/>
-      <stop offset="50%" stop-color="#FFF3B0"/>
-      <stop offset="75%" stop-color="#915B0E"/>
-      <stop offset="100%" stop-color="#362002"/>
-    </linearGradient>
-
-    <linearGradient id="goldOrbit" x1="0%" y1="0%" x2="100%" y2="80%">
-      <stop offset="0%" stop-color="#FFF8D6"/>
-      <stop offset="20%" stop-color="#F3BA42"/>
-      <stop offset="45%" stop-color="#966113"/>
-      <stop offset="70%" stop-color="#FFDF73"/>
-      <stop offset="90%" stop-color="#E2A127"/>
-      <stop offset="100%" stop-color="#804C06"/>
-    </linearGradient>
-
-    <linearGradient id="goldTassel" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF7C2"/>
-      <stop offset="40%" stop-color="#F5B731"/>
-      <stop offset="80%" stop-color="#A86E12"/>
-      <stop offset="100%" stop-color="#FFE685"/>
-    </linearGradient>
-
-    <linearGradient id="goldBook" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FAD961"/>
-      <stop offset="50%" stop-color="#F76B1C"/>
-      <stop offset="100%" stop-color="#A73A00"/>
-    </linearGradient>
-
-    <!-- Deep Blue Medallion Face Gradient -->
-    <radialGradient id="dialGrad" cx="45%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#14346B"/>
-      <stop offset="40%" stop-color="#0A1D42"/>
-      <stop offset="75%" stop-color="#050E24"/>
-      <stop offset="100%" stop-color="#020612"/>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#11162D"/>
+      <stop offset="100%" stop-color="#030408"/>
     </radialGradient>
-
-    <!-- Glowing Sun/Moon Inside Pin -->
-    <radialGradient id="sunGlow" cx="50%" cy="45%" r="55%">
-      <stop offset="0%" stop-color="#FFFDF0"/>
-      <stop offset="35%" stop-color="#FFE26A"/>
-      <stop offset="75%" stop-color="#FFB319"/>
-      <stop offset="100%" stop-color="#E07A00"/>
-    </radialGradient>
-
-    <!-- Pin 3D Metallic Blue Gradient -->
-    <linearGradient id="pinBody" x1="15%" y1="10%" x2="85%" y2="90%">
+    <linearGradient id="topRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="30%" stop-color="#0284C7"/>
-      <stop offset="70%" stop-color="#0369A1"/>
-      <stop offset="100%" stop-color="#075985"/>
+      <stop offset="100%" stop-color="#2563EB"/>
     </linearGradient>
-
-    <linearGradient id="pinHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#BAE6FD"/>
-      <stop offset="50%" stop-color="#38BDF8"/>
-      <stop offset="100%" stop-color="#0284C7"/>
+    <linearGradient id="centerRibbon" x1="0%" y1="20%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="50%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#9333EA"/>
     </linearGradient>
-
-    <!-- 3D Skyscraper Gradients -->
-    <linearGradient id="towerFaceCenter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A5F"/>
-      <stop offset="100%" stop-color="#0B192C"/>
+    <linearGradient id="bottomRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9333EA"/>
+      <stop offset="60%" stop-color="#DB2777"/>
+      <stop offset="100%" stop-color="#7E22CE"/>
     </linearGradient>
-    <linearGradient id="towerSideCenter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F243E"/>
-      <stop offset="100%" stop-color="#060E1A"/>
+    <linearGradient id="roadGlow" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#E879F9"/>
+      <stop offset="100%" stop-color="#A855F7"/>
     </linearGradient>
-
-    <!-- Academic Cap Gradients -->
-    <linearGradient id="capTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2A3B5C"/>
-      <stop offset="40%" stop-color="#131F38"/>
-      <stop offset="100%" stop-color="#0A1020"/>
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
     </linearGradient>
-
-    <linearGradient id="capRim" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FFE685"/>
-      <stop offset="50%" stop-color="#F5B731"/>
-      <stop offset="100%" stop-color="#8F590A"/>
-    </linearGradient>
-
-    <!-- Blue Hardcover Book Gradient -->
-    <linearGradient id="blueBook" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="60%" stop-color="#1D4ED8"/>
-      <stop offset="100%" stop-color="#172554"/>
-    </linearGradient>
-
-    <!-- 3D Shadow and Glow Filters -->
-    <filter id="medallionShadow" x="-15%" y="-15%" width="130%" height="135%">
-      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.65"/>
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#E5AA38" flood-opacity="0.3"/>
-    </filter>
-
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="10" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <filter id="intenseBeacon" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="14" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
 
-  <!-- Group for whole Medallion with Realistic Shadow -->
-  <g filter="url(#medallionShadow)">
-    <!-- 1. Outer Beveled Gold Rim -->
-    <circle cx="512" cy="512" r="460" fill="url(#goldRimOuter)"/>
-    <!-- 2. Dark Recessed Ring Step -->
-    <circle cx="512" cy="512" r="436" fill="url(#goldRimInner)"/>
-    <!-- 3. Inner Fine Polished Gold Pinstripe Ring -->
-    <circle cx="512" cy="512" r="424" fill="none" stroke="url(#goldRimOuter)" stroke-width="4"/>
-    <!-- 4. Deep Sapphire Circular Coin Dial -->
-    <circle cx="512" cy="512" r="416" fill="url(#dialGrad)"/>
-    <path d="M180 320 C240 180 400 130 512 130 C624 130 784 180 844 320 C740 230 630 190 512 190 C394 190 284 230 180 320 Z" 
-          fill="#FFFFFF" opacity="0.08"/>
+  <rect width="512" height="512" rx="110" fill="url(#bgGlow)"/>
+
+  <!-- Inside S: Skyline -->
+  <g transform="translate(160, 168)" opacity="0.9">
+    <rect x="20" y="44" width="22" height="66" rx="2" fill="#0284C7"/>
+    <rect x="48" y="24" width="26" height="86" rx="2" fill="#00E5FF"/>
+    <polygon points="48,24 61,8 74,24" fill="#38BDF8"/>
+    <polygon points="80,38 100,48 100,110 80,110" fill="#2563EB"/>
+    <rect x="106" y="52" width="20" height="58" rx="2" fill="#0284C7"/>
+    <rect x="132" y="64" width="16" height="46" rx="2" fill="#0369A1"/>
   </g>
 
-  <!-- 5. BACK ARC OF GOLDEN ORBITAL RING -->
-  <path d="M260 560 C230 500 310 410 460 380 C580 355 690 380 750 425" 
-        stroke="url(#goldOrbit)" stroke-width="26" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <!-- 3D Glowing S Ribbon -->
+  <path d="M120 295 C112 345 132 395 180 415 C240 440 330 425 365 375 C390 340 375 295 330 270 C285 245 220 235 180 215 C155 202 135 180 135 155 C135 135 150 115 175 105 C155 125 150 150 165 175 C185 205 235 218 280 238 C340 265 385 305 385 365 C385 425 315 455 230 450 C160 445 110 395 105 335 Z" fill="url(#bottomRibbon)"/>
+  <path d="M148 215 C142 165 175 115 245 105 C315 95 360 135 345 190 C335 225 295 245 235 245 C190 245 155 235 148 215 Z" fill="url(#topRibbon)"/>
+  <path d="M342 160 C330 130 295 112 245 115 C180 118 140 160 145 215 C150 260 200 280 265 300 C345 325 388 355 380 405 C370 455 290 468 215 450 C160 436 120 390 120 335 C142 355 175 405 230 415 C290 425 345 405 350 365 C355 325 315 300 250 275 C180 248 128 220 128 165 C128 115 180 85 255 85 C315 85 360 115 368 155 Z" fill="url(#centerRibbon)"/>
 
-  <!-- 6. BOTTOM UNFOLDED ISOMETRIC 3D MAP -->
-  <g transform="translate(512, 705)">
-    <path d="M-280 20 L-60 -70 L60 -70 L280 20 L80 120 L-80 120 Z" fill="#000000" opacity="0.45" filter="url(#softGlow)"/>
-    <path d="M-260 15 L-80 -60 L80 -60 L260 15 L260 27 L80 -48 L-80 -48 L-260 27 Z" fill="#94A3B8"/>
-    <path d="M-260 27 L-80 115 L80 115 L260 27 L260 34 L80 122 L-80 122 L-260 34 Z" fill="#64748B"/>
-    <path d="M-260 15 L-90 -55 L-80 105 L-250 25 Z" fill="#0F766E"/>
-    <path d="M-90 -55 L80 -55 L90 105 L-80 105 Z" fill="#155E75"/>
-    <path d="M80 -55 L250 15 L240 25 L90 105 Z" fill="#1E40AF"/>
-    <path d="M-230 20 L-110 -40 M-170 -10 L-140 85 M-210 22 L-110 50" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-    <path d="M-70 -40 L70 90 M60 -40 L-60 90 M-80 25 L80 25" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
-    <path d="M100 -40 L230 18 M130 85 L180 -10 M110 45 L210 20" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-    <polygon points="-65,-25 -20,-25 -30,10 -75,10" fill="#2DD4BF" opacity="0.75"/>
-    <polygon points="20,-25 65,-25 75,10 30,10" fill="#2DD4BF" opacity="0.75"/>
-    <polygon points="-75,40 -30,40 -20,75 -65,75" fill="#38BDF8" opacity="0.75"/>
-    <polygon points="30,40 75,40 65,75 20,75" fill="#38BDF8" opacity="0.75"/>
-    <g filter="url(#intenseBeacon)">
-      <ellipse cx="0" cy="25" rx="55" ry="24" fill="none" stroke="#FDE047" stroke-width="7" opacity="0.85"/>
-      <ellipse cx="0" cy="25" rx="32" ry="14" fill="#FACC15" opacity="0.5"/>
-      <ellipse cx="0" cy="25" rx="14" ry="7" fill="#FFFFFF"/>
-    </g>
-  </g>
+  <!-- Winding Path & Location Pin -->
+  <path d="M165 240 C215 248 270 265 320 290 C375 320 395 360 380 405 C360 450 280 455 220 435" stroke="url(#roadGlow)" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <circle cx="340" cy="335" r="16" fill="#EC4899"/>
+  <circle cx="340" cy="335" r="7" fill="#11162D"/>
 
-  <!-- 7. MAIN 3D LOCATION PIN (STYLED LETTER "C") -->
-  <g filter="url(#medallionShadow)">
-    <circle cx="528" cy="420" r="148" fill="url(#sunGlow)"/>
-    <circle cx="528" cy="420" r="148" fill="none" stroke="#FFEBA3" stroke-width="4" opacity="0.5"/>
-
-    <g>
-      <polygon points="420,440 455,420 455,540 420,540" fill="url(#towerFaceCenter)"/>
-      <polygon points="455,420 480,432 480,540 455,540" fill="#060E1A"/>
-      <rect x="430" y="450" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="442" y="445" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="430" y="470" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="442" y="465" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-      <rect x="430" y="490" width="7" height="10" rx="1.5" fill="#FEF08A"/>
-
-      <line x1="528" y1="310" x2="528" y2="350" stroke="#FDE047" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="528" cy="308" r="4" fill="#FF4444" filter="url(#softGlow)"/>
-
-      <polygon points="485,360 535,340 535,540 485,540" fill="url(#towerFaceCenter)"/>
-      <polygon points="535,340 568,355 568,540 535,540" fill="url(#towerSideCenter)"/>
-      <polygon points="485,360 518,348 568,355 535,340" fill="#60A5FA"/>
-
-      <rect x="496" y="375" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="368" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="402" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="395" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="430" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="422" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="496" y="458" width="9" height="14" rx="2" fill="#FEF08A"/>
-      <rect x="514" y="450" width="9" height="14" rx="2" fill="#FEF08A"/>
-
-      <polygon points="568,395 615,405 615,540 568,540" fill="url(#towerFaceCenter)"/>
-      <polygon points="615,405 638,418 638,540 615,540" fill="#030712"/>
-      <polygon points="568,395 590,390 638,418 615,405" fill="#38BDF8" opacity="0.6"/>
-
-      <rect x="580" y="420" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="598" y="425" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="580" y="445" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-      <rect x="598" y="450" width="8" height="12" rx="1.5" fill="#FEF08A"/>
-
-      <circle cx="430" cy="528" r="14" fill="#15803D"/>
-      <circle cx="450" cy="532" r="16" fill="#16A34A"/>
-      <circle cx="585" cy="534" r="15" fill="#15803D"/>
-      <circle cx="610" cy="530" r="17" fill="#16A34A"/>
-    </g>
-
-    <path d="M512 215 
-             C350 215 315 350 315 450 
-             C315 540 400 640 512 725 
-             C624 640 709 540 709 450 
-             C709 390 690 350 645 310 
-             C635 300 620 315 628 326 
-             C665 370 675 410 675 450 
-             C675 525 600 610 512 680 
-             C424 610 349 525 349 450 
-             C349 370 380 250 512 250 
-             C600 250 670 310 690 380 
-             C693 392 710 392 712 380 
-             C690 280 610 215 512 215 Z" 
-          fill="url(#pinBody)" 
-          stroke="url(#pinHighlight)" 
-          stroke-width="5"/>
-    <path d="M350 380 C340 420 340 460 355 500" stroke="#BAE6FD" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.85"/>
-  </g>
-
-  <!-- 8. FRONT ARC OF GOLDEN ORBITAL RING -->
-  <g filter="url(#softGlow)">
-    <path d="M210 575 C205 600 235 620 300 628 C420 642 620 610 740 535 C810 490 825 440 780 405 C755 385 715 378 665 380 C650 380 650 404 665 404 C705 404 735 410 750 425 C780 450 760 480 710 512 C600 580 420 610 310 598 C260 592 235 580 238 565 C240 550 215 550 210 575 Z" 
-          fill="url(#goldOrbit)"/>
-    <path d="M245 580 C360 615 570 595 720 515" stroke="#FFFBEB" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.9"/>
-  </g>
-
-  <!-- 9. TOP: 3D GRADUATION CAP (MORTARBOARD) -->
-  <g filter="url(#medallionShadow)">
-    <path d="M420 220 C420 270 600 270 600 220 Z" fill="#0C1527"/>
-    <polygon points="505,108 700,188 700,202 505,122" fill="#0A111F"/>
-    <polygon points="505,122 700,202 505,278 505,264" fill="#1E293B"/>
-    <polygon points="310,188 505,264 505,278 310,202" fill="#0F172A"/>
-    <polygon points="310,202 505,122 505,108 310,188" fill="#1E293B"/>
-    <polygon points="505,110 700,190 505,266 310,190" fill="url(#capTop)" stroke="url(#capRim)" stroke-width="5"/>
-
-    <ellipse cx="505" cy="188" rx="14" ry="10" fill="url(#goldTassel)"/>
-    <path d="M505 188 Q370 195 320 265" stroke="url(#goldTassel)" stroke-width="6" stroke-linecap="round" fill="none"/>
-    <circle cx="320" cy="265" r="7" fill="#FFE082"/>
-    <path d="M312 268 C305 300 295 350 300 370 C312 375 332 375 340 370 C335 350 325 300 322 268 Z" fill="url(#goldTassel)"/>
-    <line x1="310" y1="370" x2="308" y2="385" stroke="#FBBF24" stroke-width="2.5"/>
-    <line x1="316" y1="372" x2="315" y2="388" stroke="#FDE68A" stroke-width="2.5"/>
-    <line x1="322" y1="373" x2="323" y2="390" stroke="#FBBF24" stroke-width="2.5"/>
-  </g>
-
-  <!-- 10. BOTTOM RIGHT: STACK OF 3D STUDENT BOOKS -->
-  <g transform="translate(680, 615)" filter="url(#medallionShadow)">
-    <ellipse cx="60" cy="95" rx="90" ry="20" fill="#000000" opacity="0.4" filter="url(#softGlow)"/>
-    <polygon points="-30,60 120,30 160,55 10,85" fill="#F1F5F9"/>
-    <polygon points="10,85 160,55 160,82 10,112" fill="#E2E8F0"/>
-    <polygon points="-30,60 10,85 10,112 -30,87" fill="#CBD5E1"/>
-    <polygon points="-35,55 125,25 125,32 -35,62" fill="url(#goldBook)"/>
-    <polygon points="10,110 165,80 165,88 10,118" fill="url(#goldBook)"/>
-    <path d="M-35 55 L-35 87 C-35 90 -30 92 10 118 L10 110 C-20 86 -25 84 -25 62 Z" fill="#9A3412"/>
-
-    <polygon points="-45,15 95,-15 138,10 -2,40" fill="#FFFFFF"/>
-    <polygon points="-2,40 138,10 138,36 -2,66" fill="#E2E8F0"/>
-    <polygon points="-45,15 -2,40 -2,66 -45,41" fill="#94A3B8"/>
-    <polygon points="-50,10 100,-20 144,7 -6,37" fill="url(#blueBook)"/>
-    <line x1="-50" y1="10" x2="-6" y2="37" stroke="#93C5FD" stroke-width="2"/>
-    <line x1="-6" y1="37" x2="144" y2="7" stroke="#93C5FD" stroke-width="2"/>
-    <polygon points="-2,64 142,34 142,42 -2,72" fill="#1E3A8A"/>
-  </g>
-
-  <!-- 11. SPECULAR FLARES -->
-  <g transform="translate(740, 420)" filter="url(#softGlow)">
-    <circle cx="0" cy="0" r="5" fill="#FFFFFF"/>
-    <path d="M0 -22 L0 22 M-22 0 L22 0" stroke="#FFFBEB" stroke-width="3"/>
-  </g>
-  <g transform="translate(695, 188)" filter="url(#softGlow)">
-    <circle cx="0" cy="0" r="4" fill="#FFFFFF"/>
-    <path d="M0 -16 L0 16 M-16 0 L16 0" stroke="#FFFBEB" stroke-width="2.5"/>
+  <!-- Graduation Cap -->
+  <g transform="translate(145, 68)">
+    <polygon points="110,6 235,52 110,92 -15,46" fill="url(#capGrad)" stroke="#38BDF8" stroke-width="3"/>
+    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#E0F2FE"/>
+    <path d="M110 50 Q160 52 195 85" stroke="#C084FC" stroke-width="3.5" fill="none"/>
+    <polygon points="190,90 200,90 205,124 185,124" fill="#C084FC"/>
   </g>
 </svg>

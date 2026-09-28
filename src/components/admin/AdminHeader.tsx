@@ -53,7 +53,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-base sm:text-lg font-black text-white tracking-wider">City Helpline</span>
+              <span className="text-base sm:text-lg font-black text-white tracking-wider">Studolink</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30 shadow-[0_0_12px_rgba(0,229,255,0.2)]">
                 OPS CONSOLE
               </span>

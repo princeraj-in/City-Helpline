@@ -401,7 +401,7 @@ export default function Profile() {
               Intermediary Discovery Portal
             </span>
             <p className="text-gray-400 leading-relaxed">
-              City Helpline connects students and owners. Room lease, rent agreement aur offline dispute ki zimmedari landlord-tenant ki hoti hai.
+              Studolink connects students and owners. Room lease, rent agreement aur offline dispute ki zimmedari landlord-tenant ki hoti hai.
             </p>
           </div>
 
@@ -418,7 +418,7 @@ export default function Profile() {
 
         {/* Quick Links */}
         <div className="flex items-center justify-between flex-wrap gap-2 pt-2 text-[11px] text-gray-500 border-t border-white/5">
-          <span>By using City Helpline, you agree to our verified student habitat terms.</span>
+          <span>By using Studolink, you agree to our verified student habitat terms.</span>
           <div className="flex items-center gap-3">
             <Link to="/privacy" className="hover:text-white underline">Privacy Policy</Link>
             <Link to="/legal?tab=grievance" className="hover:text-white underline">Grievance Cell</Link>

@@ -1,7 +1,7 @@
 {
-  "name": "City Helpline - Student Habitat & PG Directory",
-  "short_name": "City Helpline",
-  "description": "Zero-brokerage student PGs, hostels, silent libraries, mess meals and student marketplace for Kota, Patna, Delhi and educational hubs.",
+  "name": "Studolink - Your City. Your Student Ecosystem.",
+  "short_name": "Studolink",
+  "description": "Studolink: Your City. Your Student Ecosystem. Zero-brokerage student PGs, hostels, silent libraries, mess meals, roommate matching, and student marketplace.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B0F19",

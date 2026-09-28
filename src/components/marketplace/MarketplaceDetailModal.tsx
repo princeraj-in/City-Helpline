@@ -48,17 +48,17 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
   const handleWhatsApp = () => {
     const phone = item.whatsappNumber || item.sellerPhone;
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
-    const text = `Hi ${item.sellerName}, maine City Helpline Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
+    const text = `Hi ${item.sellerName}, maine Studolink Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
     window.open(formatWhatsAppUrl(phone, text), '_blank', 'noopener,noreferrer');
   };
 
   const handleShare = () => {
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
-    const shareText = `Check out "${item.title}" (₹${item.price.toLocaleString('en-IN')}) on City Helpline Student Marketplace: ${itemUrl}`;
+    const shareText = `Check out "${item.title}" (₹${item.price.toLocaleString('en-IN')}) on Studolink Student Marketplace: ${itemUrl}`;
     
     if (navigator.share) {
       navigator.share({
-        title: `${item.title} - City Helpline Marketplace`,
+        title: `${item.title} - Studolink Marketplace`,
         text: shareText,
         url: itemUrl
       }).catch(() => {

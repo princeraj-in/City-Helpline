@@ -94,7 +94,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     title: 'Legal, Privacy & Student Safety Hub',
     subtitle: 'Zero-brokerage terms, user conduct, privacy rights & aspirant protection guidelines',
     badge: 'Legal & Safety',
-    heroIntro: 'City Helpline is India’s dedicated zero-brokerage educational housing and resource ecosystem. Read our legally binding terms, strict anti-fraud safety rules, and privacy practices.',
+    heroIntro: 'Studolink is India’s dedicated zero-brokerage educational housing and resource ecosystem. Read our legally binding terms, strict anti-fraud safety rules, and privacy practices.',
     lastUpdated: 'Updated: September 2026',
     jurisdiction: 'Jurisdiction: India (IT Act & DPDP 2023)',
     zeroBrokerageBadge: '100% Zero Brokerage Platform',
@@ -153,7 +153,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       title: 'Privacy Policy & Data Protection',
       subtitle: 'Compliant with the Information Technology Act, 2000 and Digital Personal Data Protection (DPDP) Act, 2023.',
       introTitle: 'Introduction & Commitment to Aspirants',
-      introText: 'City Helpline operates as a zero-brokerage digital intermediary connecting students with verified accommodation and educational resources. We respect your digital privacy and do not sell student data.',
+      introText: 'Studolink operates as a zero-brokerage digital intermediary connecting students with verified accommodation and educational resources. We respect your digital privacy and do not sell student data.',
       dataCollectTitle: 'Information We Collect',
       dataCollectIntro: 'We only collect data strictly necessary to facilitate student accommodation and educational connectivity:',
       studentDataTitle: 'Student & User Information',
@@ -189,13 +189,13 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     },
     terms: {
       title: 'Terms of Service & Platform Rules',
-      subtitle: 'Legally binding framework for Students, Property Providers, and City Helpline.',
+      subtitle: 'Legally binding framework for Students, Property Providers, and Studolink.',
       acceptTitle: '1. Acceptance of Terms',
-      acceptText: 'By accessing or registering on City Helpline, you agree to comply with and be bound by these Terms of Service. If you disagree, please discontinue using the platform.',
+      acceptText: 'By accessing or registering on Studolink, you agree to comply with and be bound by these Terms of Service. If you disagree, please discontinue using the platform.',
       intermediaryTitle: '2. Intermediary Status (Section 79 IT Act)',
-      intermediaryText: 'City Helpline is an electronic intermediary and discovery platform. We do NOT own, operate, or lease properties directly, nor do we act as a broker or charge commissions.',
+      intermediaryText: 'Studolink is an electronic intermediary and discovery platform. We do NOT own, operate, or lease properties directly, nor do we act as a broker or charge commissions.',
       zeroBrokerageTitle: '3. Zero Brokerage Guarantee',
-      zeroBrokerageText: 'City Helpline will never charge students brokerage or commission fees for discovering or contacting property owners. Communication between students and owners is 100% direct.',
+      zeroBrokerageText: 'Studolink will never charge students brokerage or commission fees for discovering or contacting property owners. Communication between students and owners is 100% direct.',
       conductTitle: '4. Student & User Code of Conduct',
       conductItems: [
         'Do not post false, misleading, abusive, or defamatory content.',
@@ -209,7 +209,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
         'Abide by all local student accommodation safety norms and fire safety guidelines.'
       ],
       liabilityTitle: '6. Limitation of Liability',
-      liabilityText: 'City Helpline facilitates direct connections but is not liable for private financial transactions or off-platform disputes between landlords and tenants. Always insist on written rent receipts.'
+      liabilityText: 'Studolink facilitates direct connections but is not liable for private financial transactions or off-platform disputes between landlords and tenants. Always insist on written rent receipts.'
     },
     listingPolicy: {
       title: 'Listing & Owner Verification Policy',
@@ -239,7 +239,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       slaTitle: 'Response & Resolution Timelines',
       slaText: 'Grievance emails are acknowledged within 24 hours and fully investigated within 15 days as required by law.',
       cyberCoopTitle: 'Cyber Crime & Law Enforcement Cooperation',
-      cyberCoopText: 'City Helpline provides swift assistance to Indian Police and Cyber Crime cells in cases of reported fraud, providing verified owner records and digital logs under lawful notices.'
+      cyberCoopText: 'Studolink provides swift assistance to Indian Police and Cyber Crime cells in cases of reported fraud, providing verified owner records and digital logs under lawful notices.'
     }
   },
 
@@ -247,7 +247,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     title: 'कानूनी, गोपनीयता और छात्र सुरक्षा केंद्र',
     subtitle: 'जीरो-ब्रोकरेज नियम, छात्र आचार संहिता, डेटा सुरक्षा और स्कैम से बचाव दिशानिर्देश',
     badge: 'सुरक्षा और नियम',
-    heroIntro: 'सिटी हेल्पलाइन भारत के प्रतियोगी परीक्षा की तैयारी कर रहे विद्यार्थियों के लिए समर्पित 100% जीरो-ब्रोकरेज प्लेटफॉर्म है। हमारे कानूनी नियम, एंटी-फ्रॉड सुरक्षा और गोपनीयता नीतियां पढ़ें।',
+    heroIntro: 'स्टुडोलिंक (Studolink) भारत के प्रतियोगी परीक्षा की तैयारी कर रहे विद्यार्थियों के लिए समर्पित 100% जीरो-ब्रोकरेज प्लेटफॉर्म है। हमारे कानूनी नियम, एंटी-फ्रॉड सुरक्षा और गोपनीयता नीतियां पढ़ें।',
     lastUpdated: 'अंतिम अपडेट: सितंबर 2026',
     jurisdiction: 'अधिकार क्षेत्र: भारत (आईटी एक्ट व DPDP अधिनियम 2023)',
     zeroBrokerageBadge: '100% जीरो-दलाली (Zero Brokerage) प्लेटफॉर्म',
@@ -306,7 +306,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       title: 'गोपनीयता नीति और डेटा सुरक्षा (Privacy Policy)',
       subtitle: 'सूचना प्रौद्योगिकी अधिनियम 2000 और डिजिटल पर्सनल डेटा प्रोटेक्शन (DPDP) अधिनियम 2023 के अनुरूप।',
       introTitle: 'हमारा संकल्प: छात्रों की पूर्ण सुरक्षा',
-      introText: 'सिटी हेल्पलाइन विद्यार्थियों को सीधे बिना दलाली के रहने की जगह और शैक्षणिक संसाधन खोजने में मदद करता है। हम आपके डेटा की पूर्ण सुरक्षा करते हैं और छात्रों का डेटा कभी किसी को नहीं बेचते।',
+      introText: 'स्टुडोलिंक (Studolink) विद्यार्थियों को सीधे बिना दलाली के रहने की जगह और शैक्षणिक संसाधन खोजने में मदद करता है। हम आपके डेटा की पूर्ण सुरक्षा करते हैं और छात्रों का डेटा कभी किसी को नहीं बेचते।',
       dataCollectTitle: 'हम कौन-सी जानकारी एकत्र करते हैं',
       dataCollectIntro: 'हम केवल वही जानकारी लेते हैं जो रूम सर्च और सुविधा देने के लिए आवश्यक है:',
       studentDataTitle: 'छात्रों की जानकारी',
@@ -341,13 +341,13 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     },
     terms: {
       title: 'सेवा की शर्तें और प्लेटफॉर्म नियम (Terms of Service)',
-      subtitle: 'विद्यार्थियों, मकान मालिकों और सिटी हेल्पलाइन के बीच कानूनी समझौता।',
+      subtitle: 'विद्यार्थियों, मकान मालिकों और स्टुडोलिंक के बीच कानूनी समझौता।',
       acceptTitle: '1. शर्तों की स्वीकृति',
-      acceptText: 'सिटी हेल्पलाइन का उपयोग करने का अर्थ है कि आप इन सभी नियमों से सहमत हैं। यदि आप सहमत नहीं हैं, तो कृपया प्लेटफॉर्म का उपयोग न करें।',
+      acceptText: 'स्टुडोलिंक का उपयोग करने का अर्थ है कि आप इन सभी नियमों से सहमत हैं। यदि आप सहमत नहीं हैं, तो कृपया प्लेटफॉर्म का उपयोग न करें।',
       intermediaryTitle: '2. मध्यस्थ प्लेटफॉर्म (Intermediary Status)',
-      intermediaryText: 'सिटी हेल्पलाइन आईटी एक्ट की धारा 79 के तहत एक सूचना मध्यस्थ है। हम स्वयं किसी भी कमरे, पीजी या मेस के मालिक नहीं हैं। हम केवल छात्रों को सीधे मालिकों से जोड़ते हैं।',
+      intermediaryText: 'स्टुडोलिंक आईटी एक्ट की धारा 79 के तहत एक सूचना मध्यस्थ है। हम स्वयं किसी भी कमरे, पीजी या मेस के मालिक नहीं हैं। हम केवल छात्रों को सीधे मालिकों से जोड़ते हैं।',
       zeroBrokerageTitle: '3. 100% जीरो ब्रोकरेज गारंटी',
-      zeroBrokerageText: 'सिटी हेल्पलाइन छात्रों से कमरा खोजने या मालिक से बात करने का ₹1 भी ब्रोकरेज या दलाली शुल्क नहीं लेता है।',
+      zeroBrokerageText: 'स्टुडोलिंक छात्रों से कमरा खोजने या मालिक से बात करने का ₹1 भी ब्रोकरेज या दलाली शुल्क नहीं लेता है।',
       conductTitle: '4. छात्र आचार संहिता',
       conductItems: [
         'गलत, अश्लील या भ्रामक जानकारी पोस्ट न करें।',
@@ -360,7 +360,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
         'सुरक्षा, पानी और बिजली की समुचित व्यवस्था बनाए रखें।'
       ],
       liabilityTitle: '6. कानूनी दायरा',
-      liabilityText: 'मकान मालिक और किरायेदार के बीच हुए निजी लेन-देन की रसीद हमेशा लिखित में लें। सिटी हेल्पलाइन दोनों पक्षों को सीधे जोड़ने का माध्यम है।'
+      liabilityText: 'मकान मालिक और किरायेदार के बीच हुए निजी लेन-देन की रसीद हमेशा लिखित में लें। स्टुडोलिंक दोनों पक्षों को सीधे जोड़ने का माध्यम है।'
     },
     listingPolicy: {
       title: 'कमरा लिस्टिंग और वेरिफिकेशन नीति',
@@ -389,7 +389,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       slaTitle: 'शिकायत निवारण समय सीमा',
       slaText: 'ईमेल मिलने के 24 घंटे में पावती दी जाती है और 15 दिनों के अंदर पूरी जांच कर समाधान किया जाता है।',
       cyberCoopTitle: 'साइबर क्राइम और पुलिस सहयोग',
-      cyberCoopText: 'किसी भी फर्जीवाड़े या अपराध की स्थिति में सिटी हेल्पलाइन भारतीय पुलिस और साइबर सेल को त्वरित डिजिटल साक्ष्य और सहयोग प्रदान करती है।'
+      cyberCoopText: 'किसी भी फर्जीवाड़े या अपराध की स्थिति में स्टुडोलिंक भारतीय पुलिस और साइबर सेल को त्वरित डिजिटल साक्ष्य और सहयोग प्रदान करता है।'
     }
   },
 
@@ -397,7 +397,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     title: 'Legal, Privacy aur Student Safety Hub',
     subtitle: 'Zero-brokerage terms, user conduct, privacy rights aur student fraud protection guidelines',
     badge: 'Legal & Safety',
-    heroIntro: 'City Helpline India ke sabhi competitive exam aspirants ke liye dedicated zero-brokerage housing aur study resource platform hai. Hamare legally binding terms, anti-scam rules aur privacy policy aasaani se samjhein.',
+    heroIntro: 'Studolink India ke sabhi competitive exam aspirants ke liye dedicated zero-brokerage housing aur study resource platform hai. Hamare legally binding terms, anti-scam rules aur privacy policy aasaani se samjhein.',
     lastUpdated: 'Updated: September 2026',
     jurisdiction: 'Jurisdiction: India (IT Act aur DPDP 2023 Compliant)',
     zeroBrokerageBadge: '100% Zero Brokerage (Bina Dalali) Platform',
@@ -456,7 +456,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       title: 'Privacy Policy & Data Protection',
       subtitle: 'Information Technology Act, 2000 aur DPDP Act 2023 ke mutabiq.',
       introTitle: 'Introduction & Students Ko Hamara Vaada',
-      introText: 'City Helpline ek zero-brokerage student community platform hai. Hum aapke personal data ki complete security karte hain aur kisi student ka data commercial brokers ko nahi bechte.',
+      introText: 'Studolink ek zero-brokerage student community platform hai. Hum aapke personal data ki complete security karte hain aur kisi student ka data commercial brokers ko nahi bechte.',
       dataCollectTitle: 'Hum Kaunsa Data Lete Hain',
       dataCollectIntro: 'Hum sirf wahi data lete hain jo room search aur safety ke liye zaroori hai:',
       studentDataTitle: 'Students Ka Data',
@@ -491,13 +491,13 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
     },
     terms: {
       title: 'Terms of Service & Platform Rules',
-      subtitle: 'Users, Room Providers aur City Helpline ke beech binding agreement.',
+      subtitle: 'Users, Room Providers aur Studolink ke beech binding agreement.',
       acceptTitle: '1. Terms Ki Acceptance',
-      acceptText: 'City Helpline use karne ka matlab hai ki aap in platform rules ko agree karte hain.',
+      acceptText: 'Studolink use karne ka matlab hai ki aap in platform rules ko agree karte hain.',
       intermediaryTitle: '2. Intermediary Status (Section 79 IT Act)',
-      intermediaryText: 'City Helpline ek information platform hai. Hum kisi bhi room ya hostel ke direct owner ya broker nahi hain. Hum direct communication provide karte hain.',
+      intermediaryText: 'Studolink ek information platform hai. Hum kisi bhi room ya hostel ke direct owner ya broker nahi hain. Hum direct communication provide karte hain.',
       zeroBrokerageTitle: '3. Zero Brokerage Guarantee',
-      zeroBrokerageText: 'City Helpline kisi bhi student se kamra khojne ka ₹1 bhi brokerage ya middleman commission nahi leta hai.',
+      zeroBrokerageText: 'Studolink kisi bhi student se kamra khojne ka ₹1 bhi brokerage ya middleman commission nahi leta hai.',
       conductTitle: '4. Student Code of Conduct',
       conductItems: [
         'Koi bhi fake, abusive ya misleading listing/message na karein.',
@@ -510,7 +510,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
         'Student safety, RO drinking water aur hygiene ensure karein.'
       ],
       liabilityTitle: '6. Limitation of Liability',
-      liabilityText: 'Landlord aur student ke beech financial transactions ki written receipt zaroor lein. City Helpline direct verified connectivity provide karta hai.'
+      liabilityText: 'Landlord aur student ke beech financial transactions ki written receipt zaroor lein. Studolink direct verified connectivity provide karta hai.'
     },
     listingPolicy: {
       title: 'Listing & Owner Verification Policy',
@@ -539,7 +539,7 @@ export const LEGAL_TRANSLATIONS: Record<'en' | 'hi' | 'hinglish', LocalizedConte
       slaTitle: 'Response Timeline',
       slaText: 'Grievance email milte hi 24 hours me acknowledgment aur 15 days ke andar investigation poori ki jaati hai.',
       cyberCoopTitle: 'Cyber Crime & Police Assistance',
-      cyberCoopText: 'Kisi bhi fraud ya complaint aane par City Helpline Indian Police aur Cyber Crime cell ko direct digital evidence provide karti hai.'
+      cyberCoopText: 'Kisi bhi fraud ya complaint aane par Studolink Indian Police aur Cyber Crime cell ko direct digital evidence provide karti hai.'
     }
   }
 };
