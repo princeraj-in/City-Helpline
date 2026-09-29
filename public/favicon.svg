@@ -23,21 +23,22 @@
       <stop offset="100%" stop-color="#A855F7"/>
     </linearGradient>
     <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="30%" stop-color="#F59E0B"/>
       <stop offset="100%" stop-color="#1E1B4B"/>
     </linearGradient>
   </defs>
 
   <rect width="512" height="512" rx="110" fill="url(#bgGlow)"/>
 
-  <!-- Inside S: Skyline -->
-  <g transform="translate(160, 168)" opacity="0.9">
-    <rect x="20" y="44" width="22" height="66" rx="2" fill="#0284C7"/>
-    <rect x="48" y="24" width="26" height="86" rx="2" fill="#00E5FF"/>
-    <polygon points="48,24 61,8 74,24" fill="#38BDF8"/>
-    <polygon points="80,38 100,48 100,110 80,110" fill="#2563EB"/>
-    <rect x="106" y="52" width="20" height="58" rx="2" fill="#0284C7"/>
-    <rect x="132" y="64" width="16" height="46" rx="2" fill="#0369A1"/>
+  <!-- Inside S: Skyline (Emerald) -->
+  <g transform="translate(160, 168)" opacity="0.95">
+    <rect x="20" y="44" width="22" height="66" rx="2" fill="#059669"/>
+    <rect x="48" y="24" width="26" height="86" rx="2" fill="#10B981"/>
+    <polygon points="48,24 61,8 74,24" fill="#34D399"/>
+    <polygon points="80,38 100,48 100,110 80,110" fill="#059669"/>
+    <rect x="106" y="52" width="20" height="58" rx="2" fill="#10B981"/>
+    <rect x="132" y="64" width="16" height="46" rx="2" fill="#047857"/>
   </g>
 
   <!-- 3D Glowing S Ribbon -->
@@ -45,16 +46,16 @@
   <path d="M148 215 C142 165 175 115 245 105 C315 95 360 135 345 190 C335 225 295 245 235 245 C190 245 155 235 148 215 Z" fill="url(#topRibbon)"/>
   <path d="M342 160 C330 130 295 112 245 115 C180 118 140 160 145 215 C150 260 200 280 265 300 C345 325 388 355 380 405 C370 455 290 468 215 450 C160 436 120 390 120 335 C142 355 175 405 230 415 C290 425 345 405 350 365 C355 325 315 300 250 275 C180 248 128 220 128 165 C128 115 180 85 255 85 C315 85 360 115 368 155 Z" fill="url(#centerRibbon)"/>
 
-  <!-- Winding Path & Location Pin -->
+  <!-- Winding Path & Location Pin (Coral Red) -->
   <path d="M165 240 C215 248 270 265 320 290 C375 320 395 360 380 405 C360 450 280 455 220 435" stroke="url(#roadGlow)" stroke-width="14" stroke-linecap="round" fill="none"/>
-  <circle cx="340" cy="335" r="16" fill="#EC4899"/>
-  <circle cx="340" cy="335" r="7" fill="#11162D"/>
+  <circle cx="340" cy="335" r="16" fill="#FF385C"/>
+  <circle cx="340" cy="335" r="7" fill="#FFFFFF"/>
 
-  <!-- Graduation Cap -->
+  <!-- Graduation Cap (Gold) -->
   <g transform="translate(145, 68)">
-    <polygon points="110,6 235,52 110,92 -15,46" fill="url(#capGrad)" stroke="#38BDF8" stroke-width="3"/>
-    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#E0F2FE"/>
-    <path d="M110 50 Q160 52 195 85" stroke="#C084FC" stroke-width="3.5" fill="none"/>
-    <polygon points="190,90 200,90 205,124 185,124" fill="#C084FC"/>
+    <polygon points="110,6 235,52 110,92 -15,46" fill="url(#capGrad)" stroke="#FBBF24" stroke-width="3"/>
+    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#FEF08A"/>
+    <path d="M110 50 Q160 52 195 85" stroke="#FDE047" stroke-width="3.5" fill="none"/>
+    <polygon points="190,90 200,90 205,124 185,124" fill="#F59E0B"/>
   </g>
 </svg>

@@ -69,32 +69,34 @@
       <stop offset="100%" stop-color="#A855F7"/>
     </linearGradient>
 
-    <!-- Graduation Cap Gradients -->
+    <!-- Graduation Cap Gradients (Rich Obsidian with Imperial Gold & Amber Trim) -->
     <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="35%" stop-color="#1E3A8A"/>
-      <stop offset="70%" stop-color="#312E81"/>
-      <stop offset="100%" stop-color="#1E1B4B"/>
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="20%" stop-color="#F59E0B"/>
+      <stop offset="45%" stop-color="#1E1B4B"/>
+      <stop offset="85%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#020617"/>
     </linearGradient>
 
     <linearGradient id="tasselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C084FC"/>
-      <stop offset="50%" stop-color="#E879F9"/>
-      <stop offset="100%" stop-color="#A855F7"/>
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
 
-    <!-- City Skyline Silhouette Gradient -->
+    <!-- City Skyline Silhouette Gradient (Vibrant Emerald / Mint Green for Student Housing) -->
     <linearGradient id="skylineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#67E8F9"/>
-      <stop offset="60%" stop-color="#0284C7"/>
-      <stop offset="100%" stop-color="#0F172A"/>
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#064E3B"/>
     </linearGradient>
 
-    <!-- Location Pin Gradient -->
+    <!-- Location Pin Gradient (Electric Coral / Crimson Red for Map Discovery) -->
     <linearGradient id="pinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#E879F9"/>
-      <stop offset="50%" stop-color="#C084FC"/>
-      <stop offset="100%" stop-color="#7C3AED"/>
+      <stop offset="0%" stop-color="#FF5252"/>
+      <stop offset="40%" stop-color="#FF385C"/>
+      <stop offset="80%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#9F1239"/>
     </linearGradient>
   </defs>
 
@@ -107,22 +109,22 @@
   <circle cx="256" cy="256" r="215" fill="none" stroke="#00E5FF" stroke-width="1" stroke-opacity="0.08"/>
 
   <!-- ============================================ -->
-  <!-- 1. INSIDE S: CITY SKYLINE BUILDINGS -->
+  <!-- 1. INSIDE S: CITY SKYLINE BUILDINGS (EMERALD & WARM GOLD) -->
   <!-- ============================================ -->
   <g transform="translate(160, 168)" opacity="0.95">
     <!-- City Skyline Silhouette Buildings -->
     <!-- Tower 1 -->
-    <rect x="18" y="44" width="22" height="66" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
-    <line x1="24" y1="52" x2="34" y2="52" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="24" y1="60" x2="34" y2="60" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="24" y1="68" x2="34" y2="68" stroke="#E0F2FE" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="18" y="44" width="22" height="66" rx="2" fill="url(#skylineGrad)" stroke="#10B981" stroke-width="1.3"/>
+    <line x1="24" y1="52" x2="34" y2="52" stroke="#A7F3D0" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="24" y1="60" x2="34" y2="60" stroke="#A7F3D0" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="24" y1="68" x2="34" y2="68" stroke="#A7F3D0" stroke-width="1.5" stroke-linecap="round"/>
 
     <!-- Tower 2 (Tall Central Tower with Dome / Spire) -->
-    <rect x="46" y="22" width="26" height="88" rx="2" fill="url(#skylineGrad)" stroke="#00E5FF" stroke-width="1.4"/>
-    <path d="M46 24 C46 12 72 12 72 24 Z" fill="#38BDF8"/>
-    <line x1="59" y1="6" x2="59" y2="16" stroke="#00E5FF" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="59" cy="5" r="2" fill="#F43F5E"/>
-    <!-- Windows Matrix -->
+    <rect x="46" y="22" width="26" height="88" rx="2" fill="url(#skylineGrad)" stroke="#34D399" stroke-width="1.4"/>
+    <path d="M46 24 C46 12 72 12 72 24 Z" fill="#10B981"/>
+    <line x1="59" y1="6" x2="59" y2="16" stroke="#34D399" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="59" cy="5" r="2.2" fill="#F59E0B"/>
+    <!-- Windows Matrix (Warm Glowing Student Lights) -->
     <rect x="52" y="32" width="4" height="6" rx="1" fill="#FEF08A"/>
     <rect x="62" y="32" width="4" height="6" rx="1" fill="#FEF08A"/>
     <rect x="52" y="44" width="4" height="6" rx="1" fill="#FEF08A"/>
@@ -133,23 +135,23 @@
     <rect x="62" y="68" width="4" height="6" rx="1" fill="#FEF08A"/>
 
     <!-- Tower 3 (Angle Roof) -->
-    <polygon points="78,38 100,48 100,110 78,110" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
-    <line x1="84" y1="58" x2="94" y2="62" stroke="#BAE6FD" stroke-width="1.5"/>
-    <line x1="84" y1="68" x2="94" y2="72" stroke="#BAE6FD" stroke-width="1.5"/>
-    <line x1="84" y1="78" x2="94" y2="82" stroke="#BAE6FD" stroke-width="1.5"/>
+    <polygon points="78,38 100,48 100,110 78,110" fill="url(#skylineGrad)" stroke="#10B981" stroke-width="1.3"/>
+    <line x1="84" y1="58" x2="94" y2="62" stroke="#A7F3D0" stroke-width="1.5"/>
+    <line x1="84" y1="68" x2="94" y2="72" stroke="#A7F3D0" stroke-width="1.5"/>
+    <line x1="84" y1="78" x2="94" y2="82" stroke="#A7F3D0" stroke-width="1.5"/>
 
     <!-- Tower 4 -->
-    <rect x="106" y="52" width="20" height="58" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1.2"/>
-    <line x1="111" y1="62" x2="121" y2="62" stroke="#BAE6FD" stroke-width="1.5"/>
-    <line x1="111" y1="72" x2="121" y2="72" stroke="#BAE6FD" stroke-width="1.5"/>
+    <rect x="106" y="52" width="20" height="58" rx="2" fill="url(#skylineGrad)" stroke="#10B981" stroke-width="1.2"/>
+    <line x1="111" y1="62" x2="121" y2="62" stroke="#A7F3D0" stroke-width="1.5"/>
+    <line x1="111" y1="72" x2="121" y2="72" stroke="#A7F3D0" stroke-width="1.5"/>
 
     <!-- Tower 5 Small -->
-    <rect x="132" y="64" width="16" height="46" rx="2" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1"/>
-    <line x1="136" y1="72" x2="144" y2="72" stroke="#BAE6FD" stroke-width="1.2"/>
-    <line x1="136" y1="80" x2="144" y2="80" stroke="#BAE6FD" stroke-width="1.2"/>
+    <rect x="132" y="64" width="16" height="46" rx="2" fill="url(#skylineGrad)" stroke="#10B981" stroke-width="1"/>
+    <line x1="136" y1="72" x2="144" y2="72" stroke="#A7F3D0" stroke-width="1.2"/>
+    <line x1="136" y1="80" x2="144" y2="80" stroke="#A7F3D0" stroke-width="1.2"/>
 
     <!-- Tower 6 Spire Line -->
-    <rect x="154" y="74" width="12" height="36" rx="1.5" fill="url(#skylineGrad)" stroke="#38BDF8" stroke-width="1"/>
+    <rect x="154" y="74" width="12" height="36" rx="1.5" fill="url(#skylineGrad)" stroke="#10B981" stroke-width="1"/>
   </g>
 
   <!-- ============================================ -->
@@ -242,7 +244,7 @@
   </g>
 
   <!-- ============================================ -->
-  <!-- 4. GLOWING PURPLE/MAGENTA LOCATION PIN -->
+  <!-- 4. GLOWING ELECTRIC CORAL LOCATION PIN -->
   <!-- ============================================ -->
   <g transform="translate(320, 310)" filter="url(#subtleGlow)">
     <!-- Location Pin Body -->
@@ -252,16 +254,16 @@
              C28 54 48 39 48 24 
              C48 10.7 37.3 0 24 0 Z" 
           fill="url(#pinGrad)" 
-          stroke="#F472B6" 
+          stroke="#FECDD3" 
           stroke-width="2"/>
     
     <!-- Pin Aperture Center Hole -->
-    <circle cx="24" cy="22" r="8" fill="#11162D" stroke="#00E5FF" stroke-width="2"/>
-    <circle cx="24" cy="22" r="3.5" fill="#00E5FF"/>
+    <circle cx="24" cy="22" r="8.5" fill="#0A0F1D" stroke="#FFFFFF" stroke-width="1.8"/>
+    <circle cx="24" cy="22" r="4" fill="#00E5FF"/>
   </g>
 
   <!-- ============================================ -->
-  <!-- 5. TOP: 3D GRADUATION CAP (MORTARBOARD) -->
+  <!-- 5. TOP: 3D ROYAL GOLD & OBSIDIAN GRADUATION CAP -->
   <!-- ============================================ -->
   <g transform="translate(145, 68)" filter="url(#subtleGlow)">
     <!-- Graduation Cap Skull Base -->
@@ -271,24 +273,24 @@
     <polygon points="110,6 235,52 110,92 -15,46" fill="#090D1A"/>
     <polygon points="110,12 235,58 110,98 -15,52" fill="#020617"/>
 
-    <!-- Mortarboard Top Surface (Glossy Cyan & Navy Gradient) -->
+    <!-- Mortarboard Top Surface (Glossy Obsidian & Gold Rim Gradient) -->
     <polygon points="110,6 235,52 110,92 -15,46" 
              fill="url(#capGrad)" 
-             stroke="#38BDF8" 
+             stroke="#FBBF24" 
              stroke-width="2.5" 
              stroke-linejoin="round"/>
 
-    <!-- Center Button on Mortarboard -->
-    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#E0F2FE"/>
-    <circle cx="110" cy="49" r="2.5" fill="#00E5FF"/>
+    <!-- Center Button on Mortarboard (Golden Stud) -->
+    <ellipse cx="110" cy="50" rx="7" ry="4.5" fill="#FEF08A"/>
+    <circle cx="110" cy="49" r="2.5" fill="#F59E0B"/>
 
-    <!-- Tassel Ribbon & Cord Draping to Right -->
+    <!-- Tassel Ribbon & Cord Draping to Right (Shimmering Gold) -->
     <path d="M110 50 Q160 52 195 85" stroke="url(#tasselGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <circle cx="195" cy="85" r="3.5" fill="#E879F9"/>
+    <circle cx="195" cy="85" r="3.5" fill="#FDE047"/>
 
-    <!-- Tassel Hanging Body (3D Tiered) -->
-    <polygon points="190,90 200,90 205,124 185,124" fill="url(#tasselGrad)" stroke="#F472B6" stroke-width="1"/>
-    <polygon points="188,124 202,124 200,132 190,132" fill="#E879F9"/>
+    <!-- Tassel Hanging Body (3D Tiered Golden Tassel) -->
+    <polygon points="190,90 200,90 205,124 185,124" fill="url(#tasselGrad)" stroke="#FBBF24" stroke-width="1.2"/>
+    <polygon points="188,124 202,124 200,132 190,132" fill="#F59E0B"/>
   </g>
 
   <!-- Specular Shimmer Flares -->
