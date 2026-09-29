@@ -49,7 +49,9 @@ export function ListingCard({ listing }: ListingCardProps) {
             <img
               src={listing.images[0]}
               alt={listing.title}
-              className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700 ease-out"
+              loading="lazy"
+              decoding="async"
+              className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 ease-out"
               referrerPolicy="no-referrer"
             />
           ) : (

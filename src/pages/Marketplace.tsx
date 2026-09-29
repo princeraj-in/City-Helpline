@@ -6,6 +6,7 @@ import { INITIAL_MARKETPLACE_ITEMS } from '../lib/marketplaceData';
 import { MARKETPLACE_CATEGORIES, STATE_CITIES } from '../lib/constants';
 import { MarketplaceCard } from '../components/marketplace/MarketplaceCard';
 import { MarketplaceDetailModal } from '../components/marketplace/MarketplaceDetailModal';
+import { MarketplaceGridSkeleton } from '../components/common/SkeletonLoaders';
 import { useLocationContext } from '../contexts/LocationContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -349,7 +350,9 @@ export default function Marketplace() {
       </div>
 
       {/* Grid of Items */}
-      {filteredItems.length > 0 ? (
+      {loading ? (
+        <MarketplaceGridSkeleton count={8} />
+      ) : filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredItems.map(item => (
             <MarketplaceCard

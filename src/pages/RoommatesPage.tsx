@@ -4,6 +4,7 @@ import { getRoommateProfiles } from '../lib/roommateService';
 import { RoommateCard } from '../components/roommate/RoommateCard';
 import { RoommateModal } from '../components/roommate/RoommateModal';
 import { RoommateConnectModal } from '../components/roommate/RoommateConnectModal';
+import { RoommatesGridSkeleton } from '../components/common/SkeletonLoaders';
 import { useLocationContext } from '../contexts/LocationContext';
 import { useAuth } from '../contexts/AuthContext';
 import { ALL_CITIES } from '../lib/constants';
@@ -320,10 +321,7 @@ export default function RoommatesPage() {
 
       {/* Grid of Roommates */}
       {loading ? (
-        <div className="py-20 text-center">
-          <div className="w-10 h-10 border-2 border-[#00E5FF] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-xs text-gray-400">Loading verified student roommate profiles...</p>
-        </div>
+        <RoommatesGridSkeleton count={6} />
       ) : filteredProfiles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProfiles.map(p => (

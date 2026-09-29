@@ -1,6 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, GithubAuthProvider, setPersistence, browserLocalPersistence } from 'firebase/auth';
-import { initializeFirestore, setLogLevel, doc, getDocFromServer } from 'firebase/firestore';
+import { 
+  initializeFirestore, 
+  setLogLevel, 
+  doc, 
+  getDocFromServer,
+  persistentLocalCache,
+  persistentMultipleTabManager 
+} from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import appletConfig from '../../firebase-applet-config.json';
 
@@ -77,9 +84,17 @@ githubProvider.setCustomParameters({
 
 const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || appletConfig.firestoreDatabaseId;
 
+const isBrowser = typeof window !== 'undefined';
+
 export const db = initializeFirestore(
   app,
-  {},
+  isBrowser
+    ? {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager(),
+        }),
+      }
+    : {},
   databaseId && databaseId !== '(default)' ? databaseId : undefined
 );
 

@@ -14,6 +14,7 @@ import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
 import { LiquidButton } from '../components/ui/LiquidButton';
 import { ListingCard } from '../components/ListingCard';
 import { useLocationContext } from '../contexts/LocationContext';
+import { ListingsGridSkeleton } from '../components/common/SkeletonLoaders';
 
 export default function Search() {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -277,13 +278,7 @@ export default function Search() {
       </LiquidGlassCard>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="glass-card rounded-3xl h-[400px] animate-pulse bg-[rgba(255,255,255,0.02)] border border-white/10 relative overflow-hidden">
-              <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-            </div>
-          ))}
-        </div>
+        <ListingsGridSkeleton count={6} />
       ) : filteredListings.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredListings.map((listing, index) => (
@@ -293,7 +288,7 @@ export default function Search() {
               transition={{ delay: index * 0.05 }}
               whileHover={{ y: -8 }}
               key={listing.id}
-              className="h-full"
+              className="h-full card-content-auto"
             >
               <ListingCard listing={listing} />
             </motion.div>

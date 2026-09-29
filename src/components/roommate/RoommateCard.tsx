@@ -34,7 +34,7 @@ export const RoommateCard: React.FC<RoommateCardProps> = ({ profile, onConnect, 
 
   return (
     <GlassCard 
-      className="p-5 sm:p-6 rounded-3xl border border-white/10 hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between group shadow-lg hover:shadow-[0_0_25px_rgba(0,229,255,0.12)] relative overflow-hidden"
+      className="p-5 sm:p-6 rounded-3xl border border-white/10 hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between group shadow-lg hover:shadow-[0_0_25px_rgba(0,229,255,0.12)] relative overflow-hidden card-content-auto"
       intensity="low"
     >
       {/* Background ambient gradient */}

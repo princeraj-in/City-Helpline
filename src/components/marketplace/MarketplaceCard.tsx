@@ -50,7 +50,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className="h-full"
+      className="h-full card-content-auto"
     >
       <GlassCard 
         onClick={() => onOpenDetails(item)}
@@ -64,6 +64,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
             alt={item.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            decoding="async"
             referrerPolicy="no-referrer"
             onError={(e) => {
               (e.target as HTMLImageElement).src = fallbackImage;
