@@ -1,0 +1,14 @@
+# Robots.txt for Studolink (studolink.imprince.me)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /account
+Disallow: /my-listings
+Disallow: /my-marketplace
+Disallow: /saved-listings
+Disallow: /messages
+
+# Host & Sitemap location
+Host: https://studolink.imprince.me
+Sitemap: https://studolink.imprince.me/sitemap.xml
