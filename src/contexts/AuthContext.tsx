@@ -31,9 +31,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Authoritatively driven by Firebase Auth Custom Claim (request.auth.token.admin == true)
-  const isAdmin = hasCustomClaimAdmin;
-  const isSuperAdmin = hasCustomClaimAdmin;
+  // Authoritatively driven by Firebase Auth Custom Claim (request.auth.token.admin == true) or founder emails
+  const isFounderAdmin = !!(
+    currentUser?.email && (
+      currentUser.email === 'kusprince.raj@gmail.com' ||
+      currentUser.email === 'official.techdrive@gmail.com' ||
+      currentUser.email.endsWith('@imprince.me')
+    )
+  );
+
+  const isAdmin = hasCustomClaimAdmin || userProfile?.role === 'admin' || isFounderAdmin;
+  const isSuperAdmin = hasCustomClaimAdmin || isFounderAdmin;
 
   useEffect(() => {
     let unsubscribeProfile: (() => void) | undefined;

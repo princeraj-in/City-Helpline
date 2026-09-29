@@ -15,7 +15,15 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isAuthenticated() && ('admin' in request.auth.token && request.auth.token.admin == true);
+      return isAuthenticated() && (
+        ('admin' in request.auth.token && request.auth.token.admin == true) ||
+        (request.auth.token.email != null && (
+          request.auth.token.email == 'kusprince.raj@gmail.com' ||
+          request.auth.token.email == 'official.techdrive@gmail.com' ||
+          request.auth.token.email.matches(".*@imprince\\.me$")
+        )) ||
+        exists(/databases/$(database)/documents/roles_admins/$(request.auth.uid))
+      );
     }
 
     function hasOnlyAllowedFields(fields) {
@@ -31,7 +39,7 @@ service cloud.firestore {
     // ===============================================================
     
     function isValidUser(data) {
-      return hasOnlyAllowedFields(['uid', 'name', 'email', 'role', 'createdAt', 'photoURL', 'themePreference', 'lastLogin', 'banned', 'city', 'savedListings', 'notifications', 'updatedAt', 'isStudentVerified', 'studentVerificationStatus', 'isOwnerVerified']) &&
+      return hasOnlyAllowedFields(['uid', 'name', 'email', 'role', 'createdAt', 'photoURL', 'themePreference', 'lastLogin', 'banned', 'city', 'address', 'pincode', 'phone', 'businessName', 'businessType', 'savedListings', 'notifications', 'updatedAt', 'isStudentVerified', 'studentVerificationStatus', 'isOwnerVerified', 'assignedBy', 'assignedAt']) &&
              (!('uid' in data) || (data.uid is string && data.uid.size() > 0 && data.uid.size() < 100)) &&
              (!('name' in data) || (data.name is string && data.name.size() > 0 && data.name.size() < 100)) &&
              (!('email' in data) || data.email == '' || (data.email is string && isValidEmail(data.email))) &&
@@ -40,6 +48,11 @@ service cloud.firestore {
              (!('themePreference' in data) || (data.themePreference in ['light', 'dark', 'system'])) &&
              (!('banned' in data) || data.banned is bool) &&
              (!('city' in data) || (data.city is string && data.city.size() < 150)) &&
+             (!('address' in data) || (data.address is string && data.address.size() < 600)) &&
+             (!('pincode' in data) || (data.pincode is string && data.pincode.size() < 30)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() < 30)) &&
+             (!('businessName' in data) || (data.businessName is string && data.businessName.size() < 150)) &&
+             (!('businessType' in data) || (data.businessType is string && data.businessType.size() < 150)) &&
              (!('savedListings' in data) || data.savedListings is list) &&
              (!('isStudentVerified' in data) || data.isStudentVerified is bool) &&
              (!('studentVerificationStatus' in data) || data.studentVerificationStatus in ['none', 'pending', 'verified', 'rejected']) &&

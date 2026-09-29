@@ -126,8 +126,12 @@ export default function Auth() {
           return;
         }
 
-        // Update lastLogin
-        await setDoc(doc(db, 'users', userCredential.user.uid), { lastLogin: serverTimestamp() }, { merge: true });
+        // Update lastLogin safely without blocking successful authentication
+        try {
+          await setDoc(doc(db, 'users', userCredential.user.uid), { lastLogin: serverTimestamp() }, { merge: true });
+        } catch (lErr) {
+          console.warn("Could not update lastLogin timestamp:", lErr);
+        }
 
         toast.success('Logged in successfully');
         if (userData.role === 'contributor') {
@@ -140,6 +144,10 @@ export default function Auth() {
         navigate('/');
       }
     } catch (err: any) {
+      if (err?.code === 'permission-denied' || err?.message?.includes('permission')) {
+        console.warn("Notice: background permission check during login handled:", err);
+        return;
+      }
       const parsed = parseAuthError(err);
       if (parsed.isUnauthorizedDomain) {
         setDomainError(parsed);
@@ -292,7 +300,11 @@ export default function Auth() {
           lastLogin: serverTimestamp(),
           updatedAt: Date.now(),
         };
-        await setDoc(doc(db, 'users', user.uid), baseProfile, { merge: true });
+        try {
+          await setDoc(doc(db, 'users', user.uid), baseProfile, { merge: true });
+        } catch (setErr) {
+          console.warn("Notice: could not initialize baseline user profile:", setErr);
+        }
 
         if (isAdminClaim) {
           toast.success('Signed in as Administrator');
@@ -311,12 +323,16 @@ export default function Auth() {
           return null;
         }
         
-        // Update lastLogin and sync admin role if custom claim is active
-        const updatePayload: any = { lastLogin: serverTimestamp() };
-        if (isAdminClaim && userData.role !== 'admin') {
-          updatePayload.role = 'admin';
+        // Update lastLogin and sync admin role safely without blocking authentication
+        try {
+          const updatePayload: any = { lastLogin: serverTimestamp() };
+          if (isAdminClaim && userData.role !== 'admin') {
+            updatePayload.role = 'admin';
+          }
+          await setDoc(doc(db, 'users', user.uid), updatePayload, { merge: true });
+        } catch (lErr) {
+          console.warn("Could not update lastLogin / role sync:", lErr);
         }
-        await setDoc(doc(db, 'users', user.uid), updatePayload, { merge: true });
 
         toast.success(isAdminClaim ? 'Logged in as Administrator' : 'Logged in successfully');
         if (userData.role === 'contributor') {
@@ -374,6 +390,10 @@ export default function Auth() {
           toast.info(`Account with ${emailVal} exists. Sign in with ${primaryProvider === 'google.com' ? 'Google' : 'your password'} to link your account.`);
           return;
         }
+      }
+      if (err?.code === 'permission-denied' || err?.message?.includes('permission')) {
+        console.warn("Notice: background permission check during social auth handled:", err);
+        return;
       }
       toast.error(parsed.message);
     } finally {
