@@ -37,6 +37,7 @@ import MyListingsPage from './pages/MyListingsPage';
 import RoommatesPage from './pages/RoommatesPage';
 import Help from './pages/Help';
 import MessagesPage from './pages/MessagesPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { AiFloatingAssistant } from './components/ai/AiFloatingAssistant';
 import { InstallAppPrompt } from './components/common/InstallAppPrompt';
 
@@ -257,6 +258,9 @@ function AppLayout() {
               </ProtectedRoute>
             } 
           />
+
+          {/* 404 Not Found Catch-All */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <InstallAppPrompt />

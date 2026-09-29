@@ -1,39 +1,39 @@
 /**
  * Official App Configuration
- * Canonical Domain: app.imprince.me
+ * Canonical Domain: studolink.imprince.me
  */
 
 export const APP_CONFIG = {
   name: 'Studolink',
   tagline: 'Your City. Your Student Ecosystem.',
-  domain: 'app.imprince.me',
-  baseUrl: 'https://app.imprince.me',
+  domain: 'studolink.imprince.me',
+  baseUrl: 'https://studolink.imprince.me',
   supportEmail: 'Support@imprince.me',
   developerEmail: 'Developer@imprince.me',
 
   /**
    * Generates a fully qualified production URL for any path
-   * Always uses the official domain https://app.imprince.me
+   * Always uses the official domain https://studolink.imprince.me
    */
   getUrl: (path: string = '') => {
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `https://app.imprince.me${cleanPath}`;
+    return `https://studolink.imprince.me${cleanPath}`;
   },
 
   getListingUrl: (listingId: string) => {
-    return `https://app.imprince.me/listing/${listingId}`;
+    return `https://studolink.imprince.me/listing/${listingId}`;
   },
 
   getMarketplaceUrl: (itemId?: string) => {
     return itemId 
-      ? `https://app.imprince.me/marketplace?item=${itemId}` 
-      : `https://app.imprince.me/marketplace`;
+      ? `https://studolink.imprince.me/marketplace?item=${itemId}` 
+      : `https://studolink.imprince.me/marketplace`;
   },
 
   getBudgetUrl: (city?: string) => {
     return city 
-      ? `https://app.imprince.me/budget?city=${encodeURIComponent(city)}` 
-      : `https://app.imprince.me/budget`;
+      ? `https://studolink.imprince.me/budget?city=${encodeURIComponent(city)}` 
+      : `https://studolink.imprince.me/budget`;
   },
 
   getSearchUrl: (city?: string, category?: string) => {
@@ -41,6 +41,6 @@ export const APP_CONFIG = {
     if (city) params.set('city', city);
     if (category) params.set('category', category);
     const qs = params.toString();
-    return `https://app.imprince.me/search${qs ? `?${qs}` : ''}`;
+    return `https://studolink.imprince.me/search${qs ? `?${qs}` : ''}`;
   }
 };

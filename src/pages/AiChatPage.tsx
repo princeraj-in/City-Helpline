@@ -508,7 +508,7 @@ export default function AiChatPage() {
               </form>
 
               <div className="mt-2 flex items-center justify-between text-xs text-gray-500 px-1">
-                <span>Direct link: <code className="text-[#00E5FF]">app.imprince.me/chat</code></span>
+                <span>Direct link: <code className="text-[#00E5FF]">studolink.imprince.me/chat</code></span>
                 <span>Zero Brokerage Student Guide</span>
               </div>
             </div>

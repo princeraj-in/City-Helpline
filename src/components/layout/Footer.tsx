@@ -112,12 +112,12 @@ export function Footer() {
                 <Globe className="w-3.5 h-3.5 text-[#00E5FF]" />
                 <span className="text-gray-400">Web Portal:</span>
                 <a 
-                  href="https://app.imprince.me" 
+                  href="https://studolink.imprince.me" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="font-bold text-[#00E5FF] hover:underline inline-flex items-center gap-1"
                 >
-                  app.imprince.me
+                  studolink.imprince.me
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
@@ -363,7 +363,7 @@ export function Footer() {
       <div className="py-6 pb-24 md:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} <strong>Studolink</strong> (app.imprince.me). All rights reserved.
+            © {new Date().getFullYear()} <strong>Studolink</strong> (studolink.imprince.me). All rights reserved.
           </p>
           <span className="hidden sm:inline text-gray-600">•</span>
           <p className="text-gray-400">

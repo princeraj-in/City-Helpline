@@ -150,7 +150,7 @@ export default function AccountSettings() {
     setMessage({ type: '', text: '' });
     try {
       const actionCodeSettings = {
-        url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'https://app.imprince.me/login',
+        url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'https://studolink.imprince.me/login',
         handleCodeInApp: true,
       };
       await sendPasswordResetEmail(auth, currentUser.email, actionCodeSettings);
@@ -195,10 +195,6 @@ export default function AccountSettings() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Account Settings</h2>
-      </div>
-
       {message.text && (
         <div className={`p-4 rounded-xl ${message.type === 'success' ? 'bg-green-500/20 text-green-400 border border-green-500/20' : 'bg-red-500/20 text-red-400 border border-red-500/20'}`}>
           {message.text}
@@ -533,7 +529,7 @@ export default function AccountSettings() {
               <ChevronRight className="h-4 w-4 text-gray-400 group-open:rotate-90 transition-transform" />
             </summary>
             <div className="p-4 pt-0 text-xs text-gray-300 border-t border-gray-700/50 mt-2 space-y-2.5 leading-relaxed">
-              <p className="font-bold text-white mt-2">Privacy Commitment – Studolink (app.imprince.me)</p>
+              <p className="font-bold text-white mt-2">Privacy Commitment – Studolink (studolink.imprince.me)</p>
               <p>
                 Studolink is an educational student community network. We strictly comply with the Indian Information Technology Act, 2000 and Digital Personal Data Protection (DPDP) principles.
               </p>
@@ -625,7 +621,7 @@ export default function AccountSettings() {
             <div className="p-4 pt-0 text-xs text-gray-300 border-t border-gray-700/50 mt-2 space-y-2.5 leading-relaxed">
               <p className="font-bold text-white mt-2">Mission & Founder Details</p>
               <p>
-                Studolink (<a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline">app.imprince.me</a>) was created by Prince Raj (Prince Kushwaha) with a mission to eliminate broker exploitation for Indian aspirants relocating far from home for competitive exams.
+                Studolink (<a href="https://studolink.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline">studolink.imprince.me</a>) was created by Prince Raj (Prince Kushwaha) with a mission to eliminate broker exploitation for Indian aspirants relocating far from home for competitive exams.
               </p>
               <p className="text-gray-400">
                 Covering educational hubs in Kota, Patna, Delhi NCR, Sikar, Prayagraj, Indore, Bengaluru, Lucknow, and Jaipur.
@@ -653,7 +649,7 @@ export default function AccountSettings() {
       {/* Footer */}
       <div className="mt-12 pt-6 border-t border-gray-800 text-center pb-8 space-y-1">
         <p className="text-sm text-gray-400">
-          © 2026 Studolink • Official Portal: <a href="https://app.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline font-semibold">app.imprince.me</a>
+          © 2026 Studolink • Official Portal: <a href="https://studolink.imprince.me" target="_blank" rel="noopener noreferrer" className="text-[#00E5FF] hover:underline font-semibold">studolink.imprince.me</a>
         </p>
         <p className="text-xs text-gray-500">
           Developed by Prince Kushwaha | Support: <a href="mailto:Support@imprince.me" className="text-blue-400 hover:underline">Support@imprince.me</a> | App Issues: <a href="mailto:Developer@imprince.me" className="text-[#00E5FF] hover:underline">Developer@imprince.me</a>

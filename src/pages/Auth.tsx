@@ -246,7 +246,7 @@ export default function Auth() {
       }
 
       const actionCodeSettings = {
-        url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'https://app.imprince.me/login',
+        url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'https://studolink.imprince.me/login',
         handleCodeInApp: true,
       };
 

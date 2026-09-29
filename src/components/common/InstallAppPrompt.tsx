@@ -109,7 +109,7 @@ export const InstallAppPrompt: React.FC = () => {
 
   if (!showPrompt) return null;
 
-  const currentHost = typeof window !== 'undefined' ? (window.location.hostname || 'app.imprince.me') : 'app.imprince.me';
+  const currentHost = typeof window !== 'undefined' ? (window.location.hostname || 'studolink.imprince.me') : 'studolink.imprince.me';
 
   return (
     <>

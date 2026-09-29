@@ -37,8 +37,8 @@ describe('WhatsApp Formatter Utility (formatWhatsAppUrl)', () => {
   });
 
   it('should properly encode complex messages, URLs, and Hindi characters', () => {
-    const url = formatWhatsAppUrl('9876543210', 'नमस्ते, क्या यह कमरा उपलब्ध है? (https://app.imprince.me)');
+    const url = formatWhatsAppUrl('9876543210', 'नमस्ते, क्या यह कमरा उपलब्ध है? (https://studolink.imprince.me)');
     expect(url).toContain('https://wa.me/919876543210?text=');
-    expect(url).toContain(encodeURIComponent('नमस्ते, क्या यह कमरा उपलब्ध है? (https://app.imprince.me)'));
+    expect(url).toContain(encodeURIComponent('नमस्ते, क्या यह कमरा उपलब्ध है? (https://studolink.imprince.me)'));
   });
 });

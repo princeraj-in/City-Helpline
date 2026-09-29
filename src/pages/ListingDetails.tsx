@@ -270,11 +270,8 @@ export default function ListingDetails() {
 
             {/* Details */}
             <div className="p-8 lg:p-12 flex flex-col justify-center bg-[rgba(255,255,255,0.02)] backdrop-blur-sm">
-              <div className="flex flex-wrap items-center gap-3 mb-3">
+              <div className="mb-3">
                 <h1 className="text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 tracking-tight drop-shadow-sm">{listing.title}</h1>
-                {listing.isVerifiedPG && (
-                  <VerifiedPGBadge size="lg" />
-                )}
               </div>
 
               {/* Owner / Landlord Badge Apply Action */}
