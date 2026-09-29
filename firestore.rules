@@ -17,12 +17,8 @@ service cloud.firestore {
     function isAdmin() {
       return isAuthenticated() && (
         ('admin' in request.auth.token && request.auth.token.admin == true) ||
-        (request.auth.token.email != null && (
-          request.auth.token.email == 'kusprince.raj@gmail.com' ||
-          request.auth.token.email == 'official.techdrive@gmail.com' ||
-          request.auth.token.email.matches(".*@imprince\\.me$")
-        )) ||
-        exists(/databases/$(database)/documents/roles_admins/$(request.auth.uid))
+        exists(/databases/$(database)/documents/roles_admins/$(request.auth.uid)) ||
+        (request.auth.token.email != null && request.auth.token.email == 'kusprince.raj@gmail.com')
       );
     }
 
@@ -122,7 +118,7 @@ service cloud.firestore {
     }
 
     function isValidMarketplaceItem(data) {
-      return hasOnlyAllowedFields(['title', 'description', 'price', 'originalPrice', 'category', 'condition', 'city', 'area', 'images', 'sellerId', 'sellerName', 'sellerPhone', 'whatsappNumber', 'status', 'featured', 'createdAt', 'isStudentVerified']) &&
+      return hasOnlyAllowedFields(['title', 'description', 'price', 'originalPrice', 'category', 'condition', 'city', 'area', 'images', 'sellerId', 'sellerName', 'sellerPhone', 'whatsappNumber', 'status', 'featured', 'createdAt', 'isStudentVerified', 'contactPreference', 'allowWhatsApp', 'allowDirectCall', 'hasContactDetails']) &&
              data.title is string && data.title.size() > 0 && data.title.size() < 150 &&
              data.description is string && data.description.size() > 0 && data.description.size() < 2500 &&
              data.price is number && data.price >= 0 &&
@@ -134,8 +130,12 @@ service cloud.firestore {
              data.images is list && data.images.size() <= 8 &&
              data.sellerId is string && data.sellerId.size() > 0 && data.sellerId.size() < 100 &&
              data.sellerName is string && data.sellerName.size() > 0 && data.sellerName.size() < 100 &&
-             data.sellerPhone is string && data.sellerPhone.size() > 0 && data.sellerPhone.size() < 25 &&
+             (!('sellerPhone' in data) || (data.sellerPhone is string && data.sellerPhone.size() < 25)) &&
              (!('whatsappNumber' in data) || (data.whatsappNumber is string && data.whatsappNumber.size() < 25)) &&
+             (!('contactPreference' in data) || data.contactPreference in ['in_app_chat', 'phone_whatsapp']) &&
+             (!('allowWhatsApp' in data) || data.allowWhatsApp is bool) &&
+             (!('allowDirectCall' in data) || data.allowDirectCall is bool) &&
+             (!('hasContactDetails' in data) || data.hasContactDetails is bool) &&
              data.status in ['available', 'sold'] &&
              (!('featured' in data) || data.featured is bool) &&
              (!('isStudentVerified' in data) || data.isStudentVerified is bool) &&
@@ -160,11 +160,12 @@ service cloud.firestore {
                     );
       allow update: if isAuthenticated() && 
                     isValidUser(request.resource.data) && 
+                    // Role management isolation: Role field can NEVER be updated from client-side writes!
+                    (!('role' in request.resource.data) || request.resource.data.role == resource.data.role) &&
                     (
                       isAdmin() ||
                       (
                         request.auth.uid == userId &&
-                        (!('role' in request.resource.data) || request.resource.data.role == resource.data.role) &&
                         (!('banned' in request.resource.data) || request.resource.data.banned == resource.data.banned) &&
                         (!('isStudentVerified' in request.resource.data) || request.resource.data.isStudentVerified == resource.data.isStudentVerified || (!('isStudentVerified' in resource.data) && request.resource.data.isStudentVerified == false)) &&
                         (!('isOwnerVerified' in request.resource.data) || request.resource.data.isOwnerVerified == resource.data.isOwnerVerified || (!('isOwnerVerified' in resource.data) && request.resource.data.isOwnerVerified == false)) &&
@@ -279,13 +280,43 @@ service cloud.firestore {
                     );
                     
       allow delete: if isAuthenticated() && (isOwner(resource.data.sellerId) || isAdmin());
+
+      // Isolated Private Seller Contact Subcollection
+      // Zero-Leakage: Accessible only to authenticated students; only seller or admin can write
+      match /private/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated() && 
+                     (request.resource.data.sellerId == request.auth.uid || 
+                      resource.data.sellerId == request.auth.uid || 
+                      isAdmin());
+      }
     }
 
+    // ===============================================================
+    // Roommates & Flatmates Profiles (Sanitized Public Preferences)
+    // ===============================================================
     match /roommate_profiles/{profileId} {
       allow read: if true;
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      allow update: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && 
+                    request.resource.data.userId == request.auth.uid &&
+                    // Privacy enforcement: Phone numbers MUST NOT be stored in the public document!
+                    (!('userPhone' in request.resource.data) || request.resource.data.userPhone == '') &&
+                    (!('whatsappNumber' in request.resource.data) || request.resource.data.whatsappNumber == '');
+      allow update: if isAuthenticated() && 
+                    (resource.data.userId == request.auth.uid || isAdmin()) &&
+                    (!('userPhone' in request.resource.data) || request.resource.data.userPhone == '') &&
+                    (!('whatsappNumber' in request.resource.data) || request.resource.data.whatsappNumber == '');
       allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Isolated Private Contact & Verification Subcollection
+      // Zero-Leakage: Only authenticated users can access contact details; only owner or admin can write
+      match /private/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated() && 
+                     (request.resource.data.userId == request.auth.uid || 
+                      resource.data.userId == request.auth.uid || 
+                      isAdmin());
+      }
     }
 
     match /conversations/{convId} {
@@ -316,9 +347,23 @@ service cloud.firestore {
       }
     }
 
+    // ===============================================================
+    // Isolated Role Management (Strictly Server-Authoritative)
+    // ===============================================================
     match /roles_admins/{adminUid} {
       allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      // Client-side writes are strictly DENIED!
+      // roles_admins can ONLY be managed by the trusted backend via Firebase Admin SDK.
+      allow write: if false;
+    }
+
+    // ===============================================================
+    // Tamper-Proof Audit Logs (Read-only for Admins, Non-writable by Clients)
+    // ===============================================================
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      // Non-writable by clients! (Tamper-proof: client cannot write, forge, alter, or delete logs)
+      allow write: if false;
     }
   }
 }

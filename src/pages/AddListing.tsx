@@ -96,9 +96,10 @@ export default function AddListing() {
       let uploadedImageUrls: string[] = [];
       if (images.length > 0) {
         setUploadProgressText(`Compressing & uploading ${images.length} photos...`);
+        const idToken = await currentUser.getIdToken();
         uploadedImageUrls = await uploadMultipleImages(images, (completed, total) => {
           setUploadProgressText(`Uploaded ${completed} of ${total} photos...`);
-        });
+        }, idToken);
       }
 
       setUploadProgressText('Saving listing for verification...');

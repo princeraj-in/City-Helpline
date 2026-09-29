@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { RoommateProfile } from '../../types';
+import React, { useState, useEffect } from 'react';
+import { RoommateProfile, RoommatePrivateContact } from '../../types';
 import { motion } from 'motion/react';
 import { 
   X, MessageCircle, Phone, BedDouble, 
-  MapPin, IndianRupee, Send, CheckCircle2, ShieldCheck
+  MapPin, IndianRupee, Send, CheckCircle2, ShieldCheck, Lock, Loader2, LogIn
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { getRoommateContactDetails } from '../../lib/roommateService';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { formatWhatsAppUrl } from '../../lib/utils';
 
@@ -16,25 +18,74 @@ interface RoommateConnectModalProps {
 
 export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalProps) {
   const { currentUser, userProfile } = useAuth();
+  const navigate = useNavigate();
+
   const [message, setMessage] = useState(
     'Hi! I saw your roommate requirement on Studolink. I would like to discuss room sharing and visit the place.'
   );
   const [sentSuccess, setSentSuccess] = useState(false);
+  const [contact, setContact] = useState<RoommatePrivateContact | null>(null);
+  const [loadingContact, setLoadingContact] = useState(false);
+
+  useEffect(() => {
+    if (!profile) return;
+    if (!currentUser) return; // Unauthenticated users cannot view private subcollections
+
+    let isMounted = true;
+    const loadContact = async () => {
+      setLoadingContact(true);
+      try {
+        const data = await getRoommateContactDetails(profile.id, profile.userId);
+        if (isMounted && data) {
+          setContact(data);
+        }
+      } catch (err) {
+        console.warn('Could not load protected roommate contact:', err);
+      } finally {
+        if (isMounted) setLoadingContact(false);
+      }
+    };
+
+    loadContact();
+    return () => { isMounted = false; };
+  }, [profile, currentUser]);
 
   if (!profile) return null;
 
+  const phone = contact?.userPhone || profile.userPhone || '';
+  const whatsapp = contact?.whatsappNumber || contact?.userPhone || profile.whatsappNumber || profile.userPhone || '';
+
   const handleWhatsApp = () => {
-    const phone = profile.whatsappNumber || profile.userPhone;
+    if (!currentUser) {
+      toast.error('Please sign in to view contact details and chat with this roommate.');
+      return;
+    }
+    if (!whatsapp) {
+      toast.error('WhatsApp number is not provided by this student.');
+      return;
+    }
     const text = `Hi ${profile.userName}, I saw your Roommate listing for ${profile.locality}, ${profile.city} on Studolink. I am preparing for ${profile.targetExam} and would like to connect!\n\nMessage: ${message}`;
-    window.open(formatWhatsAppUrl(phone, text), '_blank');
+    window.open(formatWhatsAppUrl(whatsapp, text), '_blank');
   };
 
   const handleCall = () => {
-    window.location.href = `tel:${profile.userPhone}`;
+    if (!currentUser) {
+      toast.error('Please sign in to view phone details.');
+      return;
+    }
+    if (!phone) {
+      toast.error('Phone number is not provided by this student.');
+      return;
+    }
+    window.location.href = `tel:${phone}`;
   };
 
   const handleSendInApp = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!currentUser) {
+      toast.error('Please sign in to send a connect request.');
+      return;
+    }
     setSentSuccess(true);
     toast.success(`Booking inquiry sent to ${profile.userName}! They will contact you shortly.`);
     setTimeout(() => {
@@ -97,31 +148,66 @@ export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalP
               </div>
             </div>
 
-            {/* Direct Connect Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={handleWhatsApp}
-                className="py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Chat on WhatsApp</span>
-              </button>
+            {/* Privacy Gate: Unauthenticated vs Authenticated */}
+            {!currentUser ? (
+              <div className="p-5 rounded-2xl bg-cyan-950/40 border border-cyan-800/40 text-center space-y-3">
+                <div className="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto text-[#00E5FF]">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Student Contact Details Protected</h4>
+                  <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto">
+                    To prevent harassment and protect student privacy, direct phone numbers and WhatsApp chats are only available to signed-in students.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#00E5FF] to-cyan-400 text-slate-950 font-black text-xs shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:brightness-110 active:scale-95 transition-all"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Sign In to View Contact & Connect</span>
+                </button>
+              </div>
+            ) : loadingContact ? (
+              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-center gap-3 text-xs text-cyan-300">
+                <Loader2 className="w-4 h-4 animate-spin text-[#00E5FF]" />
+                <span>Securely decrypting contact details...</span>
+              </div>
+            ) : (
+              /* Direct Connect Buttons for Authenticated Students */
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={handleWhatsApp}
+                    className="py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat on WhatsApp</span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={handleCall}
-                className="py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-black text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Direct Call</span>
-              </button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={handleCall}
+                    className="py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-black text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>Direct Call</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2 text-[11px] text-gray-400 px-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>Verified contact loaded securely from protected student database.</span>
+                </div>
+              </div>
+            )}
 
             {/* Custom note form */}
             <form onSubmit={handleSendInApp} className="space-y-3 pt-2 border-t border-white/10">
               <label className="block text-xs font-bold text-gray-300">
-                Or Send In-App Connect Request:
+                Send In-App Connect Request:
               </label>
               <textarea
                 rows={3}
@@ -130,11 +216,6 @@ export function RoommateConnectModal({ profile, onClose }: RoommateConnectModalP
                 className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
                 placeholder="Write a message to introduce yourself..."
               />
-
-              <div className="flex items-center gap-2 text-[11px] text-gray-400">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Your contact details are shared safely only for accommodation discussions.</span>
-              </div>
 
               <button
                 type="submit"

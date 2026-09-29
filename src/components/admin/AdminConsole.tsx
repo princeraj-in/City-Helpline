@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  collection, query, getDocs, doc, updateDoc, deleteDoc, orderBy, setDoc, serverTimestamp 
+  collection, query, getDocs, doc, updateDoc, deleteDoc, orderBy, limit, setDoc, serverTimestamp 
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { Listing, UserProfile, MarketplaceItem, Role } from '../../types';
@@ -36,28 +36,89 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
   const [listings, setListings] = useState<Listing[]>([]);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [marketplaceItems, setMarketplaceItems] = useState<MarketplaceItem[]>([]);
-  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(() => {
-    const saved = sessionStorage.getItem('adminAuditLogs');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   
   const [loading, setLoading] = useState(true);
   const [globalSearch, setGlobalSearch] = useState('');
   const [inspectListing, setInspectListing] = useState<Listing | null>(null);
 
-  const addAuditLog = (action: AuditLogEntry['action'], details: string) => {
+  const addAuditLog = async (
+    action: string, 
+    details: string, 
+    targetId?: string, 
+    metadata?: Record<string, any>
+  ) => {
     const entry: AuditLogEntry = {
-      id: Math.random().toString(36).substring(2, 9),
+      id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      actorUid: currentUser?.uid || '',
+      actorEmail: currentUser?.email || 'admin',
       action,
+      targetId,
+      targetUid: targetId,
       details,
       actor: userProfile?.name || currentUser?.email || 'Admin',
       timestamp: Date.now(),
+      metadata,
     };
-    setAuditLogs(prev => {
-      const updated = [entry, ...prev].slice(0, 50);
-      sessionStorage.setItem('adminAuditLogs', JSON.stringify(updated));
-      return updated;
-    });
+
+    // Optimistically prepend to active log list
+    setAuditLogs(prev => [entry, ...prev].slice(0, 100));
+
+    // Send authorized write to dedicated server API for immutable Firestore persistence
+    try {
+      const idToken = await currentUser?.getIdToken();
+      if (idToken) {
+        await fetch('/api/admin/audit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            action,
+            targetId,
+            targetUid: targetId,
+            details,
+            metadata,
+          }),
+        });
+      }
+    } catch (e) {
+      console.warn("Could not sync audit log to server:", e);
+    }
+  };
+
+  const fetchAuditTrail = async () => {
+    try {
+      // 1. Try fetching directly from Firestore audit_logs collection (read-only for admins)
+      const auditQuery = query(collection(db, 'audit_logs'), orderBy('timestamp', 'desc'), limit(100));
+      const auditSnap = await getDocs(auditQuery);
+      if (!auditSnap.empty) {
+        const loadedLogs = auditSnap.docs.map(d => ({ id: d.id, ...d.data() })) as AuditLogEntry[];
+        setAuditLogs(loadedLogs);
+        return;
+      }
+    } catch (fErr) {
+      console.warn("Direct Firestore audit_logs query notice:", fErr);
+    }
+
+    // 2. Fallback to trusted backend server audit API
+    try {
+      const idToken = await currentUser?.getIdToken();
+      if (idToken) {
+        const res = await fetch('/api/admin/audit', {
+          headers: { 'Authorization': `Bearer ${idToken}` }
+        });
+        if (res.ok) {
+          const serverLogs = await res.json();
+          if (Array.isArray(serverLogs) && serverLogs.length > 0) {
+            setAuditLogs(serverLogs);
+          }
+        }
+      }
+    } catch (sErr) {
+      console.warn("Server audit trail fetch error:", sErr);
+    }
   };
 
   const fetchAdminData = async () => {
@@ -114,16 +175,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         console.warn("Marketplace fetch skipped or empty:", mErr);
       }
 
-      // 4. Secure Database RBAC: Ensure active admin has verified record in roles_admins
-      if (currentUser && isAdmin) {
-        setDoc(doc(db, 'roles_admins', currentUser.uid), {
-          uid: currentUser.uid,
-          email: currentUser.email || '',
-          role: 'admin',
-          assignedBy: 'system_bootstrap',
-          assignedAt: Date.now(),
-        }, { merge: true }).catch(() => {});
-      }
+      // 4. Fetch Dedicated Tamper-Proof Audit Trail
+      await fetchAuditTrail();
     } catch (error) {
       console.error("Error fetching admin telemetry data:", error);
       toast.error("Failed to sync some admin data from Cloud Firestore");
@@ -142,7 +195,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       await updateDoc(doc(db, 'listings', id), { status: 'approved' });
       setListings(prev => prev.map(l => l.id === id ? { ...l, status: 'approved' } : l));
       const target = listings.find(l => l.id === id);
-      addAuditLog('approve_listing', `Approved listing "${target?.title || id}"`);
+      addAuditLog('approve_listing', `Approved listing "${target?.title || id}"`, id, { title: target?.title, category: target?.category });
       toast.success("Listing approved and published to student directory");
     } catch (error) {
       console.error("Error approving listing:", error);
@@ -155,7 +208,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       await updateDoc(doc(db, 'listings', id), { status: 'rejected' });
       setListings(prev => prev.map(l => l.id === id ? { ...l, status: 'rejected' } : l));
       const target = listings.find(l => l.id === id);
-      addAuditLog('reject_listing', `Rejected listing "${target?.title || id}"`);
+      addAuditLog('reject_listing', `Rejected listing "${target?.title || id}"`, id, { title: target?.title });
       toast.info("Listing status marked as rejected");
     } catch (error) {
       console.error("Error rejecting listing:", error);
@@ -168,7 +221,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
       await updateDoc(doc(db, 'listings', id), { featured: !currentFeatured });
       setListings(prev => prev.map(l => l.id === id ? { ...l, featured: !currentFeatured } : l));
       const target = listings.find(l => l.id === id);
-      addAuditLog('toggle_featured', `${!currentFeatured ? 'Featured' : 'Unfeatured'} "${target?.title || id}"`);
+      addAuditLog('toggle_featured', `${!currentFeatured ? 'Featured' : 'Unfeatured'} "${target?.title || id}"`, id, { featured: !currentFeatured });
       toast.success(`Listing ${!currentFeatured ? 'marked as Featured' : 'unfeatured'}`);
     } catch (error) {
       console.error("Error toggling featured:", error);
@@ -183,7 +236,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
     try {
       await deleteDoc(doc(db, 'listings', id));
       setListings(prev => prev.filter(l => l.id !== id));
-      addAuditLog('delete_listing', `Deleted listing "${target?.title || id}"`);
+      addAuditLog('delete_listing', `Deleted listing "${target?.title || id}"`, id, { title: target?.title });
       toast.success("Listing deleted successfully");
     } catch (error) {
       console.error("Error deleting listing:", error);
@@ -200,24 +253,37 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
     }
 
     try {
-      await updateDoc(doc(db, 'users', uid), { role: newRole });
-      if (newRole === 'admin') {
-        await setDoc(doc(db, 'roles_admins', uid), {
-          uid,
-          email: target?.email || '',
-          role: 'admin',
-          assignedBy: currentUser?.email || 'admin',
-          assignedAt: Date.now(),
-        }, { merge: true }).catch(() => {});
-      } else {
-        await deleteDoc(doc(db, 'roles_admins', uid)).catch(() => {});
+      const idToken = await currentUser?.getIdToken(true);
+      if (!idToken) {
+        toast.error("Authentication expired. Please sign in again.");
+        return;
       }
+
+      // Authoritative role assignment via trusted server API
+      const response = await fetch('/api/admin/role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          targetUid: uid,
+          targetEmail: target?.email || '',
+          newRole,
+        }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to update user role');
+      }
+
       setUsers(prev => prev.map(u => u.uid === uid ? { ...u, role: newRole } : u));
-      addAuditLog('change_role', `Changed role of ${target?.name || uid} to "${newRole}"`);
-      toast.success(`User role updated to ${newRole}`);
-    } catch (error) {
-      console.error("Error updating user role:", error);
-      toast.error("Failed to update user role");
+      addAuditLog('change_role', `Changed role of ${target?.name || uid} to "${newRole}" via server API`, uid, { newRole, email: target?.email });
+      toast.success(result.message || `User role updated to ${newRole}`);
+    } catch (error: any) {
+      console.error("Error updating user role via server API:", error);
+      toast.error(error.message || "Failed to update user role");
     }
   };
 
@@ -231,7 +297,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
     try {
       await updateDoc(doc(db, 'users', uid), { banned: !currentBanned });
       setUsers(prev => prev.map(u => u.uid === uid ? { ...u, banned: !currentBanned } : u));
-      addAuditLog(!currentBanned ? 'ban_user' : 'unban_user', `${!currentBanned ? 'Banned' : 'Unbanned'} user "${target?.name || uid}"`);
+      addAuditLog(!currentBanned ? 'ban_user' : 'unban_user', `${!currentBanned ? 'Banned' : 'Unbanned'} user "${target?.name || uid}"`, uid, { banned: !currentBanned, email: target?.email });
       toast.success(`User account ${!currentBanned ? 'banned' : 'unbanned'}`);
     } catch (error) {
       console.error("Error toggling ban:", error);
@@ -249,8 +315,27 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
     if (!window.confirm(`Are you sure you want to permanently remove user "${target?.name || uid}"?`)) return;
 
     try {
+      // If user was an admin, revoke administrative role via server API
+      if (target?.role === 'admin') {
+        const idToken = await currentUser?.getIdToken(true);
+        if (idToken) {
+          await fetch('/api/admin/role', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${idToken}`,
+            },
+            body: JSON.stringify({
+              targetUid: uid,
+              targetEmail: target?.email || '',
+              newRole: 'user',
+            }),
+          }).catch(() => {});
+        }
+      }
+
       await deleteDoc(doc(db, 'users', uid));
-      await deleteDoc(doc(db, 'roles_admins', uid)).catch(() => {});
+      addAuditLog('delete_user', `Permanently deleted user "${target?.name || uid}"`, uid, { email: target?.email });
       setUsers(prev => prev.filter(u => u.uid !== uid));
       toast.success("User account deleted");
     } catch (error) {
@@ -331,7 +416,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         }
       } : u));
 
-      addAuditLog('approve_student_badge' as any, `Issued "Verified Student" Badge to ${target?.name || uid}`);
+      addAuditLog('approve_student_badge', `Issued "Verified Student" Badge to ${target?.name || uid}`, uid, { studentName: target?.name, studentEmail: target?.email });
       toast.success(`"Verified Student" Badge successfully issued to ${target?.name || 'student'}!`);
     } catch (err: any) {
       console.error("Error approving student verification:", err);
@@ -371,7 +456,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         }
       } : u));
 
-      addAuditLog('reject_student_badge' as any, `Rejected/Revoked Student Badge for ${target?.name || uid}`);
+      addAuditLog('reject_student_badge', `Rejected/Revoked Student Badge for ${target?.name || uid}`, uid, { reason: note, studentEmail: target?.email });
       toast.info(`Student verification status updated for ${target?.name || 'student'}.`);
     } catch (err: any) {
       console.error("Error updating student verification:", err);
@@ -426,7 +511,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         } : null);
       }
 
-      addAuditLog('approve_pg_badge' as any, `Issued "Verified PG" Trust Badge to "${target?.title || id}"`);
+      addAuditLog('approve_pg_badge', `Issued "Verified PG" Trust Badge to "${target?.title || id}"`, id, { title: target?.title });
       toast.success(`"Verified PG" Badge issued to "${target?.title || 'Listing'}"!`);
     } catch (err: any) {
       console.error("Error approving PG verification:", err);
@@ -478,7 +563,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
         } : null);
       }
 
-      addAuditLog('reject_pg_badge' as any, `Rejected/Revoked PG Badge for "${target?.title || id}"`);
+      addAuditLog('reject_pg_badge', `Rejected/Revoked PG Badge for "${target?.title || id}"`, id, { reason: note, title: target?.title });
       toast.info(`PG verification rejected/revoked for "${target?.title || 'Listing'}".`);
     } catch (err: any) {
       console.error("Error updating PG verification:", err);
@@ -632,10 +717,8 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ onSwitchToStudentVie
             {activeTab === 'audit' && (
               <AdminAuditTab
                 logs={auditLogs}
-                onClearLogs={() => {
-                  setAuditLogs([]);
-                  sessionStorage.removeItem('adminAuditLogs');
-                }}
+                onRefresh={fetchAuditTrail}
+                isLoading={loading}
               />
             )}
 

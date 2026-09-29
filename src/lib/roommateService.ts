@@ -1,6 +1,6 @@
 import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, query, orderBy, where } from 'firebase/firestore';
 import { db } from './firebase';
-import { RoommateProfile } from '../types';
+import { RoommateProfile, RoommatePrivateContact } from '../types';
 
 export const DEMO_ROOMMATES: RoommateProfile[] = [
   {
@@ -195,21 +195,80 @@ export async function getRoommateProfiles(city?: string): Promise<RoommateProfil
   }
 }
 
+/**
+ * Securely fetches private contact details for a roommate profile
+ * Stored in isolated subcollection /roommate_profiles/{profileId}/private/contact
+ * Only accessible to authenticated logged-in students or owner/admin.
+ */
+export async function getRoommateContactDetails(
+  profileId: string, 
+  userId?: string
+): Promise<RoommatePrivateContact | null> {
+  // Check if it's a demo profile
+  const demo = DEMO_ROOMMATES.find(d => d.id === profileId || (userId && d.userId === userId));
+  if (demo) {
+    return {
+      userId: demo.userId,
+      userPhone: demo.userPhone || '',
+      whatsappNumber: demo.whatsappNumber || demo.userPhone || '',
+      userEmail: demo.userEmail || '',
+      updatedAt: demo.createdAt,
+    };
+  }
+
+  try {
+    const contactRef = doc(db, 'roommate_profiles', profileId, 'private', 'contact');
+    const snap = await getDoc(contactRef);
+    if (snap.exists()) {
+      return snap.data() as RoommatePrivateContact;
+    }
+  } catch (err) {
+    console.warn('Could not fetch protected contact from Firestore subcollection:', err);
+  }
+
+  // Check local fallback
+  if (userId) {
+    try {
+      const local = localStorage.getItem(`user_roommate_contact_${userId}`);
+      if (local) {
+        return JSON.parse(local);
+      }
+    } catch {}
+  }
+
+  return null;
+}
+
 export async function getUserRoommateProfile(userId: string): Promise<RoommateProfile | null> {
   if (!userId) return null;
   try {
+    let publicProfile: RoommateProfile | null = null;
+    let profileId = userId;
+
     const docRef = doc(db, 'roommate_profiles', userId);
     const snap = await getDoc(docRef);
     if (snap.exists()) {
-      return { id: snap.id, ...snap.data() } as RoommateProfile;
+      publicProfile = { id: snap.id, ...snap.data() } as RoommateProfile;
+    } else {
+      // Check query by userId
+      const q = query(collection(db, 'roommate_profiles'), where('userId', '==', userId));
+      const querySnap = await getDocs(q);
+      if (!querySnap.empty && querySnap.docs[0]) {
+        const first = querySnap.docs[0];
+        publicProfile = { id: first.id, ...first.data() } as RoommateProfile;
+        profileId = first.id;
+      }
     }
 
-    // Check query by userId
-    const q = query(collection(db, 'roommate_profiles'), where('userId', '==', userId));
-    const querySnap = await getDocs(q);
-    if (!querySnap.empty && querySnap.docs[0]) {
-      const first = querySnap.docs[0];
-      return { id: first.id, ...first.data() } as RoommateProfile;
+    if (publicProfile) {
+      // Fetch private contact subcollection for owner
+      const contact = await getRoommateContactDetails(profileId, userId);
+      return {
+        ...publicProfile,
+        userPhone: contact?.userPhone || publicProfile.userPhone || '',
+        whatsappNumber: contact?.whatsappNumber || publicProfile.whatsappNumber || '',
+        userEmail: contact?.userEmail || publicProfile.userEmail || '',
+      };
     }
 
     // Check local storage backup
@@ -231,38 +290,81 @@ export async function saveRoommateProfile(
   const profileId = profileData.id || profileData.userId || `rm-${Date.now()}`;
   const now = Date.now();
   
-  const finalProfile: RoommateProfile = {
-    ...profileData,
+  // 1. Separate public sanitized preferences from private contact information
+  const rawPhone = (profileData.userPhone || '').trim();
+  const rawWhatsApp = (profileData.whatsappNumber || rawPhone).trim();
+  const rawEmail = (profileData.userEmail || '').trim();
+
+  // Public document contains NO phone or WhatsApp numbers
+  const publicProfile: RoommateProfile = {
     id: profileId,
+    userId: profileData.userId,
+    userName: profileData.userName,
+    gender: profileData.gender,
+    city: profileData.city,
+    locality: profileData.locality,
+    budgetMin: profileData.budgetMin,
+    budgetMax: profileData.budgetMax,
+    roomType: profileData.roomType,
+    targetExam: profileData.targetExam,
+    habits: profileData.habits,
+    bio: profileData.bio,
+    moveInDate: profileData.moveInDate,
+    status: profileData.status,
+    hasContactDetails: Boolean(rawPhone || rawWhatsApp),
+    photoURL: profileData.photoURL,
+    isStudentVerified: profileData.isStudentVerified,
     createdAt: profileData.createdAt || now,
-    updatedAt: now
+    updatedAt: now,
   };
 
   try {
-    await setDoc(doc(db, 'roommate_profiles', profileId), finalProfile, { merge: true });
+    // 2. Save public preferences to /roommate_profiles/{profileId}
+    await setDoc(doc(db, 'roommate_profiles', profileId), publicProfile, { merge: true });
+
+    // 3. Save sensitive contact data to protected /roommate_profiles/{profileId}/private/contact subcollection
+    if (rawPhone || rawWhatsApp || rawEmail) {
+      const privateContact: RoommatePrivateContact = {
+        userId: profileData.userId,
+        userPhone: rawPhone,
+        whatsappNumber: rawWhatsApp,
+        userEmail: rawEmail,
+        updatedAt: now,
+      };
+      await setDoc(doc(db, 'roommate_profiles', profileId, 'private', 'contact'), privateContact, { merge: true });
+      localStorage.setItem(`user_roommate_contact_${profileData.userId}`, JSON.stringify(privateContact));
+    }
   } catch (err) {
     console.warn('Notice: Firestore save roommate profile warning, saved locally:', err);
   }
 
+  // Combined profile for user's own session state
+  const mergedProfile: RoommateProfile = {
+    ...publicProfile,
+    userPhone: rawPhone,
+    whatsappNumber: rawWhatsApp,
+    userEmail: rawEmail,
+  };
+
   // Always save locally for instant retrieval
   try {
-    localStorage.setItem(`user_roommate_profile_${profileData.userId}`, JSON.stringify(finalProfile));
+    localStorage.setItem(`user_roommate_profile_${profileData.userId}`, JSON.stringify(mergedProfile));
     
     // Update local cache list
     const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
     let list: RoommateProfile[] = cached ? JSON.parse(cached) : [...DEMO_ROOMMATES];
     const idx = list.findIndex(p => p.id === profileId || p.userId === profileData.userId);
     if (idx >= 0) {
-      list[idx] = finalProfile;
+      list[idx] = mergedProfile;
     } else {
-      list.unshift(finalProfile);
+      list.unshift(mergedProfile);
     }
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
   } catch (e) {
     // Ignore storage issues
   }
 
-  return finalProfile;
+  return mergedProfile;
 }
 
 export async function toggleRoommateStatus(profileId: string, userId: string, newStatus: 'active' | 'found'): Promise<void> {
@@ -288,6 +390,7 @@ export async function toggleRoommateStatus(profileId: string, userId: string, ne
 
 export async function deleteRoommateProfile(profileId: string, userId: string): Promise<void> {
   try {
+    await deleteDoc(doc(db, 'roommate_profiles', profileId, 'private', 'contact')).catch(() => {});
     await deleteDoc(doc(db, 'roommate_profiles', profileId));
   } catch (err) {
     console.warn('Could not delete roommate profile from Firestore:', err);
@@ -295,6 +398,7 @@ export async function deleteRoommateProfile(profileId: string, userId: string): 
 
   try {
     localStorage.removeItem(`user_roommate_profile_${userId}`);
+    localStorage.removeItem(`user_roommate_contact_${userId}`);
     const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (cached) {
       const list: RoommateProfile[] = JSON.parse(cached);

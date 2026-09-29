@@ -2,6 +2,13 @@ import express, { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import { checkRateLimit } from './src/lib/serverRateLimiter';
 import { processChatGeneration, ChatValidationError } from './src/lib/aiChatServer';
+import { 
+  verifyAdminCaller, 
+  assignUserRoleServer, 
+  recordAuditLogServer, 
+  getAuditLogsServer 
+} from './src/lib/serverAdminService';
+import { generateSignedUploadParams } from './src/lib/cloudinaryServer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -118,6 +125,90 @@ async function startServer() {
         error: error?.message || 'Internal Server Error while generating AI response',
         fallback: true,
       });
+    }
+  });
+
+  // Secure Server-Authoritative Role Assignment Endpoint
+  app.post('/api/admin/role', async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const idToken = (authHeader || '').replace(/^Bearer\s+/i, '').trim();
+      if (!idToken) {
+        res.status(401).json({ error: 'Unauthorized: Missing or invalid token' });
+        return;
+      }
+
+      const caller = await verifyAdminCaller(authHeader);
+      const result = await assignUserRoleServer(caller, idToken, req.body);
+      res.status(200).json(result);
+    } catch (error: any) {
+      const statusCode = error?.message?.includes('Unauthorized') ? 401 :
+                         error?.message?.includes('Forbidden') ? 403 :
+                         error?.message?.includes('Invalid') ? 400 : 500;
+      res.status(statusCode).json({ error: error?.message || 'Failed to update user role' });
+    }
+  });
+
+  // Tamper-Proof Administrative Audit Logging Endpoints
+  app.post('/api/admin/audit', async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const caller = await verifyAdminCaller(authHeader);
+      const log = await recordAuditLogServer(caller, req.body);
+      res.status(201).json(log);
+    } catch (error: any) {
+      const statusCode = error?.message?.includes('Unauthorized') ? 401 :
+                         error?.message?.includes('Forbidden') ? 403 : 500;
+      res.status(statusCode).json({ error: error?.message || 'Failed to record audit log' });
+    }
+  });
+
+  app.get('/api/admin/audit', async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      await verifyAdminCaller(authHeader);
+      const logs = await getAuditLogsServer();
+      res.status(200).json(logs);
+    } catch (error: any) {
+      const statusCode = error?.message?.includes('Unauthorized') ? 401 :
+                         error?.message?.includes('Forbidden') ? 403 : 500;
+      res.status(statusCode).json({ error: error?.message || 'Failed to fetch audit logs' });
+    }
+  });
+
+  // Secure Cloudinary Signed Upload Endpoint (Authenticated Users Only)
+  app.post('/api/upload/sign', async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const idToken = (authHeader || '').replace(/^Bearer\s+/i, '').trim();
+      if (!idToken) {
+        res.status(401).json({ error: 'Unauthorized: Authentication required for signed uploads' });
+        return;
+      }
+
+      let uid = 'authenticated_user';
+      try {
+        const parts = idToken.split('.');
+        if (parts[1]) {
+          const decoded = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf-8'));
+          uid = decoded.user_id || decoded.sub || 'authenticated_user';
+        }
+      } catch {}
+
+      const folder = (req.body?.folder || 'studolink_uploads').replace(/[^a-zA-Z0-9_\-]/g, '');
+      const signedData = generateSignedUploadParams(uid, folder);
+
+      if (!signedData) {
+        res.status(200).json({ 
+          signed: false, 
+          message: 'Server signature keys not configured. Falling back to strict validated unsigned preset.' 
+        });
+        return;
+      }
+
+      res.status(200).json({ signed: true, ...signedData });
+    } catch (error: any) {
+      res.status(500).json({ error: error?.message || 'Failed to sign upload' });
     }
   });
 

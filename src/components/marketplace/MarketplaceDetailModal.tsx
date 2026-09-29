@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MarketplaceItem } from '../../types';
+import { MarketplaceItem, MarketplacePrivateContact } from '../../types';
 import { GlassCard } from '../ui/GlassCard';
 import { 
   X, MapPin, Phone, MessageCircle, ShieldAlert, CheckCircle, 
   Trash2, AlertTriangle, Sparkles, User, Calendar, ExternalLink,
-  Share2, Check, MessageSquareText, Loader2
+  Share2, Check, MessageSquareText, Loader2, ShieldCheck, Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -13,6 +13,7 @@ import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { APP_CONFIG } from '../../lib/appConfig';
 import { getOrCreateConversation } from '../../lib/chatService';
+import { getMarketplaceContactDetails } from '../../lib/marketplaceService';
 import { toast } from 'sonner';
 import { formatWhatsAppUrl } from '../../lib/utils';
 
@@ -36,6 +37,32 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [startingChat, setStartingChat] = useState(false);
 
+  // Protected Contact Details from private subcollection
+  const [contact, setContact] = useState<MarketplacePrivateContact | null>(null);
+  const [loadingContact, setLoadingContact] = useState(false);
+
+  useEffect(() => {
+    if (!item || !currentUser) return;
+    let isMounted = true;
+
+    const loadContact = async () => {
+      setLoadingContact(true);
+      try {
+        const data = await getMarketplaceContactDetails(item.id, item.sellerId);
+        if (isMounted && data) {
+          setContact(data);
+        }
+      } catch (err) {
+        console.warn('Could not load protected seller contact:', err);
+      } finally {
+        if (isMounted) setLoadingContact(false);
+      }
+    };
+
+    loadContact();
+    return () => { isMounted = false; };
+  }, [item, currentUser]);
+
   if (!item) return null;
 
   const isOwner = currentUser?.uid === item.sellerId || userProfile?.role === 'admin';
@@ -45,11 +72,25 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
 
   const [copiedShare, setCopiedShare] = useState(false);
 
+  const phone = contact?.sellerPhone || item.sellerPhone;
+  const whatsapp = contact?.whatsappNumber || contact?.sellerPhone || item.whatsappNumber || item.sellerPhone;
+  const allowWhatsApp = item.allowWhatsApp !== false && (item.contactPreference === 'phone_whatsapp' || !!item.whatsappNumber);
+  const allowDirectCall = item.allowDirectCall !== false && (item.contactPreference === 'phone_whatsapp' || !!item.sellerPhone);
+
   const handleWhatsApp = () => {
-    const phone = item.whatsappNumber || item.sellerPhone;
+    if (!currentUser) {
+      toast.info("Please sign in to contact the seller directly.");
+      onClose();
+      navigate('/login');
+      return;
+    }
+    if (!whatsapp) {
+      toast.info("Seller has enabled In-App Chat. Please send a message below!");
+      return;
+    }
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
     const text = `Hi ${item.sellerName}, maine Studolink Student Marketplace (${itemUrl}) par aapka item "${item.title}" dekha. Kya ye abhi available hai?`;
-    window.open(formatWhatsAppUrl(phone, text), '_blank', 'noopener,noreferrer');
+    window.open(formatWhatsAppUrl(whatsapp, text), '_blank', 'noopener,noreferrer');
   };
 
   const handleShare = () => {
@@ -74,7 +115,17 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
   };
 
   const handleCall = () => {
-    window.location.href = `tel:${item.sellerPhone}`;
+    if (!currentUser) {
+      toast.info("Please sign in to call the seller.");
+      onClose();
+      navigate('/login');
+      return;
+    }
+    if (!phone) {
+      toast.info("Seller has chosen In-App Chat for privacy. Please send a chat message!");
+      return;
+    }
+    window.location.href = `tel:${phone}`;
   };
 
   const handleStartChat = async () => {
@@ -295,9 +346,18 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
                   {/* Seller Box */}
                   <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col justify-between">
                     <div>
-                      <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
-                        Seller Details
-                      </span>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                          Seller Details
+                        </span>
+                        {item.contactPreference === 'in_app_chat' && (
+                          <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 font-bold bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-800/40">
+                            <ShieldCheck className="w-3 h-3" />
+                            In-App Chat Protected
+                          </span>
+                        )}
+                      </div>
+
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-2xl bg-[#00E5FF]/20 text-[#00E5FF] flex items-center justify-center font-bold text-lg border border-[#00E5FF]/30">
                           {item.sellerName.charAt(0).toUpperCase()}
@@ -311,51 +371,71 @@ export const MarketplaceDetailModal: React.FC<MarketplaceDetailModalProps> = ({
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      <button
-                        onClick={handleStartChat}
-                        disabled={item.status === 'sold' || startingChat}
-                        className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#00E5FF]/20 to-[#8A2BE2]/20 hover:from-[#00E5FF]/30 hover:to-[#8A2BE2]/30 text-white border border-[#00E5FF]/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 shadow-[0_0_15px_rgba(0,229,255,0.2)]"
-                      >
-                        {startingChat ? (
-                          <Loader2 className="w-4 h-4 text-[#00E5FF] animate-spin" />
-                        ) : (
-                          <MessageSquareText className="w-4 h-4 text-[#00E5FF]" />
+                    <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
+                      <div className={`grid gap-2 ${
+                        allowWhatsApp || allowDirectCall ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2'
+                      }`}>
+                        <button
+                          onClick={handleStartChat}
+                          disabled={item.status === 'sold' || startingChat}
+                          className={`py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#00E5FF]/20 to-[#8A2BE2]/20 hover:from-[#00E5FF]/30 hover:to-[#8A2BE2]/30 text-white border border-[#00E5FF]/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 shadow-[0_0_15px_rgba(0,229,255,0.2)] ${
+                            !allowWhatsApp && !allowDirectCall ? 'col-span-1' : ''
+                          }`}
+                        >
+                          {startingChat ? (
+                            <Loader2 className="w-4 h-4 text-[#00E5FF] animate-spin" />
+                          ) : (
+                            <MessageSquareText className="w-4 h-4 text-[#00E5FF]" />
+                          )}
+                          <span>In-App Chat</span>
+                        </button>
+
+                        {allowWhatsApp && (
+                          <button
+                            onClick={handleWhatsApp}
+                            disabled={item.status === 'sold' || loadingContact}
+                            className="py-2.5 px-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-current" />
+                            <span>WhatsApp</span>
+                          </button>
                         )}
-                        <span>In-App Chat</span>
-                      </button>
-                      <button
-                        onClick={handleWhatsApp}
-                        disabled={item.status === 'sold'}
-                        className="py-2.5 px-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-                      >
-                        <MessageCircle className="w-4 h-4 fill-current" />
-                        <span>WhatsApp</span>
-                      </button>
-                      <button
-                        onClick={handleCall}
-                        disabled={item.status === 'sold'}
-                        className="py-2.5 px-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-                      >
-                        <Phone className="w-4 h-4" />
-                        <span>Call</span>
-                      </button>
-                      <button
-                        onClick={handleShare}
-                        className="py-2.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/20 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                      >
-                        {copiedShare ? (
-                          <>
-                            <Check className="w-4 h-4 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Share2 className="w-4 h-4 text-[#00E5FF]" />
-                            <span>Share</span>
-                          </>
+
+                        {allowDirectCall && (
+                          <button
+                            onClick={handleCall}
+                            disabled={item.status === 'sold' || loadingContact}
+                            className="py-2.5 px-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            <Phone className="w-4 h-4" />
+                            <span>Call</span>
+                          </button>
                         )}
-                      </button>
+
+                        <button
+                          onClick={handleShare}
+                          className="py-2.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/20 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          {copiedShare ? (
+                            <>
+                              <Check className="w-4 h-4 text-emerald-400" />
+                              <span className="text-emerald-400">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Share2 className="w-4 h-4 text-[#00E5FF]" />
+                              <span>Share</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      {!currentUser && (allowWhatsApp || allowDirectCall) && (
+                        <p className="text-[10px] text-cyan-300/80 flex items-center gap-1">
+                          <Lock className="w-3 h-3 text-[#00E5FF] shrink-0" />
+                          <span>Direct WhatsApp/Call requires signing in as a verified student.</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 

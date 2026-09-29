@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { VerifiedStudentBadge } from '../common/TrustBadge';
 import { formatWhatsAppUrl } from '../../lib/utils';
+import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'sonner';
 
 export interface RoommateCardProps {
   profile: RoommateProfile;
@@ -17,18 +19,37 @@ export interface RoommateCardProps {
 }
 
 export const RoommateCard: React.FC<RoommateCardProps> = ({ profile, onConnect, isCurrentUser, onEdit }) => {
+  const { currentUser } = useAuth();
   const isNightOwl = profile.habits.studyTime.includes('Night Owl');
   const isVeg = profile.habits.dietary.includes('Vegetarian');
 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!currentUser) {
+      toast.info('Please sign in to view student contact and chat on WhatsApp.');
+      onConnect(profile);
+      return;
+    }
     const phone = profile.whatsappNumber || profile.userPhone;
+    if (!phone) {
+      onConnect(profile);
+      return;
+    }
     const text = `Hi ${profile.userName}, I saw your Roommate / Flatmate profile on Studolink for ${profile.locality}, ${profile.city}. I am preparing for ${profile.targetExam} and looking for a flatmate in budget ₹${profile.budgetMin}-${profile.budgetMax}. Let's connect!`;
     window.open(formatWhatsAppUrl(phone, text), '_blank');
   };
 
   const handleCall = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!currentUser) {
+      toast.info('Please sign in to view student contact and make a call.');
+      onConnect(profile);
+      return;
+    }
+    if (!profile.userPhone) {
+      onConnect(profile);
+      return;
+    }
     window.location.href = `tel:${profile.userPhone}`;
   };
 

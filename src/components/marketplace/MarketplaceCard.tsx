@@ -20,6 +20,10 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const phone = item.whatsappNumber || item.sellerPhone;
+    if (!phone) {
+      onOpenDetails(item);
+      return;
+    }
     const itemUrl = APP_CONFIG.getMarketplaceUrl(item.id);
     const text = item.price === 0
       ? `Hi ${item.sellerName}, maine Studolink par aapka Free Study Material Giveaway "${item.title}" dekha. Kya ye abhi available hai collect karne ke liye?`
@@ -29,6 +33,10 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item, onOpenDe
 
   const handleCallClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!item.sellerPhone) {
+      onOpenDetails(item);
+      return;
+    }
     window.location.href = `tel:${item.sellerPhone}`;
   };
 

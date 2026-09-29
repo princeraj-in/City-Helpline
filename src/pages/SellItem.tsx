@@ -7,6 +7,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { uploadMultipleImages } from '../lib/storage';
 import { MarketplaceCategory, ItemCondition, MarketplaceItem } from '../types';
 import { MARKETPLACE_CATEGORIES, ITEM_CONDITIONS, STATE_CITIES } from '../lib/constants';
+import { createMarketplaceListing } from '../lib/marketplaceService';
 import { GlassCard } from '../components/ui/GlassCard';
 import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
 import { LiquidButton } from '../components/ui/LiquidButton';
@@ -15,7 +16,8 @@ import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
 import { ListingSuccessModal } from '../components/common/ListingSuccessModal';
 import { 
   ShoppingBag, ArrowLeft, UploadCloud, X, AlertCircle, 
-  CheckCircle, Sparkles, MapPin, Tag, IndianRupee, Phone, MessageCircle, Info, Gift, Heart, Loader2
+  CheckCircle, Sparkles, MapPin, Tag, IndianRupee, Phone, MessageCircle, Info, Gift, Heart, Loader2,
+  ShieldCheck, Lock, MessageSquareText
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -35,8 +37,14 @@ export default function SellItem() {
   const [originalPrice, setOriginalPrice] = useState('');
   const [city, setCity] = useState(userLocation?.city || 'Kota');
   const [area, setArea] = useState('');
+  
+  // Privacy-First Contact Settings
+  const [contactPreference, setContactPreference] = useState<'in_app_chat' | 'phone_whatsapp'>('in_app_chat');
   const [phone, setPhone] = useState(userProfile?.phone || '');
   const [whatsapp, setWhatsapp] = useState(userProfile?.phone || '');
+  const [allowWhatsApp, setAllowWhatsApp] = useState(true);
+  const [allowDirectCall, setAllowDirectCall] = useState(true);
+
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
@@ -109,8 +117,13 @@ export default function SellItem() {
       return;
     }
 
-    if (!title.trim() || !description.trim() || price.trim() === '' || !city || !phone) {
-      setError('Please fill in all required fields.');
+    if (!title.trim() || !description.trim() || price.trim() === '' || !city) {
+      setError('Please fill in all required title, price, city, and description fields.');
+      return;
+    }
+
+    if (contactPreference === 'phone_whatsapp' && !phone.trim()) {
+      setError('Please provide your phone number for direct contact, or select In-App Chat Only.');
       return;
     }
 
@@ -134,12 +147,13 @@ export default function SellItem() {
       let uploadedUrls: string[] = [];
       if (imageFiles.length > 0) {
         setUploadProgressText(`Compressing & uploading ${imageFiles.length} photos...`);
+        const idToken = await currentUser?.getIdToken();
         uploadedUrls = await uploadMultipleImages(imageFiles, (completed, total) => {
           setUploadProgressText(`Uploaded ${completed} of ${total} photos...`);
-        });
+        }, idToken);
       }
 
-      setUploadProgressText('Publishing to campus marketplace...');
+      setUploadProgressText('Publishing to campus marketplace with privacy protection...');
 
       // Combine uploaded file URLs with any direct image URLs added
       const nonBlobUrls = previewUrls.filter(u => !u.startsWith('blob:'));
@@ -160,7 +174,7 @@ export default function SellItem() {
         finalImages.push(fallbackUrl);
       }
 
-      const itemPayload = {
+      const { id: createdId } = await createMarketplaceListing({
         title: title.trim(),
         description: description.trim(),
         price: numPrice,
@@ -173,17 +187,16 @@ export default function SellItem() {
         sellerId: currentUser.uid,
         sellerName: userProfile?.name || currentUser.displayName || 'Student Seller',
         sellerPhone: phone.trim(),
-        ...(whatsapp.trim() ? { whatsappNumber: whatsapp.trim() } : {}),
-        status: 'available',
-        createdAt: Date.now(),
-        featured: false,
+        whatsappNumber: whatsapp.trim() || phone.trim(),
+        sellerEmail: currentUser.email || '',
+        contactPreference,
+        allowWhatsApp: contactPreference === 'phone_whatsapp' ? allowWhatsApp : false,
+        allowDirectCall: contactPreference === 'phone_whatsapp' ? allowDirectCall : false,
         isStudentVerified: !!userProfile?.isStudentVerified
-      };
-
-      const docRef = await addDoc(collection(db, 'marketplace_items'), itemPayload);
+      });
 
       setCreatedItem({
-        id: docRef.id,
+        id: createdId,
         title: title.trim(),
         city,
         price: numPrice,
@@ -387,40 +400,121 @@ export default function SellItem() {
             />
           </div>
 
-          {/* Contact Numbers */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-200 mb-1.5">
-                Phone Number for Calls *
+          {/* Privacy-First Contact Preference Section */}
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-cyan-500/20 space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-bold text-white flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#00E5FF]" />
+                Student Contact & Privacy Protection
               </label>
-              <div className="relative">
-                <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  placeholder="10-digit mobile number"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF] transition-colors text-sm"
-                />
-              </div>
+              <span className="text-[11px] text-cyan-300 font-bold bg-cyan-950/60 px-2.5 py-0.5 rounded-full border border-cyan-800/60">
+                Zero Public Leakage
+              </span>
             </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-200 mb-1.5">
-                WhatsApp Number (Optional)
-              </label>
-              <div className="relative">
-                <MessageCircle className="w-4 h-4 absolute left-3.5 top-3.5 text-emerald-400" />
-                <input
-                  type="tel"
-                  value={whatsapp}
-                  onChange={e => setWhatsapp(e.target.value)}
-                  placeholder="Defaults to phone number"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF] transition-colors text-sm"
-                />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setContactPreference('in_app_chat')}
+                className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                  contactPreference === 'in_app_chat'
+                    ? 'bg-cyan-500/15 border-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.15)]'
+                    : 'bg-white/[0.02] border-white/10 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-1.5">
+                  <MessageSquareText className="w-4 h-4 text-[#00E5FF]" />
+                  <span className="text-xs font-bold text-white">In-App Chat Only</span>
+                </div>
+                <p className="text-[11px] text-gray-400 leading-relaxed">
+                  Buyers chat inside Studolink. Your mobile number is 100% private and never exposed.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setContactPreference('phone_whatsapp')}
+                className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                  contactPreference === 'phone_whatsapp'
+                    ? 'bg-cyan-500/15 border-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.15)]'
+                    : 'bg-white/[0.02] border-white/10 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Phone className="w-4 h-4 text-emerald-400" />
+                  <span className="text-xs font-bold text-white">In-App + Direct Contact</span>
+                </div>
+                <p className="text-[11px] text-gray-400 leading-relaxed">
+                  Allows logged-in students to call/WhatsApp. Stored in a secured private subcollection.
+                </p>
+              </button>
             </div>
+
+            {contactPreference === 'phone_whatsapp' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-4 pt-3 border-t border-white/10"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-200 mb-1.5">
+                      Phone Number *
+                    </label>
+                    <div className="relative">
+                      <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+                      <input
+                        type="tel"
+                        required={contactPreference === 'phone_whatsapp'}
+                        value={phone}
+                        onChange={e => setPhone(e.target.value)}
+                        placeholder="10-digit mobile number"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF] transition-colors text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-200 mb-1.5">
+                      WhatsApp Number (Optional)
+                    </label>
+                    <div className="relative">
+                      <MessageCircle className="w-4 h-4 absolute left-3.5 top-3.5 text-emerald-400" />
+                      <input
+                        type="tel"
+                        value={whatsapp}
+                        onChange={e => setWhatsapp(e.target.value)}
+                        placeholder="Defaults to phone number"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF] transition-colors text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Explicit Seller Consent Checkboxes */}
+                <div className="space-y-2 pt-1">
+                  <label className="flex items-center gap-2.5 text-xs text-gray-300 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={allowWhatsApp}
+                      onChange={e => setAllowWhatsApp(e.target.checked)}
+                      className="rounded bg-white/10 border-white/20 text-[#00E5FF] focus:ring-0 cursor-pointer"
+                    />
+                    <span>Allow logged-in campus students to send WhatsApp inquiries</span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 text-xs text-gray-300 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={allowDirectCall}
+                      onChange={e => setAllowDirectCall(e.target.checked)}
+                      className="rounded bg-white/10 border-white/20 text-[#00E5FF] focus:ring-0 cursor-pointer"
+                    />
+                    <span>Allow logged-in campus students to make direct phone calls</span>
+                  </label>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* Photo Upload Section */}

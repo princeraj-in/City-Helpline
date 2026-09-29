@@ -20,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [hasCustomClaimAdmin, setHasCustomClaimAdmin] = useState(false);
+  const [isRolesAdminDoc, setIsRolesAdminDoc] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
     try {
       const cachedProfile = localStorage.getItem('userProfile');
@@ -31,22 +32,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Authoritatively driven by Firebase Auth Custom Claim (request.auth.token.admin == true) or founder emails
-  const isFounderAdmin = !!(
-    currentUser?.email && (
-      currentUser.email === 'kusprince.raj@gmail.com' ||
-      currentUser.email === 'official.techdrive@gmail.com' ||
-      currentUser.email.endsWith('@imprince.me')
-    )
-  );
-
-  const isAdmin = hasCustomClaimAdmin || userProfile?.role === 'admin' || isFounderAdmin;
-  const isSuperAdmin = hasCustomClaimAdmin || isFounderAdmin;
+  // Authoritatively determined ONLY via:
+  // 1. Cryptographic Firebase Auth Custom Claims (request.auth.token.admin == true)
+  // 2. Explicit Firestore Admin UID document in /roles_admins/{uid}
+  // 3. User profile role 'admin' in Firestore
+  // 4. Primary verified project owner account (kusprince.raj@gmail.com)
+  // NOTE: Email domain wildcards (@imprince.me) have been removed for zero-trust authorization.
+  const isPrimaryOwner = currentUser?.email === 'kusprince.raj@gmail.com';
+  const isAdmin = hasCustomClaimAdmin || isRolesAdminDoc || userProfile?.role === 'admin' || isPrimaryOwner;
+  const isSuperAdmin = hasCustomClaimAdmin || isRolesAdminDoc || isPrimaryOwner;
 
   useEffect(() => {
     let unsubscribeProfile: (() => void) | undefined;
     let unsubscribePrivateDetails: (() => void) | undefined;
     let unsubscribePrivateVerification: (() => void) | undefined;
+    let unsubscribeRolesAdmin: (() => void) | undefined;
 
     // Safety fallback: Never keep the app completely unmounted/blocked for more than 2.5 seconds
     const safetyTimeout = setTimeout(() => {
@@ -65,6 +65,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setHasCustomClaimAdmin(isAdminClaim);
         } catch {
           setHasCustomClaimAdmin(false);
+        }
+
+        // Explicitly verify server-side Firestore Admin UID Document (/roles_admins/{uid})
+        try {
+          const rolesAdminRef = doc(db, 'roles_admins', user.uid);
+          unsubscribeRolesAdmin = onSnapshot(rolesAdminRef, (docSnap) => {
+            setIsRolesAdminDoc(docSnap.exists());
+          }, () => {
+            setIsRolesAdminDoc(false);
+          });
+        } catch {
+          setIsRolesAdminDoc(false);
         }
 
         let publicProfileData: Partial<UserProfile> = {};
@@ -157,14 +169,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.warn("Notice: private verification sync offline or not yet initialized:", vErr);
         });
 
+        // Listen to server-authoritative Admin UID document (/roles_admins/{uid})
+        const rolesAdminRef = doc(db, 'roles_admins', user.uid);
+        unsubscribeRolesAdmin = onSnapshot(rolesAdminRef, (snap) => {
+          setIsRolesAdminDoc(snap.exists());
+        }, (rErr) => {
+          // If unprivileged, permission will simply be false
+          setIsRolesAdminDoc(false);
+        });
+
       } else {
         setUserProfile(null);
         setHasCustomClaimAdmin(false);
+        setIsRolesAdminDoc(false);
         localStorage.removeItem('userProfile');
         setLoading(false);
         if (unsubscribeProfile) unsubscribeProfile();
         if (unsubscribePrivateDetails) unsubscribePrivateDetails();
         if (unsubscribePrivateVerification) unsubscribePrivateVerification();
+        if (unsubscribeRolesAdmin) unsubscribeRolesAdmin();
       }
     });
 
@@ -174,6 +197,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (unsubscribeProfile) unsubscribeProfile();
       if (unsubscribePrivateDetails) unsubscribePrivateDetails();
       if (unsubscribePrivateVerification) unsubscribePrivateVerification();
+      if (unsubscribeRolesAdmin) unsubscribeRolesAdmin();
     };
   }, []);
 

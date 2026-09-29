@@ -146,12 +146,26 @@ export interface MarketplaceItem {
   images: string[];
   sellerId: string;
   sellerName: string;
-  sellerPhone: string;
+  sellerPhone?: string;
   whatsappNumber?: string;
+  contactPreference?: 'in_app_chat' | 'phone_whatsapp';
+  allowWhatsApp?: boolean;
+  allowDirectCall?: boolean;
+  hasContactDetails?: boolean;
   status: ItemStatus;
   createdAt: number;
   featured?: boolean;
   isStudentVerified?: boolean;
+}
+
+export interface MarketplacePrivateContact {
+  sellerId: string;
+  sellerPhone: string;
+  whatsappNumber?: string;
+  sellerEmail?: string;
+  allowWhatsApp?: boolean;
+  allowDirectCall?: boolean;
+  updatedAt: number;
 }
 
 // Flatmate / Roommate Finder Types
@@ -171,8 +185,9 @@ export interface RoommateProfile {
   userId: string;
   userName: string;
   userEmail?: string;
-  userPhone: string;
+  userPhone?: string;
   whatsappNumber?: string;
+  hasContactDetails?: boolean;
   gender: 'male' | 'female' | 'other';
   city: string;
   locality: string;
@@ -188,6 +203,15 @@ export interface RoommateProfile {
   updatedAt?: number;
   photoURL?: string;
   isStudentVerified?: boolean;
+}
+
+export interface RoommatePrivateContact {
+  userId: string;
+  userPhone: string;
+  whatsappNumber?: string;
+  userEmail?: string;
+  exactAddress?: string;
+  updatedAt: number;
 }
 
 // Emergency Contacts Types
