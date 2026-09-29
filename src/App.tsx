@@ -13,33 +13,46 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { LocationPromptBanner } from './components/location/LocationPromptBanner';
 import { LocationSelectorModal } from './components/location/LocationSelectorModal';
 import { SystemBroadcastBanner } from './components/layout/SystemBroadcastBanner';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { Toaster } from 'sonner';
 
-// Pages
+// Eagerly loaded for instant First Contentful Paint
 import Home from './pages/Home';
-import Auth from './pages/Auth';
-import AddListing from './pages/AddListing';
-import EditListing from './pages/EditListing';
-import ListingDetails from './pages/ListingDetails';
-import AdminDashboard from './pages/AdminDashboard';
-import Search from './pages/Search';
-import Profile from './pages/Profile';
-import Marketplace from './pages/Marketplace';
-import SellItem from './pages/SellItem';
-import BudgetCalculator from './pages/BudgetCalculator';
-import Legal from './pages/Legal';
-import AiChatPage from './pages/AiChatPage';
-import AccountSettingsPage from './pages/AccountSettingsPage';
-import SavedListingsPage from './pages/SavedListingsPage';
-import MyMarketplacePage from './pages/MyMarketplacePage';
-import MyListingsPage from './pages/MyListingsPage';
-import RoommatesPage from './pages/RoommatesPage';
-import Help from './pages/Help';
-import MessagesPage from './pages/MessagesPage';
-import NotFoundPage from './pages/NotFoundPage';
-import { AiFloatingAssistant } from './components/ai/AiFloatingAssistant';
+
+// Lazy-loaded routes for code-splitting (dramatically lowers TBT & initial JS parse time)
+const Auth = lazy(() => import('./pages/Auth'));
+const AddListing = lazy(() => import('./pages/AddListing'));
+const EditListing = lazy(() => import('./pages/EditListing'));
+const ListingDetails = lazy(() => import('./pages/ListingDetails'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const Search = lazy(() => import('./pages/Search'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Marketplace = lazy(() => import('./pages/Marketplace'));
+const SellItem = lazy(() => import('./pages/SellItem'));
+const BudgetCalculator = lazy(() => import('./pages/BudgetCalculator'));
+const Legal = lazy(() => import('./pages/Legal'));
+const AiChatPage = lazy(() => import('./pages/AiChatPage'));
+const AccountSettingsPage = lazy(() => import('./pages/AccountSettingsPage'));
+const SavedListingsPage = lazy(() => import('./pages/SavedListingsPage'));
+const MyMarketplacePage = lazy(() => import('./pages/MyMarketplacePage'));
+const MyListingsPage = lazy(() => import('./pages/MyListingsPage'));
+const RoommatesPage = lazy(() => import('./pages/RoommatesPage'));
+const Help = lazy(() => import('./pages/Help'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+
+// Defer floating assistant so it does not block main thread
+const AiFloatingAssistant = lazy(() => 
+  import('./components/ai/AiFloatingAssistant').then(m => ({ default: m.AiFloatingAssistant }))
+);
+
 import { InstallAppPrompt } from './components/common/InstallAppPrompt';
+
+const RouteFallback = () => (
+  <div className="min-h-[55vh] flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+  </div>
+);
 
 function AppLayout() {
   const { isLocationModalOpen, closeLocationModal } = useLocationContext();
@@ -120,151 +133,157 @@ function AppLayout() {
       <LocationPromptBanner />
       <LocationSelectorModal isOpen={isLocationModalOpen} onClose={closeLocationModal} />
       <main className="flex-grow pb-24 md:pb-0">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/roommates" element={<RoommatesPage />} />
-          <Route path="/flatmates" element={<RoommatesPage />} />
-          <Route path="/budget" element={<BudgetCalculator />} />
-          <Route path="/budget-calculator" element={<BudgetCalculator />} />
-          <Route path="/chat" element={<AiChatPage />} />
-          <Route path="/login" element={<Auth />} />
-          <Route path="/signup" element={<Auth />} />
-          <Route path="/listing/:id" element={<ListingDetails />} />
-          
-          {/* Legal & Policy Routes */}
-          <Route path="/legal" element={<Legal />} />
-          <Route path="/privacy" element={<Legal defaultTab="privacy" />} />
-          <Route path="/terms" element={<Legal defaultTab="terms" />} />
-          <Route path="/safety" element={<Legal defaultTab="safety" />} />
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/roommates" element={<RoommatesPage />} />
+            <Route path="/flatmates" element={<RoommatesPage />} />
+            <Route path="/budget" element={<BudgetCalculator />} />
+            <Route path="/budget-calculator" element={<BudgetCalculator />} />
+            <Route path="/chat" element={<AiChatPage />} />
+            <Route path="/login" element={<Auth />} />
+            <Route path="/signup" element={<Auth />} />
+            <Route path="/listing/:id" element={<ListingDetails />} />
+            
+            {/* Legal & Policy Routes */}
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/privacy" element={<Legal defaultTab="privacy" />} />
+            <Route path="/terms" element={<Legal defaultTab="terms" />} />
+            <Route path="/safety" element={<Legal defaultTab="safety" />} />
 
-          {/* Help & Support Hub */}
-          <Route path="/help" element={<Help />} />
-          <Route path="/support" element={<Help />} />
-          
-          {/* Direct In-App Chat Routes */}
-          <Route 
-            path="/messages" 
-            element={
-              <ProtectedRoute>
-                <MessagesPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/messages/:conversationId" 
-            element={
-              <ProtectedRoute>
-                <MessagesPage />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Protected Routes */}
-          <Route 
-            path="/sell-item" 
-            element={
-              <ProtectedRoute>
-                <SellItem />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/settings" 
-            element={
-              <ProtectedRoute>
-                <AccountSettingsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/account-settings" 
-            element={
-              <ProtectedRoute>
-                <AccountSettingsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/saved-listings" 
-            element={
-              <ProtectedRoute>
-                <SavedListingsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/saved" 
-            element={
-              <ProtectedRoute>
-                <SavedListingsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/my-marketplace" 
-            element={
-              <ProtectedRoute>
-                <MyMarketplacePage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/my-listings" 
-            element={
-              <ProtectedRoute>
-                <MyListingsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/add-listing" 
-            element={
-              <ProtectedRoute>
-                <AddListing />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/edit-listing/:id" 
-            element={
-              <ProtectedRoute>
-                <EditListing />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Admin Routes */}
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard 
-                  onSwitchToStudentView={() => {
-                    setAdminViewMode('student');
-                    localStorage.setItem('admin_view_mode', 'student');
-                    navigate('/');
-                  }}
-                />
-              </ProtectedRoute>
-            } 
-          />
+            {/* Help & Support Hub */}
+            <Route path="/help" element={<Help />} />
+            <Route path="/support" element={<Help />} />
+            
+            {/* Direct In-App Chat Routes */}
+            <Route 
+              path="/messages" 
+              element={
+                <ProtectedRoute>
+                  <MessagesPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/messages/:conversationId" 
+              element={
+                <ProtectedRoute>
+                  <MessagesPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/sell-item" 
+              element={
+                <ProtectedRoute>
+                  <SellItem />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <AccountSettingsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/account-settings" 
+              element={
+                <ProtectedRoute>
+                  <AccountSettingsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/saved-listings" 
+              element={
+                <ProtectedRoute>
+                  <SavedListingsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/saved" 
+              element={
+                <ProtectedRoute>
+                  <SavedListingsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/my-marketplace" 
+              element={
+                <ProtectedRoute>
+                  <MyMarketplacePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/my-listings" 
+              element={
+                <ProtectedRoute>
+                  <MyListingsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/add-listing" 
+              element={
+                <ProtectedRoute>
+                  <AddListing />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/edit-listing/:id" 
+              element={
+                <ProtectedRoute>
+                  <EditListing />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin Routes */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminDashboard 
+                    onSwitchToStudentView={() => {
+                      setAdminViewMode('student');
+                      localStorage.setItem('admin_view_mode', 'student');
+                      navigate('/');
+                    }}
+                  />
+                </ProtectedRoute>
+              } 
+            />
 
-          {/* 404 Not Found Catch-All */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+            {/* 404 Not Found Catch-All */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </main>
       <InstallAppPrompt />
-      {location.pathname === '/' && <AiFloatingAssistant />}
+      {location.pathname === '/' && (
+        <Suspense fallback={null}>
+          <AiFloatingAssistant />
+        </Suspense>
+      )}
       <BottomNav />
     </div>
   );
