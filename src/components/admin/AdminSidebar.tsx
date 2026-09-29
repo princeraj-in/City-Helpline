@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
   LayoutDashboard, Building2, Users, ShoppingBag, MapPin, 
   Megaphone, History, ChevronRight, Sparkles, ShieldCheck,
@@ -192,15 +193,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           <p className="text-[11px] text-gray-400 leading-relaxed">
             All approvals, status updates and user bans sync directly to Cloud Firestore in real time.
           </p>
-          <a
-            href="/legal"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 text-[10px] font-bold text-[#00E5FF] hover:underline flex items-center gap-1"
+          <Link
+            to="/legal?from=admin"
+            className="mt-2 text-[10px] font-bold text-[#00E5FF] hover:underline flex items-center gap-1 cursor-pointer"
           >
             <span>Compliance & Legal Docs</span>
             <ExternalLink className="w-3 h-3" />
-          </a>
+          </Link>
         </div>
       )}
 

@@ -105,13 +105,13 @@ function AppLayout() {
     <div className="min-h-screen bg-transparent flex flex-col">
       <Toaster position="top-center" theme="dark" />
 
-      {/* If logged in as admin previewing student app, show executive switch banner */}
-      {isAdmin && adminViewMode === 'student' && (
+      {/* If logged in as admin browsing student app, show executive switch banner */}
+      {isAdmin && location.pathname !== '/admin' && (
         <div className="sticky top-0 z-[60] bg-gradient-to-r from-[#8A2BE2] via-[#00E5FF] to-[#8A2BE2] p-[1px] shadow-lg">
           <div className="bg-[#07090E]/95 backdrop-blur-xl px-4 py-2 flex items-center justify-between gap-3 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse" />
-              <span className="text-[#00E5FF] font-black tracking-wide">ADMIN PREVIEW MODE</span>
+              <span className="text-[#00E5FF] font-black tracking-wide">ADMIN CONSOLE ACTIVE</span>
               <span className="text-gray-400 font-medium hidden sm:inline">— You are previewing the student portal as an administrator</span>
             </div>
             <button
@@ -120,7 +120,7 @@ function AppLayout() {
                 localStorage.setItem('admin_view_mode', 'admin');
                 navigate('/admin');
               }}
-              className="px-3 py-1 rounded-lg bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] text-black font-black text-xs hover:brightness-110 transition-all shadow-[0_0_12px_rgba(0,229,255,0.4)] active:scale-95"
+              className="px-3 py-1 rounded-lg bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] text-black font-black text-xs hover:brightness-110 transition-all shadow-[0_0_12px_rgba(0,229,255,0.4)] active:scale-95 cursor-pointer"
             >
               Return to Admin Console &rarr;
             </button>

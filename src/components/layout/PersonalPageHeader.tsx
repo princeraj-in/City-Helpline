@@ -23,7 +23,7 @@ export const PersonalPageHeader: React.FC<PersonalPageHeaderProps> = ({
   badgeColor = 'bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/20',
   icon: Icon,
   iconColor = 'text-[#00E5FF]',
-  exitUrl = '/profile',
+  exitUrl = '/',
   backLabel = 'Back',
   onClose,
   rightAction,
@@ -36,12 +36,16 @@ export const PersonalPageHeader: React.FC<PersonalPageHeaderProps> = ({
       onClose();
       return;
     }
+    if (exitUrl && exitUrl !== '/') {
+      navigate(exitUrl);
+      return;
+    }
     if (window.history.length > 1) {
       navigate(-1);
     } else if (exitUrl) {
       navigate(exitUrl);
     } else {
-      navigate('/profile');
+      navigate('/');
     }
   };
 
@@ -50,12 +54,16 @@ export const PersonalPageHeader: React.FC<PersonalPageHeaderProps> = ({
       onClose();
       return;
     }
-    if (exitUrl) {
+    if (exitUrl && exitUrl !== '/') {
       navigate(exitUrl);
-    } else if (window.history.length > 1) {
+      return;
+    }
+    if (window.history.length > 1) {
       navigate(-1);
+    } else if (exitUrl) {
+      navigate(exitUrl);
     } else {
-      navigate('/profile');
+      navigate('/');
     }
   };
 

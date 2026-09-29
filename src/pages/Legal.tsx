@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { 
   ShieldCheck, Scale, AlertTriangle, Lock, 
@@ -9,6 +9,7 @@ import {
 import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
 import { LanguageSelector } from '../components/common/LanguageSelector';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { LEGAL_TRANSLATIONS } from '../lib/translations/legalTranslations';
 
 export type LegalTab = 'privacy' | 'terms' | 'safety' | 'listing-policy' | 'grievance';
@@ -19,9 +20,15 @@ interface LegalProps {
 
 export default function Legal({ defaultTab = 'privacy' }: LegalProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState<LegalTab>(defaultTab);
   const { language } = useLanguage();
   const loc = LEGAL_TRANSLATIONS[language] || LEGAL_TRANSLATIONS.hinglish;
+
+  const searchParams = new URLSearchParams(location.search);
+  const isFromAdmin = searchParams.get('from') === 'admin' || (isAdmin && localStorage.getItem('admin_view_mode') !== 'student');
+  const returnUrl = isFromAdmin ? '/admin' : '/';
 
   // Sync tab with route query or state if provided
   useEffect(() => {
@@ -109,8 +116,17 @@ export default function Legal({ defaultTab = 'privacy' }: LegalProps) {
         badgeColor={headerMeta.badgeColor}
         icon={headerMeta.icon}
         iconColor={headerMeta.iconColor}
-        backLabel="Back"
-        exitUrl="/profile"
+        backLabel={isFromAdmin ? "Admin Console" : "Back"}
+        exitUrl={returnUrl}
+        onClose={() => {
+          if (isFromAdmin) {
+            navigate('/admin');
+          } else if (window.history.length > 1) {
+            navigate(-1);
+          } else {
+            navigate('/');
+          }
+        }}
       />
 
       <div className="max-w-6xl mx-auto space-y-6">
