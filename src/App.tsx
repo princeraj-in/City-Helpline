@@ -52,6 +52,7 @@ const AiFloatingAssistant = lazy(() =>
 
 import { InstallAppPrompt } from './components/common/InstallAppPrompt';
 import { PageTransitionSkeleton } from './components/common/SkeletonLoaders';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 const RouteFallback = () => <PageTransitionSkeleton />;
 
@@ -136,16 +137,7 @@ function AppLayout() {
       <LocationSelectorModal isOpen={isLocationModalOpen} onClose={closeLocationModal} />
       <main className="flex-grow pb-24 md:pb-0 overflow-x-hidden">
         <Suspense fallback={<RouteFallback />}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full flex-grow flex flex-col will-change-[opacity,transform]"
-            >
-              <Routes location={location} key={location.pathname}>
+          <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/marketplace" element={<Marketplace />} />
@@ -299,10 +291,8 @@ function AppLayout() {
             {/* 404 Not Found Catch-All */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-        </motion.div>
-      </AnimatePresence>
-    </Suspense>
-  </main>
+        </Suspense>
+      </main>
       <InstallAppPrompt />
       {location.pathname === '/' && (
         <Suspense fallback={null}>
@@ -325,14 +315,16 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <LanguageProvider>
-        <LocationProvider>
-          <Router>
-            <AppLayout />
-          </Router>
-        </LocationProvider>
-      </LanguageProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <LanguageProvider>
+          <LocationProvider>
+            <Router>
+              <AppLayout />
+            </Router>
+          </LocationProvider>
+        </LanguageProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

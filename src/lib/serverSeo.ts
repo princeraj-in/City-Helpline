@@ -1,4 +1,4 @@
-import { ROUTE_SEO_CONFIG, getSeoForPath, BASE_APP_URL } from './seoConfig';
+import { ROUTE_SEO_CONFIG, getSeoForPath, BASE_APP_URL } from './seoConfig.ts';
 
 /**
  * Server-Side SEO & Meta Tag Transformer for Express

@@ -1,15 +1,15 @@
 import express, { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
-import { checkRateLimit } from './src/lib/serverRateLimiter';
-import { processChatGeneration, ChatValidationError } from './src/lib/aiChatServer';
+import { checkRateLimit } from './src/lib/serverRateLimiter.ts';
+import { processChatGeneration, ChatValidationError } from './src/lib/aiChatServer.ts';
 import { 
   verifyAdminCaller, 
   assignUserRoleServer, 
   recordAuditLogServer, 
   getAuditLogsServer 
-} from './src/lib/serverAdminService';
-import { generateSignedUploadParams } from './src/lib/cloudinaryServer';
-import { injectSeoMeta, generateSitemapXml, generateRobotsTxt } from './src/lib/serverSeo';
+} from './src/lib/serverAdminService.ts';
+import { generateSignedUploadParams } from './src/lib/cloudinaryServer.ts';
+import { injectSeoMeta, generateSitemapXml, generateRobotsTxt } from './src/lib/serverSeo.ts';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,7 +20,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Whitelist of trusted origins allowed to access the API
@@ -253,7 +253,7 @@ async function startServer() {
             namespace: 'android_app',
             package_name: 'me.imprince.studolink.twa',
             sha256_cert_fingerprints: [
-              '47:a8:a6:c1:39:97:47:10:e1:65:f9:6b:de:82:ac:6c:8e:49:29:11:e3:b5:9c:ad:03:7c:43:f6:70:eb:a6:ae'
+              '47:A8:A6:C1:39:97:47:10:E1:65:F9:6B:DE:82:AC:6C:8E:49:29:11:E3:B5:9C:AD:03:7C:43:F6:70:EB:A6:AE'
             ]
           }
         }
