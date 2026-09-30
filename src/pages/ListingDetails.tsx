@@ -72,7 +72,7 @@ export default function ListingDetails() {
     };
 
     fetchListingAndReviews();
-  }, [id, currentUser, userProfile]);
+  }, [id, currentUser, userProfile, isAdmin]);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

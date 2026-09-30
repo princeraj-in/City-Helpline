@@ -43,32 +43,41 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  const fetchListings = async () => {
-    setLoading(true);
-    try {
-      // Fetch approved listings safely with timeout safeguard
-      const approvedQ = query(
-        collection(db, 'listings'),
-        where('status', '==', 'approved')
-      );
-      const snapshot = await Promise.race([
-        getDocs(approvedQ),
-        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), 5000))
-      ]);
-      const allApproved = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Listing));
-      
-      // Sort client-side by createdAt descending
-      allApproved.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      setAllListings(allApproved);
-    } catch (error) {
-      console.warn("Notice: Initial listing fetch delayed or offline:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchListings = async () => {
+      setLoading(true);
+      try {
+        // Fetch approved listings safely with timeout safeguard
+        const approvedQ = query(
+          collection(db, 'listings'),
+          where('status', '==', 'approved')
+        );
+        const snapshot = await Promise.race([
+          getDocs(approvedQ),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), 5000))
+        ]);
+        if (!isMounted) return;
+        const allApproved = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Listing));
+        
+        // Sort client-side by createdAt descending
+        allApproved.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        setAllListings(allApproved);
+      } catch (error) {
+        console.warn("Notice: Initial listing fetch delayed or offline:", error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchListings();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Featured places: prioritize places from user's city if available

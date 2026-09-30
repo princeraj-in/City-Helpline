@@ -72,8 +72,13 @@ export default function Search() {
   const filteredListings = listings.filter(listing => {
     const matchesSearch = listing.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (listing.description && listing.description.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory ? listing.category === selectedCategory : true;
-    const matchesCity = selectedCity ? listing.city === selectedCity : true;
+    const matchesCategory = selectedCategory && selectedCategory !== 'All' 
+      ? listing.category?.toLowerCase().trim() === selectedCategory.toLowerCase().trim() 
+      : true;
+    const matchesCity = selectedCity && selectedCity !== 'All' && selectedCity.trim() !== ''
+      ? (listing.city?.toLowerCase().trim().includes(selectedCity.toLowerCase().trim()) || 
+         selectedCity.toLowerCase().trim().includes(listing.city?.toLowerCase().trim() || ''))
+      : true;
     
     return matchesSearch && matchesCategory && matchesCity;
   });

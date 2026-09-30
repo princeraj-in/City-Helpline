@@ -180,6 +180,27 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     ],
     canonicalPath: '/chat',
     schemaType: 'WebApplication',
+  },
+  '/privacy': {
+    title: 'Privacy Policy & Student Data Protection | Studolink',
+    description: 'Learn how Studolink safeguards student data under DPDP Act 2023 with encrypted communications and strict zero-leakage standards.',
+    keywords: ['Studolink privacy', 'student data protection', 'privacy policy'],
+    canonicalPath: '/privacy',
+    schemaType: 'AboutPage',
+  },
+  '/terms': {
+    title: 'Terms of Service & Zero Brokerage Policy | Studolink',
+    description: 'User agreement, verified habitat rules, zero brokerage transparency commitments, and terms of service on Studolink.',
+    keywords: ['Studolink terms', 'terms of service', 'zero brokerage terms'],
+    canonicalPath: '/terms',
+    schemaType: 'AboutPage',
+  },
+  '/legal': {
+    title: 'Legal Compliance, Terms & Grievance Redressal | Studolink',
+    description: 'Official legal disclosures, grievance officer contact, IT Act compliances, and user terms on Studolink.',
+    keywords: ['Studolink legal', 'grievance officer', 'compliance'],
+    canonicalPath: '/legal',
+    schemaType: 'AboutPage',
   }
 };
 

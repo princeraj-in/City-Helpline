@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { sendChatMessage, ChatMessage } from '../services/aiChatService';
 import { AiMessageRenderer } from '../components/ai/AiMessageRenderer';
+import { SEOHead } from '../components/common/SEOHead';
 
 const TOPIC_SHORTCUTS = [
   {
@@ -259,6 +260,7 @@ export default function AiChatPage() {
 
   return (
     <div className="min-h-screen bg-[#07090E] text-white pt-4 pb-12 px-4 sm:px-6 lg:px-8">
+      <SEOHead />
       <div className="max-w-7xl mx-auto">
         {/* Top Header Card */}
         <div className="mb-6 rounded-2xl bg-gradient-to-r from-[#141A2E] via-[#0E1322] to-[#141A2E] border border-white/10 p-5 shadow-2xl relative overflow-hidden">

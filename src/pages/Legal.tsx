@@ -11,6 +11,7 @@ import { LanguageSelector } from '../components/common/LanguageSelector';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { LEGAL_TRANSLATIONS } from '../lib/translations/legalTranslations';
+import { SEOHead } from '../components/common/SEOHead';
 
 export type LegalTab = 'privacy' | 'terms' | 'safety' | 'listing-policy' | 'grievance';
 
@@ -108,6 +109,10 @@ export default function Legal({ defaultTab = 'privacy' }: LegalProps) {
 
   return (
     <div className="min-h-screen bg-[#07090E] text-white pt-2 pb-24 px-4 sm:px-6 lg:px-8">
+      <SEOHead 
+        customTitle={`${headerMeta.title} | Studolink`}
+        customDescription={headerMeta.subtitle}
+      />
       {/* Top Navigation Header */}
       <PersonalPageHeader
         title={headerMeta.title}

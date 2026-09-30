@@ -64,24 +64,28 @@ export function LocationPermissionModal() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-        {/* Backdrop */}
         <motion.div
+          key="location-permission-modal-wrapper"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={handleDismiss}
-          className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
-        />
-
-        {/* Android Material-3 Inspired Bottom Sheet / Card */}
-        <motion.div
-          initial={{ y: '100%', opacity: 0.5, scale: 0.95 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: '100%', opacity: 0, scale: 0.95 }}
-          transition={{ type: 'spring', damping: 26, stiffness: 300 }}
-          className="relative w-full max-w-lg bg-[#0E131F] border border-cyan-500/30 rounded-t-[36px] sm:rounded-[36px] shadow-[0_0_50px_rgba(0,229,255,0.25)] overflow-hidden z-10 p-6 sm:p-8"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
         >
+          {/* Backdrop */}
+          <div
+            onClick={handleDismiss}
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+          />
+
+          {/* Android Material-3 Inspired Bottom Sheet / Card */}
+          <motion.div
+            initial={{ y: '100%', opacity: 0.5, scale: 0.95 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: '100%', opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 26, stiffness: 300 }}
+            className="relative w-full max-w-lg bg-[#0E131F] border border-cyan-500/30 rounded-t-[36px] sm:rounded-[36px] shadow-[0_0_50px_rgba(0,229,255,0.25)] overflow-hidden z-10 p-6 sm:p-8"
+          >
           {/* Subtle Android Drag Handle (Mobile) */}
           <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-5 sm:hidden" />
 
@@ -225,7 +229,7 @@ export function LocationPermissionModal() {
             </div>
           )}
         </motion.div>
-      </div>
+      </motion.div>
       )}
     </AnimatePresence>
   );
