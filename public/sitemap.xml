@@ -7,7 +7,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://studolink.imprince.me/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
@@ -15,57 +15,81 @@
   <!-- Find Hostels, PGs, Libraries & Mess -->
   <url>
     <loc>https://studolink.imprince.me/search</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.90</priority>
+    <priority>0.95</priority>
   </url>
 
   <!-- Student Marketplace & Free Notes Exchange -->
   <url>
     <loc>https://studolink.imprince.me/marketplace</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
 
   <!-- Flatmate & Roommate Finder -->
   <url>
     <loc>https://studolink.imprince.me/roommates</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
 
   <!-- Student Monthly Budget Estimator -->
   <url>
     <loc>https://studolink.imprince.me/budget</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Top Coaching Clusters & Student Hubs -->
+  <url>
+    <loc>https://studolink.imprince.me/hubs</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <!-- Studolink AI Mitra (Local Advisor) -->
   <url>
     <loc>https://studolink.imprince.me/chat</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.80</priority>
   </url>
 
   <!-- Help & Support -->
   <url>
     <loc>https://studolink.imprince.me/help</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <priority>0.75</priority>
   </url>
 
-  <!-- Legal & IT Act Terms -->
+  <!-- About Studolink -->
   <url>
-    <loc>https://studolink.imprince.me/legal</loc>
-    <lastmod>2026-09-29</lastmod>
+    <loc>https://studolink.imprince.me/about</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.40</priority>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- Student Safety & Helpline -->
+  <url>
+    <loc>https://studolink.imprince.me/safety</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- Sell Used Items -->
+  <url>
+    <loc>https://studolink.imprince.me/sell</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
 
 </urlset>

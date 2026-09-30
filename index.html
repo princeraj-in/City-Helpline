@@ -81,7 +81,7 @@
     }
     </script>
 
-    <!-- Early PWA Install Event Trap & Service Worker Registration -->
+    <!-- Early PWA Install Event Trap -->
     <script>
       window.deferredPWAInstallPrompt = null;
       window.addEventListener('beforeinstallprompt', function(e) {
@@ -89,12 +89,20 @@
         window.deferredPWAInstallPrompt = e;
         window.dispatchEvent(new CustomEvent('pwa-prompt-captured'));
       });
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function(err) {
-            console.warn('SW registration:', err);
-          });
-        });
+      // Self-healing: if on development or preview host, immediately clean up any lingering service workers
+      if ('serviceWorker' in navigator && (window.location.hostname.includes('run.app') || window.location.hostname.includes('localhost'))) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          for (var i = 0; i < regs.length; i++) {
+            regs[i].unregister();
+          }
+        }).catch(function() {});
+        if ('caches' in window) {
+          caches.keys().then(function(keys) {
+            for (var k = 0; k < keys.length; k++) {
+              caches.delete(keys[k]);
+            }
+          }).catch(function() {});
+        }
       }
     </script>
   </head>

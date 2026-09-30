@@ -243,9 +243,11 @@ async function startServer() {
 
     if (fs.existsSync(filePath)) {
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
       res.sendFile(filePath);
     } else {
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
       res.status(200).json([
         {
           relation: ['delegate_permission/common.handle_all_urls'],

@@ -1,6 +1,6 @@
 /**
  * Comprehensive SEO & Metadata Configuration for Studolink
- * Professional, short & high-impact titles matching exact specifications.
+ * Professional, distinct & high-impact titles matching exact Google Search snippets.
  */
 
 export interface PageSeoMetadata {
@@ -17,8 +17,8 @@ export const BASE_APP_URL = 'https://studolink.imprince.me';
 
 export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
   '/': {
-    title: 'Studolink - Your City Your Ecosystem',
-    description: 'Discover verified student PGs, hostels, 24/7 quiet study libraries, hygienic mess services, roommate matching, and campus marketplace in Kota, Patna, Pune, Delhi & more.',
+    title: 'Studolink – Zero Brokerage Student PGs, Hostels & Study Hubs',
+    description: 'Find verified student PGs, hostels, 24/7 quiet libraries, healthy meal services, and flatmates across Kota, Patna, Delhi, Pune, Sikar & more with 0% brokerage.',
     keywords: [
       'Studolink',
       'student housing',
@@ -47,8 +47,8 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     }
   },
   '/search': {
-    title: 'Find Verified Student Hostels, PGs & everything Students need - Studolink',
-    description: 'Search & compare student hostels, single rooms, 1BHK/2BHK flats, and verified PGs near top coaching institutes in Kota, Patna, Delhi, Pune, Sikar with physical inspection trust badges.',
+    title: 'Search Verified Student PGs, Hostels & Libraries | Studolink',
+    description: 'Browse & compare verified student accommodations, single/sharing rooms, and PGs with daylight inspection badges near coaching hubs in Kota, Patna, Delhi & Sikar.',
     keywords: [
       'student PG search',
       'hostels near Allen Kota',
@@ -61,24 +61,9 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     canonicalPath: '/search',
     schemaType: 'CollectionPage',
   },
-  '/roommates': {
-    title: 'Studolink Roommate Finder',
-    description: 'Connect with verified exam-focused students (NEET, JEE, UPSC, Banking) for room sharing and flatmate requirements with zero phone leakage and privacy protection.',
-    keywords: [
-      'roommate finder',
-      'flatmate in Kota',
-      'NEET roommate',
-      'JEE flatmate',
-      'room sharing Patna',
-      'female student roommate',
-      'budget flatmate'
-    ],
-    canonicalPath: '/roommates',
-    schemaType: 'Service',
-  },
   '/marketplace': {
-    title: 'Student Marketplace – Buy & Sell & Donate free',
-    description: 'Buy, sell, and donate second-hand study books, notes, desert coolers, study tables, cycles, mattresses, and electronics directly with fellow coaching students.',
+    title: 'Student Marketplace – Buy, Sell & Donate Books, Coolers & Cycles | Studolink',
+    description: 'Peer-to-peer campus marketplace. Buy and sell second-hand study books, NEET/JEE notes, room coolers, study tables, cycles, and electronics directly with coaching peers.',
     keywords: [
       'student marketplace',
       'buy used books Kota',
@@ -92,21 +77,24 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     canonicalPath: '/marketplace',
     schemaType: 'CollectionPage',
   },
-  '/sell': {
-    title: 'Sell Student Items & Books - Studolink',
-    description: 'Easily list your used study materials, desert coolers, furniture, cycles, or giveaways for campus students with protected in-app chat and zero spam.',
+  '/roommates': {
+    title: 'Roommate & Flatmate Finder for Students | Studolink',
+    description: 'Connect with verified exam-focused students (JEE, NEET, UPSC, Banking) for room sharing and flatmate requirements with protected in-app chat and zero phone leak.',
     keywords: [
-      'sell student item',
-      'resell coaching notes',
-      'sell cooler Kota',
-      'list second hand book',
-      'student classifieds'
+      'roommate finder',
+      'flatmate in Kota',
+      'NEET roommate',
+      'JEE flatmate',
+      'room sharing Patna',
+      'female student roommate',
+      'budget flatmate'
     ],
-    canonicalPath: '/sell',
+    canonicalPath: '/roommates',
+    schemaType: 'Service',
   },
   '/budget': {
-    title: 'Monthly Budget Calculator - Studolink',
-    description: 'Calculate monthly living expenses (PG rent, mess, library fees, stationery, laundry & travel) across Kota, Patna, Pune, Delhi, Indore, and Sikar with regional benchmarks.',
+    title: 'Student Monthly Living Cost & Budget Calculator | Studolink',
+    description: 'Estimate total monthly student expenses including room rent, mess food, AC library fees, and study supplies across Indian coaching cities with real benchmarks.',
     keywords: [
       'student budget calculator',
       'living cost in Kota',
@@ -118,8 +106,8 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     schemaType: 'WebApplication',
   },
   '/hubs': {
-    title: 'All Students HUB - Studolink',
-    description: 'Explore top student hubs like Landmark City Kunhari Kota, Kankarbagh Boring Road Patna, Mukherjee Nagar Delhi, Kothrud Pune with area-wise rent benchmarks and verified hostels.',
+    title: 'Top Coaching Clusters & Student Hubs in India | Studolink',
+    description: 'Explore student localities: Landmark City & Talwandi (Kota), Boring Road & Bazar Samiti (Patna), Mukherjee Nagar (Delhi), Sikar, and Indore with rent guides.',
     keywords: [
       'student hubs Kota',
       'Landmark City Kunhari',
@@ -130,22 +118,9 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     canonicalPath: '/hubs',
     schemaType: 'CollectionPage',
   },
-  '/safety': {
-    title: 'Student Safety & Helpline - Studolink',
-    description: '24/7 student distress helpline numbers, anti-scam rental guidelines, emergency SOS contacts, and physical PG inspection verification standards.',
-    keywords: [
-      'student safety rules',
-      'student helpline Kota',
-      'anti-scam PG booking',
-      'police helpline student',
-      'verified habitat standards'
-    ],
-    canonicalPath: '/safety',
-    schemaType: 'Service',
-  },
   '/help': {
-    title: 'Studolink Help & Support Center',
-    description: 'Get answers on PG booking, student verification badges, marketplace listings, roommate connect requests, safety guidelines, and direct support assistance.',
+    title: 'Help & Support Center – Student FAQs & Contact | Studolink',
+    description: 'Need help with PG booking, listing verification, or student marketplace? Check our comprehensive FAQs or contact Studolink support directly.',
     keywords: [
       'Studolink support',
       'student help desk',
@@ -157,8 +132,8 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     schemaType: 'FAQPage',
   },
   '/about': {
-    title: 'About Studolink - Student Ecosystem',
-    description: 'Learn about Studolink mission to provide safe, affordable, verified accommodations, libraries, healthy food, and peer community for competitive exam students.',
+    title: 'About Studolink – India\'s Dedicated Student Ecosystem',
+    description: 'Learn about Studolink\'s mission to eliminate broker exploitation and empower students with safe, verified, affordable habitats, healthy food, and community.',
     keywords: [
       'about Studolink',
       'student habitat platform',
@@ -167,6 +142,44 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     ],
     canonicalPath: '/about',
     schemaType: 'AboutPage',
+  },
+  '/safety': {
+    title: 'Student Safety, Anti-Scam Advisory & Emergency Helplines | Studolink',
+    description: 'Official 24/7 student distress helplines (Tele-MANAS 14416), rental scam prevention guidelines, emergency SOS contacts, and physical inspection standards.',
+    keywords: [
+      'student safety rules',
+      'student helpline Kota',
+      'anti-scam PG booking',
+      'police helpline student',
+      'verified habitat standards'
+    ],
+    canonicalPath: '/safety',
+    schemaType: 'Service',
+  },
+  '/sell': {
+    title: 'List & Sell Used Study Items, Books & Furniture | Studolink',
+    description: 'Post your coaching books, notes, cooler, or study table for free on Studolink campus marketplace and reach fellow students directly with zero commission.',
+    keywords: [
+      'sell student item',
+      'resell coaching notes',
+      'sell cooler Kota',
+      'list second hand book',
+      'student classifieds'
+    ],
+    canonicalPath: '/sell',
+    schemaType: 'Service',
+  },
+  '/chat': {
+    title: 'Studolink AI Mitra – 24/7 Student Advisor & Local Guide',
+    description: 'Chat with Studolink AI Mitra for instant locality rent advice, coaching center hostel guides, mess tips, and academic lifestyle assistance in Indian cities.',
+    keywords: [
+      'Studolink AI Mitra',
+      'student advisor AI',
+      'hostel guide AI',
+      'rent advice Kota Patna'
+    ],
+    canonicalPath: '/chat',
+    schemaType: 'WebApplication',
   }
 };
 
@@ -193,7 +206,7 @@ export function getSeoForPath(pathname: string): PageSeoMetadata {
   }
   if (normalized.startsWith('/listing/')) {
     return {
-      title: 'Student Habitat & PG Details - Studolink',
+      title: 'Student Habitat & PG Details | Studolink',
       description: 'View room photos, rent details, verified amenities, safety standards, and verified student reviews on Studolink.',
       keywords: ['verified PG', 'hostel details', 'student accommodation', 'rent in Kota', 'Patna PG'],
       canonicalPath: normalized,

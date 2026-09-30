@@ -43,7 +43,7 @@ const LOCAL_MAX_LIMIT = 25; // 25 requests per minute
 export async function checkRateLimit(identifier: string): Promise<RateLimitResult> {
   const cleanId = identifier.trim() || 'anonymous';
 
-  if (upstashRateLimiter) {
+  if (upstashRateLimiter && process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
     try {
       const { success, limit, remaining, reset } = await upstashRateLimiter.limit(cleanId);
       const now = Date.now();
