@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "me.imprince.studolink.twa",
+      "sha256_cert_fingerprints": [
+        "47:a8:a6:c1:39:97:47:10:e1:65:f9:6b:de:82:ac:6c:8e:49:29:11:e3:b5:9c:ad:03:7c:43:f6:70:eb:a6:ae"
+      ]
+    }
+  }
+]

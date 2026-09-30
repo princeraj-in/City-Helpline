@@ -235,6 +235,32 @@ async function startServer() {
     res.status(200).send(robots);
   });
 
+  // Digital Asset Links for Android TWA / Play Store App verification
+  app.get('/.well-known/assetlinks.json', (_req: Request, res: Response) => {
+    const assetlinksPath = path.resolve(__dirname, 'public', '.well-known', 'assetlinks.json');
+    const distAssetlinksPath = path.resolve(__dirname, 'dist', '.well-known', 'assetlinks.json');
+    const filePath = fs.existsSync(assetlinksPath) ? assetlinksPath : distAssetlinksPath;
+
+    if (fs.existsSync(filePath)) {
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.sendFile(filePath);
+    } else {
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.status(200).json([
+        {
+          relation: ['delegate_permission/common.handle_all_urls'],
+          target: {
+            namespace: 'android_app',
+            package_name: 'me.imprince.studolink.twa',
+            sha256_cert_fingerprints: [
+              '47:a8:a6:c1:39:97:47:10:e1:65:f9:6b:de:82:ac:6c:8e:49:29:11:e3:b5:9c:ad:03:7c:43:f6:70:eb:a6:ae'
+            ]
+          }
+        }
+      ]);
+    }
+  });
+
   // Mount Vite in dev or serve static files in production
   if (!isProduction) {
     const vite = await createViteServer({
