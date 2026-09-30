@@ -1,5 +1,5 @@
 {
-  "name": "City Helpline",
+  "name": "Studolink",
   "description": "Hyper-local student ecosystem platform for verified PGs, libraries, mess facilities, marketplace, and monthly student budget estimator.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

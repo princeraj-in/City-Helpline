@@ -1,12 +1,41 @@
 {
-  "name": "Studolink - Your City. Your Student Ecosystem.",
+  "id": "/",
+  "name": "Studolink - Your City Your Ecosystem",
   "short_name": "Studolink",
-  "description": "Studolink: Your City. Your Student Ecosystem. Zero-brokerage student PGs, hostels, silent libraries, mess meals, roommate matching, and student marketplace.",
+  "description": "Hyper-local student ecosystem platform for verified PGs, hostels, study libraries, meal services, roommate matching, and campus marketplace.",
   "start_url": "/",
+  "scope": "/",
+  "dir": "ltr",
+  "lang": "en-IN",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "orientation": "any",
   "background_color": "#0B0F19",
   "theme_color": "#0B0F19",
-  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "categories": [
+    "education",
+    "lifestyle",
+    "productivity",
+    "utilities"
+  ],
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
+    ]
+  },
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
+  "handle_links": "preferred",
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "icons": [
     {
       "src": "/favicon.png",
@@ -20,47 +49,105 @@
       "purpose": "any"
     },
     {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
-  "categories": ["education", "lifestyle", "utilities"],
-  "shortcuts": [
+  "screenshots": [
     {
-      "name": "Search PGs & Rooms",
-      "short_name": "PGs",
-      "description": "Find verified student PGs and hostels",
-      "url": "/search",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Studolink Homepage - Student Habitat Network"
     },
     {
-      "name": "AI Mitra Chatbot",
-      "short_name": "AI Mitra",
-      "description": "Ask student helpline and rent advisor",
-      "url": "/chat",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "src": "/screenshots/desktop-search.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Studolink Search - Verified Hostels & PGs"
+    },
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Studolink Mobile - Fast Campus Living"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Find Hostels & PGs",
+      "short_name": "PG Search",
+      "description": "Find verified student PGs and hostels near coaching institutes",
+      "url": "/search",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Roommate Finder",
+      "short_name": "Roommates",
+      "description": "Match with verified student flatmates and room sharing partners",
+      "url": "/roommates",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Student Marketplace",
       "short_name": "Market",
-      "description": "Buy & sell notes, books, study essentials",
+      "description": "Buy and sell second-hand study books, coolers, notes and tables",
       "url": "/marketplace",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "name": "Budget Estimator",
+      "name": "Monthly Budget Estimator",
       "short_name": "Budget",
-      "description": "Calculate monthly living expense",
+      "description": "Calculate monthly PG rent, mess, library and student living costs",
       "url": "/budget",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
