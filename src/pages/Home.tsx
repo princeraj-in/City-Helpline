@@ -34,6 +34,7 @@ import { ListingCard } from '../components/ListingCard';
 import { useLocationContext } from '../contexts/LocationContext';
 import { Footer } from '../components/layout/Footer';
 import { ListingsGridSkeleton } from '../components/common/SkeletonLoaders';
+import { SEOHead } from '../components/common/SEOHead';
 
 export default function Home() {
   const { userLocation, openLocationModal } = useLocationContext();
@@ -188,6 +189,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-transparent text-white overflow-hidden">
+      <SEOHead />
       
       {/* Ambient Visual Background Effects */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">

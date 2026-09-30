@@ -14,6 +14,7 @@ import { LiquidButton } from '../components/ui/LiquidButton';
 import { SearchableSelect } from '../components/ui/SearchableSelect';
 import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
 import { ListingSuccessModal } from '../components/common/ListingSuccessModal';
+import { SEOHead } from '../components/common/SEOHead';
 import { 
   ShoppingBag, ArrowLeft, UploadCloud, X, AlertCircle, 
   CheckCircle, Sparkles, MapPin, Tag, IndianRupee, Phone, MessageCircle, Info, Gift, Heart, Loader2,
@@ -229,6 +230,7 @@ export default function SellItem() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-20 md:mb-16">
+      <SEOHead />
       <PersonalPageHeader
         title="Sell Student Item"
         subtitle="Sell books, cycle, cooler, study table or mattress directly to students"

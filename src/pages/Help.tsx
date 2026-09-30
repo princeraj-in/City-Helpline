@@ -12,6 +12,7 @@ import { LanguageSelector } from '../components/common/LanguageSelector';
 import { useLanguage } from '../contexts/LanguageContext';
 import { LOCALIZED_FAQS, HELP_UI_TEXT } from '../lib/translations/helpTranslations';
 import { APP_CONFIG } from '../lib/appConfig';
+import { SEOHead } from '../components/common/SEOHead';
 import { toast } from 'sonner';
 
 export default function Help() {
@@ -78,6 +79,7 @@ export default function Help() {
 
   return (
     <div className="min-h-screen bg-[#07090E] text-white">
+      <SEOHead />
       {/* Reusable Header */}
       <PersonalPageHeader
         title={ui.heroTitle}

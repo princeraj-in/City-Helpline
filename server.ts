@@ -9,6 +9,8 @@ import {
   getAuditLogsServer 
 } from './src/lib/serverAdminService';
 import { generateSignedUploadParams } from './src/lib/cloudinaryServer';
+import { injectSeoMeta, generateSitemapXml, generateRobotsTxt } from './src/lib/serverSeo';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -217,17 +219,62 @@ async function startServer() {
     res.json({ status: 'ok', service: 'Studolink AI Mitra Service', time: new Date().toISOString() });
   });
 
+  // Dynamic SEO Sitemap XML
+  app.get('/sitemap.xml', (req: Request, res: Response) => {
+    const hostOrigin = `${req.protocol}://${req.get('host')}`;
+    const sitemap = generateSitemapXml(hostOrigin);
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.status(200).send(sitemap);
+  });
+
+  // Dynamic Robots.txt
+  app.get('/robots.txt', (req: Request, res: Response) => {
+    const hostOrigin = `${req.protocol}://${req.get('host')}`;
+    const robots = generateRobotsTxt(hostOrigin);
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.status(200).send(robots);
+  });
+
   // Mount Vite in dev or serve static files in production
   if (!isProduction) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
+    
+    // In development mode, transform index.html with route SEO
+    app.use(async (req, res, next) => {
+      if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
+        try {
+          const indexPath = path.resolve(__dirname, 'index.html');
+          let template = fs.readFileSync(indexPath, 'utf-8');
+          template = await vite.transformIndexHtml(req.originalUrl, template);
+          const hostOrigin = `${req.protocol}://${req.get('host')}`;
+          const finalHtml = injectSeoMeta(template, req.path, hostOrigin);
+          res.status(200).setHeader('Content-Type', 'text/html; charset=utf-8').send(finalHtml);
+          return;
+        } catch (e) {
+          next(e);
+          return;
+        }
+      }
+      next();
+    });
+
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
-    app.get('*', (_req: Request, res: Response) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+    app.use(express.static(path.resolve(__dirname, 'dist'), { index: false }));
+    app.get('*', (req: Request, res: Response) => {
+      const indexPath = path.resolve(__dirname, 'dist', 'index.html');
+      if (fs.existsSync(indexPath)) {
+        const rawHtml = fs.readFileSync(indexPath, 'utf-8');
+        const hostOrigin = `${req.protocol}://${req.get('host')}`;
+        const finalHtml = injectSeoMeta(rawHtml, req.path, hostOrigin);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.status(200).send(finalHtml);
+      } else {
+        res.sendFile(indexPath);
+      }
     });
   }
 

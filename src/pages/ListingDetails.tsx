@@ -11,6 +11,7 @@ import { getOrCreateConversation } from '../lib/chatService';
 import { toast } from 'sonner';
 import { VerifiedPGBadge } from '../components/common/TrustBadge';
 import { PGVerificationModal } from '../components/profile/PGVerificationModal';
+import { SEOHead } from '../components/common/SEOHead';
 import { formatWhatsAppUrl } from '../lib/utils';
 
 export default function ListingDetails() {
@@ -216,6 +217,27 @@ export default function ListingDetails() {
       animate={{ opacity: 1 }}
       className="min-h-screen pb-20 md:pb-12"
     >
+      <SEOHead 
+        customTitle={`${listing.title} – ${listing.category} in ${listing.city} - Studolink`}
+        customDescription={`Rent: ₹${listing.price.toLocaleString('en-IN')}/mo. ${listing.description.substring(0, 140)}...`}
+        ogImage={listing.images?.[0]}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Accommodation',
+          'name': listing.title,
+          'description': listing.description,
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': listing.city,
+            'streetAddress': listing.address
+          },
+          'offers': {
+            '@type': 'Offer',
+            'price': String(listing.price),
+            'priceCurrency': 'INR'
+          }
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <Link to={-1 as any} className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6 transition-colors">

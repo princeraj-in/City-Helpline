@@ -10,6 +10,7 @@ import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
 import { LiquidButton } from '../components/ui/LiquidButton';
 import { SearchableSelect } from '../components/ui/SearchableSelect';
 import { PersonalPageHeader } from '../components/layout/PersonalPageHeader';
+import { SEOHead } from '../components/common/SEOHead';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { 
@@ -353,6 +354,7 @@ export default function BudgetCalculator() {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-20 md:mb-0"
     >
+      <SEOHead />
       <PersonalPageHeader
         title="Student Living Budget"
         subtitle="Estimate & plan monthly PG rent, mess food, library seat and living costs"

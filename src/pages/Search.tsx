@@ -15,6 +15,7 @@ import { LiquidButton } from '../components/ui/LiquidButton';
 import { ListingCard } from '../components/ListingCard';
 import { useLocationContext } from '../contexts/LocationContext';
 import { ListingsGridSkeleton } from '../components/common/SkeletonLoaders';
+import { SEOHead } from '../components/common/SEOHead';
 
 export default function Search() {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -83,6 +84,7 @@ export default function Search() {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16 md:mb-0"
     >
+      <SEOHead />
       <LiquidGlassCard className="p-8 md:p-10 mb-10 relative z-30 overflow-visible" overflowVisible={true} glowColor="rgba(0, 229, 255, 0.3)">
         <div className="relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

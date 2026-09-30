@@ -17,6 +17,7 @@ import {
 import { GlassCard } from '../components/ui/GlassCard';
 import { LiquidGlassCard } from '../components/ui/LiquidGlassCard';
 import { LiquidButton } from '../components/ui/LiquidButton';
+import { SEOHead } from '../components/common/SEOHead';
 import { motion } from 'motion/react';
 
 export default function Marketplace() {
@@ -164,6 +165,7 @@ export default function Marketplace() {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-20 md:mb-0"
     >
+      <SEOHead />
       {/* Top Banner Card */}
       <LiquidGlassCard className="p-6 sm:p-10 mb-8 overflow-visible relative" glowColor="rgba(0, 229, 255, 0.3)">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
