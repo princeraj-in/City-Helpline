@@ -53,6 +53,7 @@ const AiFloatingAssistant = lazy(() =>
 import { InstallAppPrompt } from './components/common/InstallAppPrompt';
 import { PageTransitionSkeleton } from './components/common/SkeletonLoaders';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { LocationPermissionModal } from './components/location/LocationPermissionModal';
 
 const RouteFallback = () => <PageTransitionSkeleton />;
 
@@ -135,6 +136,7 @@ function AppLayout() {
       <SystemBroadcastBanner />
       <LocationPromptBanner />
       <LocationSelectorModal isOpen={isLocationModalOpen} onClose={closeLocationModal} />
+      <LocationPermissionModal />
       <main className="flex-grow pb-24 md:pb-0 overflow-x-hidden">
         <Suspense fallback={<RouteFallback />}>
           <Routes location={location} key={location.pathname}>
