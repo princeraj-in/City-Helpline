@@ -15,6 +15,8 @@ import { LocationSelectorModal } from './components/location/LocationSelectorMod
 import { SystemBroadcastBanner } from './components/layout/SystemBroadcastBanner';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { Toaster } from 'sonner';
+import { motion, AnimatePresence } from 'motion/react';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Eagerly loaded for instant First Contentful Paint
 import Home from './pages/Home';
@@ -38,6 +40,8 @@ const MyMarketplacePage = lazy(() => import('./pages/MyMarketplacePage'));
 const MyListingsPage = lazy(() => import('./pages/MyListingsPage'));
 const RoommatesPage = lazy(() => import('./pages/RoommatesPage'));
 const Help = lazy(() => import('./pages/Help'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const HubsPage = lazy(() => import('./pages/HubsPage'));
 const MessagesPage = lazy(() => import('./pages/MessagesPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
@@ -125,13 +129,23 @@ function AppLayout() {
         </div>
       )}
 
+      <ScrollToTop />
       <Navbar />
       <SystemBroadcastBanner />
       <LocationPromptBanner />
       <LocationSelectorModal isOpen={isLocationModalOpen} onClose={closeLocationModal} />
-      <main className="flex-grow pb-24 md:pb-0">
+      <main className="flex-grow pb-24 md:pb-0 overflow-x-hidden">
         <Suspense fallback={<RouteFallback />}>
-          <Routes>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full flex-grow flex flex-col will-change-[opacity,transform]"
+            >
+              <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/marketplace" element={<Marketplace />} />
@@ -150,7 +164,11 @@ function AppLayout() {
             <Route path="/terms" element={<Legal defaultTab="terms" />} />
             <Route path="/safety" element={<Legal defaultTab="safety" />} />
 
-            {/* Help & Support Hub */}
+            {/* Help, About & Hubs Pages */}
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/about-us" element={<AboutPage />} />
+            <Route path="/hubs" element={<HubsPage />} />
+            <Route path="/student-hubs" element={<HubsPage />} />
             <Route path="/help" element={<Help />} />
             <Route path="/support" element={<Help />} />
             
@@ -173,6 +191,14 @@ function AppLayout() {
             />
             
             {/* Protected Routes */}
+            <Route 
+              path="/sell" 
+              element={
+                <ProtectedRoute>
+                  <SellItem />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/sell-item" 
               element={
@@ -273,8 +299,10 @@ function AppLayout() {
             {/* 404 Not Found Catch-All */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-        </Suspense>
-      </main>
+        </motion.div>
+      </AnimatePresence>
+    </Suspense>
+  </main>
       <InstallAppPrompt />
       {location.pathname === '/' && (
         <Suspense fallback={null}>

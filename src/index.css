@@ -16,6 +16,29 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Fast tap response and fluid GPU compositing */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #07090E;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.25);
+  border-radius: 9999px;
+  border: 1px solid rgba(7, 9, 14, 0.8);
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.55);
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-background);
