@@ -1,4 +1,4 @@
-const CACHE_NAME = 'studolink-pwa-v3';
+const CACHE_NAME = 'studolink-pwa-v4';
 
 // Only active on official production custom domain
 const isOfficialDomain = self.location.hostname === 'studolink.imprince.me' || self.location.hostname === 'studolink.vercel.app';
@@ -22,7 +22,8 @@ if (!isOfficialDomain) {
     '/icon-192.png',
     '/icon-512.png',
     '/logo.png',
-    '/logo.svg'
+    '/logo.svg',
+    '/founder.jpg'
   ];
 
   self.addEventListener('install', (event) => {

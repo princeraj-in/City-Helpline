@@ -373,7 +373,7 @@ export function Footer() {
             <img
               src="/founder.jpg"
               alt="Prince Raj"
-              className="w-5 h-5 rounded-full object-cover border border-cyan-400/40 group-hover:scale-105 transition-transform"
+              className="w-6 h-6 rounded-full object-cover object-top border border-cyan-400/50 group-hover:scale-105 transition-transform"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).style.display = 'none';
               }}

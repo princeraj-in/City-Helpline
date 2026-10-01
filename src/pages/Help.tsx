@@ -399,12 +399,12 @@ export default function Help() {
                 <img
                   src="/founder.jpg"
                   alt="Prince Raj - Founder of Studolink"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
+                  className="w-14 h-14 rounded-full object-cover object-top border-2 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/logo.png';
                   }}
                 />
-                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#07090E]" title="Active" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#07090E]" title="Active" />
               </div>
               <div>
                 <div className="flex items-center gap-2 justify-center sm:justify-start">

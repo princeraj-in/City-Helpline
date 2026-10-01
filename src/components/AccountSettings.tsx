@@ -212,7 +212,7 @@ export default function AccountSettings() {
           <div className="flex flex-col items-center gap-3">
             <div className="relative h-24 w-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
               {userProfile?.photoURL ? (
-                <img src={userProfile.photoURL} alt="Profile" className="h-full w-full object-cover" />
+                <img src={userProfile.photoURL} alt="Profile" className="h-full w-full object-cover object-top" />
               ) : (
                 <span className="text-3xl font-bold text-white">
                   {userProfile?.name?.charAt(0).toUpperCase() || 'U'}

@@ -174,17 +174,17 @@ export default function AboutPage() {
             {/* Founder Image with Glowing Frame */}
             <div className="relative shrink-0 group">
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-[#00E5FF] via-purple-500 to-[#F5B731] opacity-70 blur-md group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl overflow-hidden border-2 border-white/20 bg-[#0E1322]">
+              <div className="relative w-36 h-48 sm:w-44 sm:h-56 rounded-3xl overflow-hidden border-2 border-white/20 bg-[#0E1322] shadow-2xl">
                 <img
                   src="/founder.jpg"
                   alt="Prince Raj - Founder & Architect of Studolink"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/logo.png';
                   }}
                 />
               </div>
-              <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-[10px] shadow-lg flex items-center gap-1 border border-white/20">
+              <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-[10px] shadow-lg flex items-center gap-1 border border-white/20 z-10">
                 <CheckCircle2 className="w-3 h-3" /> Founder
               </div>
             </div>

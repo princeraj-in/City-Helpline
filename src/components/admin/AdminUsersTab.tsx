@@ -362,7 +362,7 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center font-bold text-white text-sm shrink-0 overflow-hidden">
                         {u.photoURL ? (
-                          <img src={u.photoURL} alt={u.name} className="w-full h-full object-cover" />
+                          <img src={u.photoURL} alt={u.name} className="w-full h-full object-cover object-top" />
                         ) : (
                           u.name?.charAt(0).toUpperCase() || u.email?.charAt(0).toUpperCase() || 'U'
                         )}
@@ -713,7 +713,7 @@ export const AdminUsersTab: React.FC<AdminUsersTabProps> = ({
             <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center font-bold text-white text-base shrink-0 overflow-hidden">
                 {inspectStudentVerification.photoURL ? (
-                  <img src={inspectStudentVerification.photoURL} alt="" className="w-full h-full object-cover" />
+                  <img src={inspectStudentVerification.photoURL} alt="" className="w-full h-full object-cover object-top" />
                 ) : (
                   inspectStudentVerification.name?.charAt(0).toUpperCase() || 'S'
                 )}

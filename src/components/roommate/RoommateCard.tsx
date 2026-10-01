@@ -68,7 +68,7 @@ export const RoommateCard: React.FC<RoommateCardProps> = ({ profile, onConnect, 
             <div className="relative shrink-0">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#00E5FF]/20 to-indigo-500/20 border border-cyan-400/30 flex items-center justify-center text-white font-black text-lg overflow-hidden shadow-inner">
                 {profile.photoURL ? (
-                  <img src={profile.photoURL} alt={profile.userName} className="w-full h-full object-cover" />
+                  <img src={profile.photoURL} alt={profile.userName} className="w-full h-full object-cover object-top" />
                 ) : (
                   <span className="text-[#00E5FF] font-black">{profile.userName.charAt(0).toUpperCase()}</span>
                 )}

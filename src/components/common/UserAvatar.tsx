@@ -50,7 +50,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
             alt={displayName}
             referrerPolicy="no-referrer"
             onError={() => setImgError(true)}
-            className="w-full h-full object-cover rounded-full"
+            className="w-full h-full object-cover object-top rounded-full"
           />
         ) : (
           <span className="font-black text-transparent bg-clip-text bg-gradient-to-br from-[#00E5FF] via-white to-[#8A2BE2] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
