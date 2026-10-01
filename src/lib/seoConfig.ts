@@ -136,12 +136,33 @@ export const ROUTE_SEO_CONFIG: Record<string, PageSeoMetadata> = {
     description: 'Learn about Studolink\'s mission to eliminate broker exploitation and empower students with safe, verified, affordable habitats, healthy food, and community.',
     keywords: [
       'about Studolink',
+      'Prince Raj founder',
       'student habitat platform',
       'mission Studolink',
       'student welfare India'
     ],
     canonicalPath: '/about',
     schemaType: 'AboutPage',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      'name': 'About Studolink & Founder Prince Raj',
+      'url': 'https://studolink.imprince.me/about',
+      'description': 'Learn about Studolink and its founder Prince Raj.',
+      'mainEntity': {
+        '@type': 'Person',
+        'name': 'Prince Raj',
+        'jobTitle': 'Founder & Software Architect',
+        'image': 'https://studolink.imprince.me/founder.jpg',
+        'url': 'https://studolink.imprince.me/about',
+        'email': 'Founder@imprince.me',
+        'sameAs': [
+          'https://www.linkedin.com/in/princeraj-in/',
+          'https://github.com/princeraj-in',
+          'https://www.instagram.com/princerjjjjj?stkn=MWhnMHp1c3UyM2cwdA=='
+        ]
+      }
+    }
   },
   '/safety': {
     title: 'Student Safety, Anti-Scam Advisory & Emergency Helplines | Studolink',

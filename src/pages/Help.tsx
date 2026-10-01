@@ -392,6 +392,40 @@ export default function Help() {
 
         {/* Contact Support Form Section */}
         <div className="rounded-3xl p-6 sm:p-10 bg-white/[0.02] border border-white/10 shadow-2xl space-y-6">
+          {/* Founder & Lead Developer Direct Desk */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-900/60 to-cyan-950/40 border border-purple-500/25 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5 text-center sm:text-left">
+              <div className="relative shrink-0">
+                <img
+                  src="/founder.jpg"
+                  alt="Prince Raj - Founder of Studolink"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/logo.png';
+                  }}
+                />
+                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#07090E]" title="Active" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                  <h4 className="text-sm font-bold text-white">Prince Raj</h4>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    Founder & Architect
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Direct developer escalation desk • Personal response for student grievances & bugs
+                </p>
+              </div>
+            </div>
+            <a
+              href="mailto:Founder@imprince.me?subject=[Founder%20Desk]%20Student%20Inquiry"
+              className="px-4 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 text-xs font-bold transition-all shrink-0 hover:scale-105 active:scale-95"
+            >
+              Email Founder Desk
+            </a>
+          </div>
+
           <div className="border-b border-white/10 pb-4">
             <h2 className="text-xl sm:text-2xl font-black text-white">
               {ui.contactTitle}

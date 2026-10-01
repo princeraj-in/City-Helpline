@@ -166,11 +166,93 @@ export default function AboutPage() {
           </div>
         </LiquidGlassCard>
 
-        {/* 5. Contact & Founder Info */}
+        {/* 5. Meet the Founder & Lead Architect */}
+        <LiquidGlassCard className="p-6 sm:p-10 border-cyan-500/20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-purple-500/10 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
+            {/* Founder Image with Glowing Frame */}
+            <div className="relative shrink-0 group">
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-[#00E5FF] via-purple-500 to-[#F5B731] opacity-70 blur-md group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl overflow-hidden border-2 border-white/20 bg-[#0E1322]">
+                <img
+                  src="/founder.jpg"
+                  alt="Prince Raj - Founder & Architect of Studolink"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/logo.png';
+                  }}
+                />
+              </div>
+              <div className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-[10px] shadow-lg flex items-center gap-1 border border-white/20">
+                <CheckCircle2 className="w-3 h-3" /> Founder
+              </div>
+            </div>
+
+            {/* Founder Bio & Leadership Info */}
+            <div className="flex-1 text-center md:text-left space-y-3">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-bold text-cyan-300 mb-2">
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> Vision & Architecture
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  Prince Raj
+                </h3>
+                <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                  Founder & Software Architect of Studolink
+                </p>
+              </div>
+
+              <blockquote className="text-xs sm:text-sm text-gray-300 leading-relaxed italic border-l-2 border-cyan-400/40 pl-4 py-1">
+                &ldquo;Every student traveling to coaching hubs like Kota, Patna, or Delhi deserves transparent housing, hygienic food, and quiet study spaces without paying extortionate broker fees. Studolink was built to give every student their rightful habitat.&rdquo;
+              </blockquote>
+
+              {/* Social & Contact Links */}
+              <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2.5">
+                <a
+                  href="mailto:Founder@imprince.me"
+                  className="px-3.5 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-medium text-gray-200 hover:text-white flex items-center gap-1.5 transition-all"
+                >
+                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Founder@imprince.me</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/princeraj-in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-xs font-medium text-blue-300 flex items-center gap-1.5 transition-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>LinkedIn</span>
+                </a>
+                <a
+                  href="https://github.com/princeraj-in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-medium text-gray-300 flex items-center gap-1.5 transition-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>GitHub</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/princerjjjjj?stkn=MWhnMHp1c3UyM2cwdA=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 rounded-xl bg-pink-600/15 hover:bg-pink-600/25 border border-pink-500/30 text-xs font-medium text-pink-300 flex items-center gap-1.5 transition-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Instagram</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </LiquidGlassCard>
+
+        {/* 6. Contact & Bottom Info */}
         <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <div>
             <p className="font-bold text-white">Studolink Platform • Your Student Ecosystem</p>
-            <p>Founder & Architect: Prince Raj • Founder@imprince.me</p>
+            <p>Official Escalation: Founder@imprince.me • Support@imprince.me</p>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/legal" className="text-cyan-400 hover:underline">Privacy & Terms</Link>

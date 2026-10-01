@@ -361,14 +361,27 @@ export function Footer() {
 
       {/* 4. Bottom Copyright, Legal Quick Links & Back to Top */}
       <div className="py-6 pb-24 md:pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} <strong>Studolink</strong> (studolink.imprince.me). All rights reserved.
+            © {new Date().getFullYear()} <strong>Studolink</strong> (studolink.imprince.me).
           </p>
           <span className="hidden sm:inline text-gray-600">•</span>
-          <p className="text-gray-400">
-            Zero brokerage platform for Indian students preparing for JEE, NEET, UPSC & Govt. exams.
-          </p>
+          <Link
+            to="/about"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-400/40 text-gray-300 transition-all group"
+          >
+            <img
+              src="/founder.jpg"
+              alt="Prince Raj"
+              className="w-5 h-5 rounded-full object-cover border border-cyan-400/40 group-hover:scale-105 transition-transform"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            <span className="text-[11px]">
+              Crafted with ❤️ by <strong className="text-white group-hover:text-cyan-300 font-bold transition-colors">Prince Raj</strong>
+            </span>
+          </Link>
         </div>
 
         <div className="flex items-center gap-4 flex-wrap justify-center">
