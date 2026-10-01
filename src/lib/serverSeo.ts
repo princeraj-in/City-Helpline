@@ -106,7 +106,7 @@ export function injectSeoMeta(html: string, urlPath: string, hostOrigin?: string
         {
           '@type': 'ListItem',
           'position': 2,
-          'name': config.title.split('–')[0].split('|')[0].trim(),
+          'name': (config.title.split('–')[0] || config.title).split('|')[0]?.trim() || 'Studolink',
           'item': canonicalUrl
         }
       ]
