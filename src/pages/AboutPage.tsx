@@ -169,7 +169,7 @@ export default function AboutPage() {
         {/* 5. Contact & Founder Info */}
         <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <div>
-            <p className="font-bold text-white">Studolink Platform • ImPrince Tectra</p>
+            <p className="font-bold text-white">Studolink Platform • Your Student Ecosystem</p>
             <p>Founder & Architect: Prince Raj • Founder@imprince.me</p>
           </div>
           <div className="flex items-center gap-3">

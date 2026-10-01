@@ -89,10 +89,49 @@ export function injectSeoMeta(html: string, urlPath: string, hostOrigin?: string
     'image': logoUrl,
   };
 
-  const schemaScriptTag = `<script id="page-schema-jsonld" type="application/ld+json">\n${JSON.stringify(routeSchema, null, 2)}\n</script>`;
+  const schemas: any[] = [routeSchema];
+
+  // For subpages: Provide BreadcrumbList so Google nests them under homepage
+  if (urlPath !== '/' && urlPath !== '') {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Studolink',
+          'item': `${origin}/`
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': config.title.split('–')[0].split('|')[0].trim(),
+          'item': canonicalUrl
+        }
+      ]
+    });
+  } else {
+    // For homepage: Provide WebSite schema with Sitelinks searchbox action
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      'name': 'Studolink',
+      'url': origin,
+      'potentialAction': {
+        '@type': 'SearchAction',
+        'target': `${origin}/search?q={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    });
+  }
+
+  const schemaScriptTags = schemas
+    .map((s) => `<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
+    .join('\n');
   
   if (transformedHtml.includes('</head>')) {
-    transformedHtml = transformedHtml.replace('</head>', `  ${schemaScriptTag}\n</head>`);
+    transformedHtml = transformedHtml.replace('</head>', `  ${schemaScriptTags}\n</head>`);
   }
 
   return transformedHtml;
