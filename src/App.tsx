@@ -139,7 +139,7 @@ function AppLayout() {
       <LocationPermissionModal />
       <main className="flex-grow pb-24 md:pb-0 overflow-x-hidden">
         <Suspense fallback={<RouteFallback />}>
-          <Routes location={location} key={location.pathname}>
+          <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/marketplace" element={<Marketplace />} />

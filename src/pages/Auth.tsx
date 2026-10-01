@@ -55,10 +55,20 @@ export default function Auth() {
     setIsLogin(location.pathname !== '/signup');
   }, [location.pathname]);
 
+  // Support browser Back/Forward buttons smoothly
+  useEffect(() => {
+    const handlePopState = () => {
+      setIsLogin(window.location.pathname !== '/signup');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const toggleAuthMode = (targetIsLogin?: boolean) => {
     const nextMode = targetIsLogin !== undefined ? targetIsLogin : !isLogin;
     setIsLogin(nextMode);
-    navigate(nextMode ? '/login' : '/signup', { replace: true });
+    // Smooth in-place URL update to trigger sliding animation without component unmount
+    window.history.replaceState(null, '', nextMode ? '/login' : '/signup');
   };
 
   // Shared State
@@ -664,6 +674,18 @@ export default function Auth() {
               Safety Policy
             </Link>.
           </p>
+
+          <p className="desktop-switch-hint text-center text-xs text-gray-500 mt-2">
+            New to Studolink?{' '}
+            <button
+              type="button"
+              onClick={() => toggleAuthMode(false)}
+              className="text-[#00E5FF] font-bold hover:underline cursor-pointer"
+              style={{ display: 'inline', width: 'auto', margin: 0, padding: 0, height: 'auto', background: 'none' }}
+            >
+              Sign Up here
+            </button>
+          </p>
         </form>
 
         {/* 2. Sub-Container (Sliding Overlay Image + Sign-Up Form) */}
@@ -876,6 +898,18 @@ export default function Auth() {
               <Github size={16} />
               <span>Join with GitHub</span>
             </button>
+
+            <p className="desktop-switch-hint text-center text-xs text-gray-500 mt-3 pb-3">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => toggleAuthMode(true)}
+                className="text-[#00E5FF] font-bold hover:underline cursor-pointer"
+                style={{ display: 'inline', width: 'auto', margin: 0, padding: 0, height: 'auto', background: 'none' }}
+              >
+                Sign In here
+              </button>
+            </p>
           </form>
         </div>
       </div>
